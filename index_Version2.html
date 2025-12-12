@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Product Landing — Digital Product</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <div class="brand">YourProduct</div>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#testimonials">Testimonials</a>
+        <button id="buyTop" class="btn primary">Buy Now</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-left">
+          <h1>Sell your digital product — fast & simple</h1>
+          <p class="lead">A clean, ready-to-use product page to showcase and sell your eBook, course, template or software.</p>
+          <ul class="benefits">
+            <li>Instant digital delivery</li>
+            <li>Secure checkout (placeholder)</li>
+            <li>Works on mobile & desktop</li>
+          </ul>
+          <div class="cta-row">
+            <button id="buy" class="btn primary">Buy Now — $29</button>
+            <a href="#email" class="btn ghost">Get a free sample</a>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="card product-card">
+            <div class="mock">eBook / Course</div>
+            <h3>Awesome Guide to X</h3>
+            <p>Short product subtitle that explains the value in one sentence.</p>
+            <div class="price">$29</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <div class="container">
+        <h2>Features</h2>
+        <div class="features-grid">
+          <div class="feature">
+            <h3>Instant Access</h3>
+            <p>Buy and download immediately after payment.</p>
+          </div>
+          <div class="feature">
+            <h3>Lifetime Updates</h3>
+            <p>Get free updates and improvements.</p>
+          </div>
+          <div class="feature">
+            <h3>Money-back</h3>
+            <p>30-day refund policy if you’re not satisfied.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="section light">
+      <div class="container">
+        <h2>Pricing</h2>
+        <div class="pricing-grid">
+          <div class="plan">
+            <h3>Single License</h3>
+            <p class="plan-price">$29</p>
+            <ul>
+              <li>Full product</li>
+              <li>Email support</li>
+              <li>One-time purchase</li>
+            </ul>
+            <button class="btn primary buy-now">Buy $29</button>
+          </div>
+          <div class="plan">
+            <h3>Pro Bundle</h3>
+            <p class="plan-price">$59</p>
+            <ul>
+              <li>Product + bonus</li>
+              <li>Priority support</li>
+              <li>Free updates</li>
+            </ul>
+            <button class="btn primary buy-now">Buy $59</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="testimonials" class="section">
+      <div class="container">
+        <h2>What people say</h2>
+        <div class="testi-grid">
+          <blockquote class="testi">
+            "Helped me launch faster. Highly recommended." — Sara
+          </blockquote>
+          <blockquote class="testi">
+            "Great content and clear steps — worth every penny." — Ali
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section id="email" class="section cta-footer">
+      <div class="container">
+        <h2>Get a free sample</h2>
+        <p>Enter your email and we’ll send a short preview.</p>
+        <form id="leadForm" class="lead-form">
+          <input type="email" name="email" placeholder="you@example.com" required />
+          <button class="btn primary" type="submit">Send sample</button>
+        </form>
+        <p class="muted">We respect your privacy. No spam.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div>© <span id="year"></span> YourProduct — All rights reserved</div>
+      <div class="muted">Built with ❤️</div>
+    </div>
+  </footer>
+
+  <!-- Modal checkout (simple placeholder) -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button id="closeModal" class="modal-close">&times;</button>
+      <h3>Checkout</h3>
+      <p>Fill your details to complete purchase (this is a demo — integrate your payment provider).</p>
+      <form id="checkoutForm">
+        <input type="text" name="name" placeholder="Full name" required />
+        <input type="email" name="email" placeholder="Email" required />
+        <label class="small">Payment</label>
+        <div class="payment-placeholder">[Integrate Stripe / PayPal here]</div>
+        <button class="btn primary" type="submit">Complete purchase — $29</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
