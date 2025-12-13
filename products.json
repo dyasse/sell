@@ -1,0 +1,27 @@
+[
+  {
+    "id": "planner-mensuel-a4",
+    "title": "Planner Mensuel Printable (A4)",
+    "price_usd": 4.5,
+    "description": "Planner mensuel printable PDF (A4) — calendrier, objectifs, notes. Print-ready.",
+    "files": [
+      "assets/products/planner-mensuel-A4.pdf"
+    ],
+    "previews": [
+      "assets/products/planner-cover.jpg",
+      "assets/products/planner-page1.jpg"
+    ],
+    "tags": ["planner","printable","PDF","organisation","calendar"],
+    "etsy_url": "https://www.etsy.com/listing/EXAMPLE"
+  },
+  {
+    "id": "recettes-marocaines",
+    "title": "Ebook de recettes marocaines (PDF)",
+    "price_usd": 7.0,
+    "description": "30 recettes traditionnelles avec photos et astuces.",
+    "files": ["assets/products/recettes-marocaines-30.pdf"],
+    "previews": ["assets/products/recettes-cover.jpg"],
+    "tags": ["ebook","recettes","maroc","PDF"],
+    "etsy_url": "https://www.etsy.com/listing/EXAMPLE2"
+  }
+]
