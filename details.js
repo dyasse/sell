@@ -59,4 +59,27 @@ async function loadDetails() {
   });
 }
 
+function setupTheme() {
+  const themeToggle = document.getElementById("themeToggle");
+  const savedTheme = localStorage.getItem("theme");
+
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark");
+    themeToggle.textContent = "☀️ الوضع النهاري";
+  }
+
+  themeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+
+    if (document.body.classList.contains("dark")) {
+      localStorage.setItem("theme", "dark");
+      themeToggle.textContent = "☀️ الوضع النهاري";
+    } else {
+      localStorage.setItem("theme", "light");
+      themeToggle.textContent = "🌙 الوضع الليلي";
+    }
+  });
+}
+
 loadDetails();
+setupTheme();
