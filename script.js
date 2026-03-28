@@ -16,7 +16,7 @@ async function loadData() {
       card.innerHTML = `
         <h3>${item.title}</h3>
         <p>${item.subtitle}</p>
-        <button>فتح</button>
+        <button onclick="goToDetails(${item.id})">فتح</button>
       `;
 
       if (item.category === "quran") {
@@ -36,6 +36,10 @@ async function loadData() {
     );
     render(filtered);
   });
+}
+
+function goToDetails(id) {
+  window.location.href = `details.html?id=${id}`;
 }
 
 loadData();
