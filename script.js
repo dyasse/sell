@@ -1,41 +1,41 @@
-// Basic interactions: modal, form handlers, sample local behaviour
-document.addEventListener('DOMContentLoaded', ()=> {
-  // Year
-  document.getElementById('year').textContent = new Date().getFullYear();
+async function loadData() {
+  const response = await fetch("products.json");
+  const data = await response.json();
 
-  // Modal controls
-  const modal = document.getElementById('modal');
-  const buyBtns = document.querySelectorAll('#buy, #buyTop, .buy-now');
-  const close = document.getElementById('closeModal');
+  const quranList = document.getElementById("quranList");
+  const adhkarList = document.getElementById("adhkarList");
+  const searchInput = document.getElementById("searchInput");
 
-  function openModal(){ modal.setAttribute('aria-hidden','false'); }
-  function closeModal(){ modal.setAttribute('aria-hidden','true'); }
+  function render(items) {
+    quranList.innerHTML = "";
+    adhkarList.innerHTML = "";
 
-  buyBtns.forEach(b=> b.addEventListener('click', (e)=> {
-    e.preventDefault();
-    openModal();
-  }));
-  close.addEventListener('click', closeModal);
-  modal.addEventListener('click', (e)=> { if(e.target===modal) closeModal(); });
+    items.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <h3>${item.title}</h3>
+        <p>${item.subtitle}</p>
+        <button>فتح</button>
+      `;
 
-  // Lead form (email capture) — demo: shows a thank you message
-  const leadForm = document.getElementById('leadForm');
-  leadForm.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    const email = leadForm.querySelector('input[name="email"]').value;
-    alert('Thanks! A free sample will be sent to: ' + email);
-    leadForm.reset();
+      if (item.category === "quran") {
+        quranList.appendChild(card);
+      } else {
+        adhkarList.appendChild(card);
+      }
+    });
+  }
+
+  render(data);
+
+  searchInput.addEventListener("input", e => {
+    const value = e.target.value.toLowerCase();
+    const filtered = data.filter(item =>
+      item.title.toLowerCase().includes(value)
+    );
+    render(filtered);
   });
+}
 
-  // Checkout form — demo placeholder
-  const checkoutForm = document.getElementById('checkoutForm');
-  checkoutForm.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    // Here integrate real payment gateway (Stripe / PayPal) server-side
-    const name = checkoutForm.querySelector('input[name="name"]').value;
-    const email = checkoutForm.querySelector('input[name="email"]').value;
-    alert(`Thank you ${name}! (demo) Purchase receipt sent to ${email}`);
-    checkoutForm.reset();
-    closeModal();
-  });
-});
+loadData();

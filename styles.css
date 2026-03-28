@@ -1,50 +1,53 @@
-:root{
-  /* light blue background + dark text */
-  --bg: #e6f7ff;
-  --card: #ffffff;
-  --accent: #60a5fa;
-  --muted: #6b7280;
-  --text: #000000;
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f7fbf8;
+  color: #1f2d2a;
+  direction: rtl;
 }
 
-/* reset */
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  color:var(--text);
-  background:linear-gradient(180deg,#e6f7ff 0%, #d4f0ff 100%);
-  line-height:1.5;
+.hero {
+  background: #1f6f50;
+  color: white;
+  text-align: center;
+  padding: 30px 20px;
 }
-.container{max-width:980px;margin:0 auto;padding:24px;}
-.nav{background:transparent;position:sticky;top:0;z-index:20}
-.nav-inner{display:flex;justify-content:space-between;align-items:center;}
-.brand{font-weight:700}
-nav a{color:var(--muted);margin-right:16px;text-decoration:none}
-.btn{padding:10px 16px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
-/* primary button uses accent bg; keep text readable (white) */
-.btn.primary{background:var(--accent);color:#ffffff}
-.btn.ghost{background:transparent;border:1px solid rgba(0,0,0,0.06);color:var(--text)}
-.hero{padding:56px 0}
-.hero-grid{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:center}
-.hero-left h1{font-size:2rem;margin:0 0 12px}
-.lead{color:var(--muted);margin-bottom:16px}
-.benefits{list-style:none;padding:0;margin:0 0 18px}
-.benefits li{background:rgba(0,0,0,0.03);display:inline-block;padding:6px 10px;border-radius:999px;margin-right:8px;font-size:13px}
-.cta-row{display:flex;gap:12px;margin-top:8px}
-.product-card{background:var(--card);padding:20px;border-radius:12px;text-align:center}
-.mock{background:rgba(0,0,0,0.03);padding:10px;border-radius:8px;margin-bottom:10px}
-.price{font-weight:700;margin-top:10px}
 
-.section{padding:42px 0}
-.section.light{background:rgba(0,0,0,0.02)}
-.features-grid{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px}
-.feature{background:rgba(0,0,0,0.02);padding:18px;border-radius:10px;flex:1;min-width:220px}
-.pricing-grid{display:flex;gap:18px;flex-wrap:wrap}
-.plan{background:var(--card);padding:18px;border-radius:10px;flex:1;min-width:220px;text-align:center}
-.plan-price{font-weight:800;font-size:1.5rem;margin:12px 0}
-.testi-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.testi{background:rgba(0,0,0,0.02);padding:14px;border-left:4px solid var(--accent);border-radius:8px}
+.hero input {
+  margin-top: 15px;
+  padding: 12px;
+  width: 80%;
+  max-width: 400px;
+  border: none;
+  border-radius: 10px;
+}
 
-.cta-footer{text-align:center}
-.lead-form{display:flex;gap:12px;max-width:540px;margin:12px auto}
+main {
+  padding: 20px;
+}
+
+h2 {
+  color: #1f6f50;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.card button {
+  background: #1f6f50;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
