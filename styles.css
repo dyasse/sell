@@ -97,3 +97,50 @@ h2 {
   color: white;
   cursor: pointer;
 }
+.theme-btn {
+  margin-top: 15px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: white;
+  color: #1f6f50;
+  font-weight: bold;
+}
+
+body.dark {
+  background: #121212;
+  color: #f1f1f1;
+}
+
+body.dark .hero {
+  background: #0d3b2a;
+}
+
+body.dark .card {
+  background: #1e1e1e;
+  color: #f1f1f1;
+}
+
+body.dark h2 {
+  color: #7dd3a7;
+}
+
+body.dark .back-btn,
+body.dark .card button,
+body.dark .counter-box button {
+  background: #2e7d5a;
+  color: white;
+}
+
+body.dark .theme-btn {
+  background: #1e1e1e;
+  color: white;
+  border: 1px solid #444;
+}
+
+body.dark input {
+  background: #1e1e1e;
+  color: white;
+  border: 1px solid #444;
+}
