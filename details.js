@@ -1,133 +1,79 @@
 async function loadDetails() {
   const params = new URLSearchParams(window.location.search);
-  const id = parseInt(params.get("id"));
-
-  const response = await fetch("products.json");
-  const data = await response.json();
-
-  const item = data.find(entry => entry.id === id);
+  const chapterId = parseInt(params.get("id"));
   const detailsCard = document.getElementById("detailsCard");
 
-  if (!item) {
-    detailsCard.innerHTML = "<p>العنصر غير موجود</p>";
+  if (!chapterId) {
+    detailsCard.innerHTML = "<p>السورة غير موجودة</p>";
     return;
   }
 
-  let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-  const isFavorite = favorites.includes(item.id);
+  detailsCard.innerHTML = "<p>جاري تحميل السورة...</p>";
 
-  let count = 0;
-  let target = 33;
+  try {
+    const [chaptersRes, versesRes] = await Promise.all([
+      fetch("https://api.quran.com/api/v4/chapters?language=ar"),
+      fetch(`https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${chapterId}`)
+    ]);
 
-  detailsCard.innerHTML = `
-    <h2>${item.title}</h2>
-    <p><strong>${item.subtitle}</strong></p>
-    <p class="content-text">${item.content}</p>
+    const chaptersData = await chaptersRes.json();
+    const versesData = await versesRes.json();
 
-    <div class="counter-box">
-      <h3>العدّاد الذكي</h3>
+    const chapter = chaptersData.chapters.find(c => c.id === chapterId);
+    const verses = versesData.verses || [];
 
-      <div class="target-buttons">
-        <button id="target33" class="target-btn active-target">33</button>
-        <button id="target100" class="target-btn">100</button>
+    if (!chapter) {
+      detailsCard.innerHTML = "<p>السورة غير موجودة</p>";
+      return;
+    }
+
+    const versesHtml = verses.map(v => `
+      <span class="ayah">
+        ${v.text_uthmani}
+        <span class="ayah-number">﴿${v.verse_key.split(":")[1]}﴾</span>
+      </span>
+    `).join(" ");
+
+    detailsCard.innerHTML = `
+      <h2>${chapter.name_arabic}</h2>
+      <p><strong>${chapter.verses_count} آية</strong></p>
+      <div class="surah-text">${versesHtml}</div>
+
+      <div class="audio-box">
+        <button id="playAudioBtn">تشغيل صوت السورة</button>
+        <audio id="surahAudio" controls style="display:none; width:100%; margin-top:15px;"></audio>
       </div>
+    `;
 
-      <p>العدد الحالي: <span id="counter">0</span></p>
-      <p>الهدف: <span id="targetValue">33</span></p>
-      <p>المتبقي: <span id="remainingValue">33</span></p>
-
-      <div class="progress-wrapper">
-        <div class="progress-bar">
-          <div id="progressFill" class="progress-fill"></div>
-        </div>
-        <p class="progress-text"><span id="progressPercent">0</span>%</p>
-      </div>
-
-      <button id="increaseBtn">اضغط للتسبيح</button>
-      <button id="resetBtn">إعادة</button>
-    </div>
-
-    <button id="favoriteBtn">
-      ${isFavorite ? "موجود في المفضلة" : "إضافة إلى المفضلة"}
-    </button>
-  `;
-
-  const counterEl = document.getElementById("counter");
-  const targetValueEl = document.getElementById("targetValue");
-  const remainingValueEl = document.getElementById("remainingValue");
-  const progressFillEl = document.getElementById("progressFill");
-  const progressPercentEl = document.getElementById("progressPercent");
-  const target33Btn = document.getElementById("target33");
-  const target100Btn = document.getElementById("target100");
-
-  function updateCounterDisplay() {
-    counterEl.textContent = count;
-    targetValueEl.textContent = target;
-    remainingValueEl.textContent = Math.max(target - count, 0);
-
-    const percent = Math.min((count / target) * 100, 100);
-    progressFillEl.style.width = `${percent}%`;
-    progressPercentEl.textContent = Math.round(percent);
-
-    if (percent === 100) {
-      progressFillEl.classList.add("progress-done");
-    } else {
-      progressFillEl.classList.remove("progress-done");
-    }
+    document.getElementById("playAudioBtn").addEventListener("click", () => {
+      loadAudio(chapterId);
+    });
+  } catch (error) {
+    detailsCard.innerHTML = "<p>وقع مشكل فتحميل السورة</p>";
+    console.error(error);
   }
+}
 
-  function setTarget(newTarget) {
-    target = newTarget;
-    count = 0;
-    updateCounterDisplay();
+async function loadAudio(chapterId) {
+  try {
+    const audio = document.getElementById("surahAudio");
+    const response = await fetch(`https://api.quran.com/api/v4/chapter_recitations/1/${chapterId}`);
+    const result = await response.json();
 
-    target33Btn.classList.remove("active-target");
-    target100Btn.classList.remove("active-target");
+    const audioFile = result.audio_file;
 
-    if (target === 33) {
-      target33Btn.classList.add("active-target");
-    } else {
-      target100Btn.classList.add("active-target");
+    if (!audioFile || !audioFile.audio_url) {
+      alert("الصوت ما توفرش دابا");
+      return;
     }
+
+    audio.src = audioFile.audio_url;
+    audio.style.display = "block";
+    audio.play();
+  } catch (error) {
+    console.error(error);
+    alert("وقع مشكل فالصوت");
   }
-
-  target33Btn.addEventListener("click", () => {
-    setTarget(33);
-  });
-
-  target100Btn.addEventListener("click", () => {
-    setTarget(100);
-  });
-
-  document.getElementById("increaseBtn").addEventListener("click", () => {
-    if (count < target) {
-      count++;
-      updateCounterDisplay();
-
-      if (count === target) {
-        alert(`ما شاء الله! وصلتي ${target}`);
-      }
-    }
-  });
-
-  document.getElementById("resetBtn").addEventListener("click", () => {
-    count = 0;
-    updateCounterDisplay();
-  });
-
-  document.getElementById("favoriteBtn").addEventListener("click", () => {
-    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-
-    if (!favorites.includes(item.id)) {
-      favorites.push(item.id);
-      localStorage.setItem("favorites", JSON.stringify(favorites));
-      alert("تمت الإضافة إلى المفضلة");
-    } else {
-      alert("هذا العنصر موجود بالفعل في المفضلة");
-    }
-  });
-
-  updateCounterDisplay();
 }
 
 function setupTheme() {
@@ -136,9 +82,7 @@ function setupTheme() {
 
   if (savedTheme === "dark") {
     document.body.classList.add("dark");
-    if (themeToggle) {
-      themeToggle.textContent = "☀️ الوضع النهاري";
-    }
+    if (themeToggle) themeToggle.textContent = "☀️ الوضع النهاري";
   }
 
   if (themeToggle) {
