@@ -206,3 +206,32 @@ body.dark .progress-bar {
 body.dark .progress-text {
   color: #7dd3a7;
 }
+.surah-text {
+  margin-top: 20px;
+  line-height: 2.4;
+  font-size: 28px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.ayah {
+  display: inline;
+}
+
+.ayah-number {
+  color: #1f6f50;
+  font-size: 20px;
+  margin: 0 4px;
+}
+
+.audio-box {
+  margin-top: 20px;
+  text-align: center;
+}
+
+body.dark .surah-text {
+  background: #1e1e1e;
+  color: #f5f5f5;
+}
