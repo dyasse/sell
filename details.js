@@ -13,11 +13,16 @@ async function loadDetails() {
     return;
   }
 
+  let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+  const isFavorite = favorites.includes(item.id);
+
   detailsCard.innerHTML = `
     <h2>${item.title}</h2>
     <p><strong>${item.subtitle}</strong></p>
     <p class="content-text">${item.content}</p>
-    <button id="favoriteBtn">إضافة إلى المفضلة</button>
+    <button id="favoriteBtn">
+      ${isFavorite ? "موجود في المفضلة" : "إضافة إلى المفضلة"}
+    </button>
   `;
 
   document.getElementById("favoriteBtn").addEventListener("click", () => {
@@ -27,6 +32,7 @@ async function loadDetails() {
       favorites.push(item.id);
       localStorage.setItem("favorites", JSON.stringify(favorites));
       alert("تمت الإضافة إلى المفضلة");
+      location.reload();
     } else {
       alert("هذا العنصر موجود بالفعل في المفضلة");
     }
