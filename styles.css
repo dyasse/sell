@@ -165,3 +165,44 @@ body.dark input {
   background: #1f6f50;
   color: white;
 }
+.progress-wrapper {
+  margin: 15px 0 20px;
+  text-align: center;
+}
+
+.progress-bar {
+  width: 100%;
+  max-width: 420px;
+  height: 14px;
+  margin: 0 auto 10px;
+  background: #e7efe9;
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #1f6f50, #49a078);
+  border-radius: 999px;
+  transition: width 0.35s ease;
+}
+
+.progress-done {
+  box-shadow: 0 0 12px rgba(73, 160, 120, 0.6);
+}
+
+.progress-text {
+  font-weight: bold;
+  color: #1f6f50;
+  margin: 0;
+}
+
+body.dark .progress-bar {
+  background: #2a2a2a;
+}
+
+body.dark .progress-text {
+  color: #7dd3a7;
+}
