@@ -51,3 +51,26 @@ h2 {
   border-radius: 8px;
   cursor: pointer;
 }
+.details-page {
+  padding: 20px;
+}
+
+.details-card {
+  max-width: 700px;
+  margin: auto;
+}
+
+.content-text {
+  line-height: 2;
+  font-size: 18px;
+  margin-top: 15px;
+}
+
+.back-btn {
+  display: inline-block;
+  background: #1f6f50;
+  color: white;
+  text-decoration: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+}
