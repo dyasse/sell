@@ -1,30 +1,34 @@
 [
   {
     "id": 1,
-    "type": "surah",
     "title": "سورة الفاتحة",
     "subtitle": "7 آيات",
-    "category": "quran"
+    "category": "quran",
+    "content": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ...",
+    "favorite": false
   },
   {
     "id": 2,
-    "type": "surah",
-    "title": "سورة البقرة",
-    "subtitle": "286 آية",
-    "category": "quran"
+    "title": "سورة الإخلاص",
+    "subtitle": "4 آيات",
+    "category": "quran",
+    "content": "قُلْ هُوَ اللَّهُ أَحَدٌ ...",
+    "favorite": false
   },
   {
     "id": 3,
-    "type": "dhikr",
     "title": "أذكار الصباح",
     "subtitle": "مجموعة أذكار يومية",
-    "category": "adhkar"
+    "category": "adhkar",
+    "content": "أصبحنا وأصبح الملك لله...",
+    "favorite": false
   },
   {
     "id": 4,
-    "type": "dhikr",
     "title": "أذكار المساء",
     "subtitle": "مجموعة أذكار يومية",
-    "category": "adhkar"
+    "category": "adhkar",
+    "content": "أمسينا وأمسى الملك لله...",
+    "favorite": false
   }
 ]
