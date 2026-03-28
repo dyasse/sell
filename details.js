@@ -36,6 +36,13 @@ async function loadDetails() {
       <p>الهدف: <span id="targetValue">33</span></p>
       <p>المتبقي: <span id="remainingValue">33</span></p>
 
+      <div class="progress-wrapper">
+        <div class="progress-bar">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+        <p class="progress-text"><span id="progressPercent">0</span>%</p>
+      </div>
+
       <button id="increaseBtn">اضغط للتسبيح</button>
       <button id="resetBtn">إعادة</button>
     </div>
@@ -48,6 +55,8 @@ async function loadDetails() {
   const counterEl = document.getElementById("counter");
   const targetValueEl = document.getElementById("targetValue");
   const remainingValueEl = document.getElementById("remainingValue");
+  const progressFillEl = document.getElementById("progressFill");
+  const progressPercentEl = document.getElementById("progressPercent");
   const target33Btn = document.getElementById("target33");
   const target100Btn = document.getElementById("target100");
 
@@ -55,6 +64,16 @@ async function loadDetails() {
     counterEl.textContent = count;
     targetValueEl.textContent = target;
     remainingValueEl.textContent = Math.max(target - count, 0);
+
+    const percent = Math.min((count / target) * 100, 100);
+    progressFillEl.style.width = `${percent}%`;
+    progressPercentEl.textContent = Math.round(percent);
+
+    if (percent === 100) {
+      progressFillEl.classList.add("progress-done");
+    } else {
+      progressFillEl.classList.remove("progress-done");
+    }
   }
 
   function setTarget(newTarget) {
