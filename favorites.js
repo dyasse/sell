@@ -10,9 +10,11 @@ async function loadFavorites() {
 
   if (favoriteItems.length === 0) {
     emptyMessage.style.display = "block";
+    favoritesList.innerHTML = "";
     return;
   }
 
+  emptyMessage.style.display = "none";
   favoritesList.innerHTML = "";
 
   favoriteItems.forEach(item => {
@@ -41,4 +43,27 @@ function removeFavorite(id) {
   loadFavorites();
 }
 
+function setupTheme() {
+  const themeToggle = document.getElementById("themeToggle");
+  const savedTheme = localStorage.getItem("theme");
+
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark");
+    themeToggle.textContent = "☀️ الوضع النهاري";
+  }
+
+  themeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+
+    if (document.body.classList.contains("dark")) {
+      localStorage.setItem("theme", "dark");
+      themeToggle.textContent = "☀️ الوضع النهاري";
+    } else {
+      localStorage.setItem("theme", "light");
+      themeToggle.textContent = "🌙 الوضع الليلي";
+    }
+  });
+}
+
 loadFavorites();
+setupTheme();
