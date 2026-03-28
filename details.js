@@ -16,14 +16,35 @@ async function loadDetails() {
   let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
   const isFavorite = favorites.includes(item.id);
 
+  let count = 0;
+
   detailsCard.innerHTML = `
     <h2>${item.title}</h2>
     <p><strong>${item.subtitle}</strong></p>
     <p class="content-text">${item.content}</p>
+
+    <div class="counter-box">
+      <p>العدد: <span id="counter">${count}</span></p>
+      <button id="increaseBtn">اضغط للتسبيح</button>
+      <button id="resetBtn">إعادة</button>
+    </div>
+
     <button id="favoriteBtn">
       ${isFavorite ? "موجود في المفضلة" : "إضافة إلى المفضلة"}
     </button>
   `;
+
+  const counterEl = document.getElementById("counter");
+
+  document.getElementById("increaseBtn").addEventListener("click", () => {
+    count++;
+    counterEl.textContent = count;
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    count = 0;
+    counterEl.textContent = count;
+  });
 
   document.getElementById("favoriteBtn").addEventListener("click", () => {
     let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -32,7 +53,6 @@ async function loadDetails() {
       favorites.push(item.id);
       localStorage.setItem("favorites", JSON.stringify(favorites));
       alert("تمت الإضافة إلى المفضلة");
-      location.reload();
     } else {
       alert("هذا العنصر موجود بالفعل في المفضلة");
     }
