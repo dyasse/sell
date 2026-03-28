@@ -83,3 +83,17 @@ h2 {
 .card-actions button {
   flex: 1;
 }
+.counter-box {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.counter-box button {
+  margin: 5px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: none;
+  background: #1f6f50;
+  color: white;
+  cursor: pointer;
+}
