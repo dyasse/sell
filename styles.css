@@ -144,3 +144,24 @@ body.dark input {
   color: white;
   border: 1px solid #444;
 }
+.target-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.target-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #dff3e8;
+  color: #1f6f50;
+  font-weight: bold;
+}
+
+.active-target {
+  background: #1f6f50;
+  color: white;
+}
