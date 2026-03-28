@@ -17,6 +17,7 @@ async function loadDetails() {
   const isFavorite = favorites.includes(item.id);
 
   let count = 0;
+  let target = 33;
 
   detailsCard.innerHTML = `
     <h2>${item.title}</h2>
@@ -24,7 +25,17 @@ async function loadDetails() {
     <p class="content-text">${item.content}</p>
 
     <div class="counter-box">
-      <p>العدد: <span id="counter">${count}</span></p>
+      <h3>العدّاد الذكي</h3>
+
+      <div class="target-buttons">
+        <button id="target33" class="target-btn active-target">33</button>
+        <button id="target100" class="target-btn">100</button>
+      </div>
+
+      <p>العدد الحالي: <span id="counter">0</span></p>
+      <p>الهدف: <span id="targetValue">33</span></p>
+      <p>المتبقي: <span id="remainingValue">33</span></p>
+
       <button id="increaseBtn">اضغط للتسبيح</button>
       <button id="resetBtn">إعادة</button>
     </div>
@@ -35,15 +46,54 @@ async function loadDetails() {
   `;
 
   const counterEl = document.getElementById("counter");
+  const targetValueEl = document.getElementById("targetValue");
+  const remainingValueEl = document.getElementById("remainingValue");
+  const target33Btn = document.getElementById("target33");
+  const target100Btn = document.getElementById("target100");
+
+  function updateCounterDisplay() {
+    counterEl.textContent = count;
+    targetValueEl.textContent = target;
+    remainingValueEl.textContent = Math.max(target - count, 0);
+  }
+
+  function setTarget(newTarget) {
+    target = newTarget;
+    count = 0;
+    updateCounterDisplay();
+
+    target33Btn.classList.remove("active-target");
+    target100Btn.classList.remove("active-target");
+
+    if (target === 33) {
+      target33Btn.classList.add("active-target");
+    } else {
+      target100Btn.classList.add("active-target");
+    }
+  }
+
+  target33Btn.addEventListener("click", () => {
+    setTarget(33);
+  });
+
+  target100Btn.addEventListener("click", () => {
+    setTarget(100);
+  });
 
   document.getElementById("increaseBtn").addEventListener("click", () => {
-    count++;
-    counterEl.textContent = count;
+    if (count < target) {
+      count++;
+      updateCounterDisplay();
+
+      if (count === target) {
+        alert(`ما شاء الله! وصلتي ${target}`);
+      }
+    }
   });
 
   document.getElementById("resetBtn").addEventListener("click", () => {
     count = 0;
-    counterEl.textContent = count;
+    updateCounterDisplay();
   });
 
   document.getElementById("favoriteBtn").addEventListener("click", () => {
@@ -57,6 +107,8 @@ async function loadDetails() {
       alert("هذا العنصر موجود بالفعل في المفضلة");
     }
   });
+
+  updateCounterDisplay();
 }
 
 function setupTheme() {
@@ -65,20 +117,24 @@ function setupTheme() {
 
   if (savedTheme === "dark") {
     document.body.classList.add("dark");
-    themeToggle.textContent = "☀️ الوضع النهاري";
+    if (themeToggle) {
+      themeToggle.textContent = "☀️ الوضع النهاري";
+    }
   }
 
-  themeToggle.addEventListener("click", () => {
-    document.body.classList.toggle("dark");
+  if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
 
-    if (document.body.classList.contains("dark")) {
-      localStorage.setItem("theme", "dark");
-      themeToggle.textContent = "☀️ الوضع النهاري";
-    } else {
-      localStorage.setItem("theme", "light");
-      themeToggle.textContent = "🌙 الوضع الليلي";
-    }
-  });
+      if (document.body.classList.contains("dark")) {
+        localStorage.setItem("theme", "dark");
+        themeToggle.textContent = "☀️ الوضع النهاري";
+      } else {
+        localStorage.setItem("theme", "light");
+        themeToggle.textContent = "🌙 الوضع الليلي";
+      }
+    });
+  }
 }
 
 loadDetails();
