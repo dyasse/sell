@@ -7,6 +7,12 @@ async function loadAdhkar() {
   const container = document.getElementById("adhkarContainer");
   const statsBox = document.getElementById("adhkarStats");
 
+  // Highlight active button in hero
+  const btnSabah = document.getElementById("btnSabah");
+  const btnMasa = document.getElementById("btnMasa");
+  if(type === "sabah" && btnSabah) btnSabah.classList.add("active");
+  if(type === "masa" && btnMasa) btnMasa.classList.add("active");
+
   try {
     const response = await fetch("adhkar.json");
     const data = await response.json();
@@ -14,50 +20,54 @@ async function loadAdhkar() {
     const adhkarGroup = data[type];
 
     if (!adhkarGroup || !adhkarGroup.items || adhkarGroup.items.length === 0) {
-      container.innerHTML = "<p>ما كايناش أذكار حالياً</p>";
+      container.innerHTML = "<p style='text-align:center;'>لا توجد أذكار حالياً</p>";
       return;
     }
 
-    title.textContent = adhkarGroup.title;
-    subtitle.textContent = type === "masa"
-      ? "وردك المسائي مع تتبع التقدم"
-      : "وردك الصباحي مع تتبع التقدم";
+    title.innerHTML = `أذكار <span>${type === "sabah" ? "الصباح" : "المساء"}</span>`;
+    subtitle.textContent = "حصن مسلمك بذكر الله مع العداد الذكي";
 
     container.innerHTML = "";
 
     adhkarGroup.items.forEach((dhikr, index) => {
       const card = document.createElement("div");
-      card.className = "card adhkar-card premium-adhkar-card";
+      card.className = "premium-adhkar-card"; // Class updated for new CSS
 
       card.innerHTML = `
-        <div class="dhikr-head premium-dhikr-head">
+        <div class="premium-dhikr-head">
           <div>
-            <h3>ذكر ${index + 1}</h3>
-            <p class="dhikr-mini-label">ذكر يومي</p>
+            <h3 style="color:#1f6f50; font-size:18px;">ذكر ${index + 1}</h3>
+            <p class="dhikr-mini-label">ورد يومي</p>
           </div>
           <span class="repeat-badge">${dhikr.repeat} مرات</span>
         </div>
 
-        <p class="content-text adhkar-text">${dhikr.text}</p>
+        <p class="adhkar-text">${dhikr.text}</p>
 
-        <div class="dhikr-stats premium-dhikr-stats">
-          <div class="mini-stat">
-            <span class="mini-stat-label">المنجز</span>
-            <strong id="count-${type}-${dhikr.id}">0</strong>
+        <div style="display:flex; gap:15px; margin-bottom:15px; text-align:center;">
+          <div style="flex:1; background:#f9fbfb; padding:10px; border-radius:10px;">
+             <span style="font-size:12px; color:#6b7d76; display:block;">المنجز</span>
+             <strong id="count-${type}-${dhikr.id}" style="color:#1f6f50; font-size:20px;">0</strong>
           </div>
-          <div class="mini-stat">
-            <span class="mini-stat-label">المتبقي</span>
-            <strong id="remaining-${type}-${dhikr.id}">${dhikr.repeat}</strong>
+          <div style="flex:1; background:#f9fbfb; padding:10px; border-radius:10px;">
+             <span style="font-size:12px; color:#6b7d76; display:block;">المتبقي</span>
+             <strong id="remaining-${type}-${dhikr.id}" style="color:#f59e0b; font-size:20px;">${dhikr.repeat}</strong>
           </div>
         </div>
 
-        <div class="progress-bar small-progress premium-progress">
-          <div id="progress-${type}-${dhikr.id}" class="progress-fill"></div>
+        <div class="premium-progress">
+          <div class="progress-bar">
+            <div id="progress-${type}-${dhikr.id}" class="progress-fill"></div>
+          </div>
         </div>
 
-        <div class="card-actions premium-card-actions">
-          <button onclick="increaseDhikr('${type}', ${dhikr.id}, ${dhikr.repeat})">تسبيح</button>
-          <button onclick="resetDhikr('${type}', ${dhikr.id}, ${dhikr.repeat})" class="soft-btn">إعادة</button>
+        <div class="premium-card-actions">
+          <button onclick="increaseDhikr('${type}', ${dhikr.id}, ${dhikr.repeat})">
+            <i class="fa-solid fa-hand-holding-heart"></i> تسبيح
+          </button>
+          <button onclick="resetDhikr('${type}', ${dhikr.id}, ${dhikr.repeat})" class="soft-btn">
+            <i class="fa-solid fa-rotate-right"></i> إعادة
+          </button>
         </div>
       `;
 
@@ -68,7 +78,7 @@ async function loadAdhkar() {
     updateDoneState(type, adhkarGroup.items);
     updateGroupStats(type, adhkarGroup.items, statsBox);
   } catch (error) {
-    container.innerHTML = "<p>وقع مشكل فتحميل الأذكار</p>";
+    container.innerHTML = "<p style='text-align:center; color:#e74c3c;'>وقع مشكل في تحميل الأذكار. تأكد من اتصالك.</p>";
     console.error(error);
   }
 }
@@ -84,11 +94,18 @@ function increaseDhikr(type, id, repeat) {
   if (count < repeat) {
     count++;
     localStorage.setItem(key, count);
+    
+    // Add a tiny animation to the button
+    const btn = event.currentTarget;
+    btn.style.transform = "scale(0.95)";
+    setTimeout(() => btn.style.transform = "scale(1) translateY(-2px)", 100);
+
     updateDhikrUI(type, id, repeat);
     refreshGroupCompletion(type);
 
     if (count === repeat) {
-      alert("ما شاء الله، كملتي هاد الذكر");
+       // Optional: play a subtle sound or just show an alert
+       // alert("ما شاء الله، أكملت هذا الذكر");
     }
   }
 }
@@ -115,30 +132,33 @@ function updateDhikrUI(type, id, repeat) {
 
   if (progressEl) {
     progressEl.style.width = `${percent}%`;
-
     if (percent === 100) {
-      progressEl.classList.add("progress-done");
+      progressEl.style.background = "linear-gradient(90deg, #10b981, #34d399)"; // Green when done
     } else {
-      progressEl.classList.remove("progress-done");
+      progressEl.style.background = "linear-gradient(90deg, #1f6f50, #a3e4c7)"; // Normal color
     }
   }
 }
 
 async function refreshGroupCompletion(type) {
-  const response = await fetch("adhkar.json");
-  const data = await response.json();
-  const adhkarGroup = data[type];
-  const statsBox = document.getElementById("adhkarStats");
+  try {
+    const response = await fetch("adhkar.json");
+    const data = await response.json();
+    const adhkarGroup = data[type];
+    const statsBox = document.getElementById("adhkarStats");
 
-  if (!adhkarGroup) return;
+    if (!adhkarGroup) return;
 
-  updateDoneState(type, adhkarGroup.items);
-  updateGroupStats(type, adhkarGroup.items, statsBox);
+    updateDoneState(type, adhkarGroup.items);
+    updateGroupStats(type, adhkarGroup.items, statsBox);
+  } catch(e) {
+    console.log(e);
+  }
 }
 
 function updateDoneState(type, items) {
   const doneBox = document.getElementById("doneBox");
-
+  
   const allDone = items.every(item => {
     const count = parseInt(localStorage.getItem(getDhikrStorageKey(type, item.id)) || "0", 10);
     return count >= item.repeat;
@@ -146,7 +166,7 @@ function updateDoneState(type, items) {
 
   if (allDone) {
     doneBox.style.display = "block";
-    doneBox.textContent = "ما شاء الله، أكملتي جميع الأذكار ✅";
+    doneBox.innerHTML = '<i class="fa-solid fa-check-circle"></i> ما شاء الله، لقد أكملت جميع الأذكار بنجاح';
   } else {
     doneBox.style.display = "none";
   }
@@ -172,15 +192,15 @@ function updateGroupStats(type, items, statsBox) {
 
   statsBox.innerHTML = `
     <div class="stat-card">
-      <span class="stat-label">عدد الأذكار</span>
+      <span class="stat-label">مجموع الأذكار</span>
       <strong>${total}</strong>
     </div>
     <div class="stat-card">
-      <span class="stat-label">المكتمل</span>
+      <span class="stat-label">تم إنجازه</span>
       <strong>${completed}</strong>
     </div>
     <div class="stat-card">
-      <span class="stat-label">نسبة التقدم</span>
+      <span class="stat-label">نسبة الإكتمال</span>
       <strong>${percent}%</strong>
     </div>
   `;
@@ -192,7 +212,7 @@ function setupTheme() {
 
   if (savedTheme === "dark") {
     document.body.classList.add("dark");
-    if (themeToggle) themeToggle.textContent = "☀️ الوضع النهاري";
+    if (themeToggle) themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
   }
 
   if (themeToggle) {
@@ -201,14 +221,16 @@ function setupTheme() {
 
       if (document.body.classList.contains("dark")) {
         localStorage.setItem("theme", "dark");
-        themeToggle.textContent = "☀️ الوضع النهاري";
+        themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
       } else {
         localStorage.setItem("theme", "light");
-        themeToggle.textContent = "🌙 الوضع الليلي";
+        themeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
       }
     });
   }
 }
 
-loadAdhkar();
-setupTheme();
+document.addEventListener("DOMContentLoaded", () => {
+  loadAdhkar();
+  setupTheme();
+});
