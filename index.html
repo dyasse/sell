@@ -4,48 +4,79 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>نور - قرآن وأذكار</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="simple-hero">
-    <div class="simple-hero-content">
-      <h1>نور</h1>
-      <p class="hero-subtitle">رفيقك اليومي للقرآن الكريم والأذكار</p>
 
-      <div class="ayah-box clean-ayah-box">
-        <h2>آية اليوم</h2>
-        <p id="dailyAyahText">جاري تحميل آية اليوم...</p>
-        <span id="dailyAyahRef"></span>
+  <nav class="navbar">
+    <div class="logo">
+      <i class="fa-solid fa-book-quran"></i>
+      <span>نور</span>
+    </div>
+    <button id="themeToggle" class="theme-btn" aria-label="تغيير المظهر">
+      <i class="fa-solid fa-moon"></i>
+    </button>
+  </nav>
+
+  <header class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">مرحباً بك في <span>نور</span></h1>
+      <p class="hero-subtitle">رفيقك اليومي لتلاوة القرآن الكريم وحفظ الأذكار</p>
+
+      <div class="daily-ayah-card">
+        <div class="ayah-header">
+          <i class="fa-solid fa-star-and-crescent"></i>
+          <h2>آية اليوم</h2>
+        </div>
+        <p id="dailyAyahText" class="quran-text">جاري تحميل آية اليوم...</p>
+        <span id="dailyAyahRef" class="ayah-ref"></span>
       </div>
-
-      <div class="hero-actions">
-        <button onclick="goToQuran()">القرآن الكريم</button>
-        <button onclick="goToAdhkar('sabah')">أذكار الصباح</button>
-        <button onclick="goToAdhkar('masa')">أذكار المساء</button>
-      </div>
-
-      <button id="themeToggle" class="theme-btn">🌙 الوضع الليلي</button>
     </div>
   </header>
 
-  <main class="home-main">
-    <section class="quick-sections">
-      <div class="quick-card">
+  <main class="main-content">
+    <section class="services-grid">
+
+      <div class="service-card" onclick="goToQuran()">
+        <div class="card-icon quran-icon">
+          <i class="fa-solid fa-book-open-reader"></i>
+        </div>
         <h3>القرآن الكريم</h3>
-        <p>انتقل إلى فهرس السور واقرأ القرآن الكريم بخط واضح وجميل.</p>
-        <button onclick="goToQuran()">فتح القرآن</button>
+        <p>تلاوة خاشعة بخط واضح مع فهرس السور.</p>
+        <span class="card-link">تصفح الآن <i class="fa-solid fa-arrow-left"></i></span>
       </div>
 
-      <div class="quick-card">
-        <h3>الأذكار</h3>
-        <p>أذكار الصباح والمساء مع عداد ذكي وتقدم محفوظ.</p>
-        <div class="card-actions">
-          <button onclick="goToAdhkar('sabah')">الصباح</button>
-          <button onclick="goToAdhkar('masa')">المساء</button>
+      <div class="service-card" onclick="goToAdhkar('sabah')">
+        <div class="card-icon sun-icon">
+          <i class="fa-solid fa-sun"></i>
         </div>
+        <h3>أذكار الصباح</h3>
+        <p>ابدأ يومك بذكر الله مع العداد الذكي.</p>
+        <span class="card-link">ابدأ الأذكار <i class="fa-solid fa-arrow-left"></i></span>
       </div>
+
+      <div class="service-card" onclick="goToAdhkar('masa')">
+        <div class="card-icon moon-icon">
+          <i class="fa-solid fa-moon"></i>
+        </div>
+        <h3>أذكار المساء</h3>
+        <p>اختم يومك بالطمأنينة والسكينة والذكر.</p>
+        <span class="card-link">ابدأ الأذكار <i class="fa-solid fa-arrow-left"></i></span>
+      </div>
+
     </section>
   </main>
+
+  <footer>
+    <p>تم التصميم بحب 🤍 - تطبيق نور</p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
