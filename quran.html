@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>فهرس القرآن الكريم - نور</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero premium-hero">
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <h1>فهرس القرآن الكريم</h1>
+      <p class="hero-subtitle">تصفح جميع السور بشكل منظم واحترافي</p>
+
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="ابحث عن سورة..." />
+      </div>
+
+      <div class="hero-actions">
+        <button onclick="goHome()">الرئيسية</button>
+      </div>
+
+      <button id="themeToggle" class="theme-btn">🌙 الوضع الليلي</button>
+    </div>
+  </header>
+
+  <main class="home-main">
+    <section class="home-section">
+      <div class="section-head">
+        <h2>فهرس السور</h2>
+        <p>اختر السورة التي تريد قراءتها</p>
+      </div>
+
+      <div id="quranList" class="cards"></div>
+    </section>
+  </main>
+
+  <script src="quran.js"></script>
+</body>
+</html>
