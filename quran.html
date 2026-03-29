@@ -4,36 +4,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>فهرس القرآن الكريم - نور</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="hero premium-hero">
-    <div class="hero-overlay"></div>
 
+  <nav class="navbar">
+    <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+      <i class="fa-solid fa-book-quran"></i>
+      <span>نور</span>
+    </div>
+    <div class="nav-actions">
+      <button onclick="window.location.href='index.html'" class="back-btn">
+        <i class="fa-solid fa-house"></i> الرئيسية
+      </button>
+      <button id="themeToggle" class="theme-btn" aria-label="تغيير المظهر">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </nav>
+
+  <header class="hero-section quran-hero">
     <div class="hero-content">
-      <h1>فهرس القرآن الكريم</h1>
-      <p class="hero-subtitle">تصفح جميع السور بشكل منظم واحترافي</p>
+      <h1 class="hero-title">فهرس <span>القرآن الكريم</span></h1>
+      <p class="hero-subtitle">تصفح السور واقرأ براحة وسكينة</p>
 
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="ابحث عن سورة..." />
+      <div class="search-container">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="searchInput" class="search-input" placeholder="ابحث عن سورة (مثال: الكهف)..." />
       </div>
-
-      <div class="hero-actions">
-        <button onclick="goHome()">الرئيسية</button>
-      </div>
-
-      <button id="themeToggle" class="theme-btn">🌙 الوضع الليلي</button>
     </div>
   </header>
 
-  <main class="home-main">
-    <section class="home-section">
-      <div class="section-head">
-        <h2>فهرس السور</h2>
-        <p>اختر السورة التي تريد قراءتها</p>
-      </div>
-
-      <div id="quranList" class="cards"></div>
+  <main class="main-content">
+    <section class="surah-section">
+      <div id="quranList" class="surah-grid cards"></div>
     </section>
   </main>
 
