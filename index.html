@@ -16,18 +16,29 @@
 <div style="text-align:center; margin:20px 0;">
   <a href="favorites.html" class="back-btn">فتح المفضلة</a>
 </div>
-  <main>
-    <section>
+  <main class="home-main">
+  <section class="home-grid">
+    <div class="home-card">
       <h2>القرآن الكريم</h2>
-      <div id="quranList" class="cards"></div>
-    </section>
+      <p>تصفح السور الكريمة واقرأ القرآن بخط واضح وجميل</p>
+      <button onclick="scrollToQuran()">فتح القرآن</button>
+    </div>
 
-    <section>
+    <div class="home-card">
       <h2>الأذكار</h2>
-      <div id="adhkarList" class="cards"></div>
-    </section>
-  </main>
+      <p>أذكار الصباح والمساء مع عداد ذكي وتقدم محفوظ</p>
+      <div class="card-actions">
+        <button onclick="goToAdhkar('sabah')">أذكار الصباح</button>
+        <button onclick="goToAdhkar('masa')">أذكار المساء</button>
+      </div>
+    </div>
+  </section>
 
+  <section id="quranSection" class="home-section">
+    <h2>القرآن الكريم</h2>
+    <div id="quranList" class="cards"></div>
+  </section>
+</main>
   <script src="script.js"></script>
 </body>
 </html>
