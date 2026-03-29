@@ -536,3 +536,188 @@ body.dark .surah-number {
   background: #2a3a33;
   color: #8ce0b3;
 }
+.adhkar-hero {
+  padding-bottom: 36px;
+}
+
+.adhkar-main {
+  padding: 30px 20px 40px;
+}
+
+.adhkar-hero-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.hero-link-btn {
+  display: inline-block;
+  text-decoration: none;
+  background: white;
+  color: #1f6f50;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: bold;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.hero-link-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.secondary-btn {
+  background: rgba(255,255,255,0.16);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.adhkar-top-section {
+  max-width: 1100px;
+  margin: 0 auto 24px;
+}
+
+.adhkar-stats-box {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #5b6b65;
+  font-size: 14px;
+}
+
+.stat-card strong {
+  font-size: 28px;
+  color: #1f6f50;
+}
+
+.premium-done-box {
+  margin-bottom: 18px;
+  border-radius: 18px;
+  padding: 16px 20px;
+}
+
+.premium-adhkar-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  gap: 22px;
+}
+
+.premium-adhkar-card {
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.premium-adhkar-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+}
+
+.premium-dhikr-head {
+  margin-bottom: 14px;
+}
+
+.dhikr-mini-label {
+  margin: 4px 0 0;
+  color: #6b7d76;
+  font-size: 14px;
+}
+
+.adhkar-text {
+  font-size: 22px;
+  line-height: 2.2;
+  margin-bottom: 18px;
+}
+
+.premium-dhikr-stats {
+  margin-bottom: 16px;
+}
+
+.mini-stat {
+  flex: 1;
+  min-width: 120px;
+  background: #f7fbf8;
+  border-radius: 14px;
+  padding: 12px 14px;
+  text-align: center;
+}
+
+.mini-stat-label {
+  display: block;
+  font-size: 13px;
+  color: #6b7d76;
+  margin-bottom: 6px;
+}
+
+.mini-stat strong {
+  font-size: 22px;
+  color: #1f6f50;
+}
+
+.premium-progress {
+  margin-bottom: 18px;
+}
+
+.premium-card-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.premium-card-actions button {
+  flex: 1;
+}
+
+.soft-btn {
+  background: #e8f3ed !important;
+  color: #1f6f50 !important;
+}
+
+body.dark .hero-link-btn {
+  background: #1e1e1e;
+  color: #f1f1f1;
+}
+
+body.dark .secondary-btn {
+  background: rgba(255,255,255,0.08);
+  color: white;
+  border-color: rgba(255,255,255,0.12);
+}
+
+body.dark .stat-card,
+body.dark .premium-adhkar-card,
+body.dark .mini-stat {
+  background: #1e1e1e;
+  color: #f1f1f1;
+}
+
+body.dark .stat-label,
+body.dark .dhikr-mini-label,
+body.dark .mini-stat-label {
+  color: #b9c5bf;
+}
+
+body.dark .stat-card strong,
+body.dark .mini-stat strong {
+  color: #8ce0b3;
+}
+
+body.dark .soft-btn {
+  background: #2a3a33 !important;
+  color: #8ce0b3 !important;
+}
