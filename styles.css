@@ -208,22 +208,26 @@ body.dark .progress-text {
 }
 .surah-text {
   margin-top: 20px;
-  line-height: 2.4;
-  font-size: 28px;
+  line-height: 2.6;
+  font-size: 34px;
+  font-family: "Amiri Quran", serif;
   background: #fff;
-  padding: 20px;
+  padding: 24px;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  text-align: justify;
 }
 
 .ayah {
   display: inline;
+  font-family: "Amiri Quran", serif;
 }
 
 .ayah-number {
   color: #1f6f50;
-  font-size: 20px;
-  margin: 0 4px;
+  font-size: 22px;
+  margin: 0 6px;
+  font-family: "Amiri Quran", serif;
 }
 
 .audio-box {
@@ -234,4 +238,8 @@ body.dark .progress-text {
 body.dark .surah-text {
   background: #1e1e1e;
   color: #f5f5f5;
+}
+.quran-title {
+  font-family: "Amiri Quran", serif;
+  font-size: 42px;
 }
