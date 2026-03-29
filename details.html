@@ -1,121 +1,44 @@
-/* =========================================
-   Reading Page (صفحة القراءة - التفاصيل)
-========================================= */
-.reading-main {
-  padding: 40px 5%;
-  min-height: 80vh;
-  display: flex;
-  justify-content: center;
-}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>القراءة - نور</title>
 
-.reading-container {
-  background: #ffffff;
-  width: 100%;
-  max-width: 900px;
-  border-radius: 20px;
-  padding: 50px 40px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e8f5ee;
-}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
 
-/* تنسيق رأس السورة (البسملة والاسم) */
-.surah-title-header {
-  text-align: center;
-  margin-bottom: 40px;
-  padding-bottom: 30px;
-  border-bottom: 2px dashed #e8f5ee;
-}
+  <nav class="navbar">
+    <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+      <i class="fa-solid fa-book-quran"></i>
+      <span>نور</span>
+    </div>
+    <div class="nav-actions">
+      <button onclick="window.history.back()" class="back-btn">
+        <i class="fa-solid fa-arrow-right"></i> رجوع
+      </button>
+      <button id="themeToggle" class="theme-btn" aria-label="تغيير المظهر">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </nav>
 
-.surah-title-header h1 {
-  font-family: 'Amiri', serif;
-  font-size: 42px;
-  color: #1f6f50;
-  margin-bottom: 15px;
-}
+  <main class="reading-main">
+    <div id="detailsCard" class="reading-container">
+      <div style="text-align: center; color: #1f6f50; font-weight: bold; padding: 40px;">
+        <i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 10px;"></i>
+        <p>جاري التحميل...</p>
+      </div>
+    </div>
+  </main>
 
-.bismillah {
-  font-family: 'Amiri', serif;
-  font-size: 28px;
-  color: #1f2d2a;
-}
-
-/* نص القرآن */
-.quran-reader-text {
-  font-family: 'Amiri', serif;
-  font-size: 32px; /* خط كبير ومقروء */
-  line-height: 2.4; /* مساحة مريحة بين السطور */
-  text-align: justify;
-  color: #1f2d2a;
-  direction: rtl;
-}
-
-.ayah-text {
-  display: inline;
-}
-
-/* أرقام الآيات */
-.ayah-number-circle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #f0f7f3;
-  color: #1f6f50;
-  font-size: 16px;
-  font-family: 'Cairo', sans-serif;
-  font-weight: bold;
-  margin: 0 8px;
-  border: 1px solid #cce8d9;
-}
-
-/* =========================================
-   الوضع الليلي (Dark Mode) - صفحة القراءة
-========================================= */
-body.dark .reading-container {
-  background: #1e1e1e;
-  border-color: #2a3a33;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-body.dark .surah-title-header {
-  border-bottom-color: #2a3a33;
-}
-
-body.dark .surah-title-header h1 {
-  color: #a3e4c7;
-}
-
-body.dark .bismillah,
-body.dark .quran-reader-text {
-  color: #f1f1f1;
-}
-
-body.dark .ayah-number-circle {
-  background: #1a2f26;
-  color: #a3e4c7;
-  border-color: #2a3a33;
-}
-
-/* تجاوب الشاشات الصغيرة (الهواتف) */
-@media (max-width: 768px) {
-  .reading-container {
-    padding: 30px 20px;
-  }
-  .surah-title-header h1 {
-    font-size: 34px;
-  }
-  .bismillah {
-    font-size: 24px;
-  }
-  .quran-reader-text {
-    font-size: 26px;
-    line-height: 2.2;
-  }
-  .ayah-number-circle {
-    width: 35px;
-    height: 35px;
-    font-size: 14px;
-  }
-}
+  <script src="details.js"></script>
+</body>
+</html>
