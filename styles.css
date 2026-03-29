@@ -871,3 +871,162 @@ body.dark .meta-item strong,
 body.dark .section-head h2 {
   color: #8ce0b3;
 }
+.simple-hero {
+  background: linear-gradient(135deg, #184d3b, #1f6f50);
+  color: white;
+  text-align: center;
+  padding: 50px 20px 35px;
+}
+
+.simple-hero-content {
+  max-width: 950px;
+  margin: 0 auto;
+}
+
+.simple-hero h1 {
+  font-size: 52px;
+  margin-bottom: 10px;
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  margin-bottom: 24px;
+  opacity: 0.95;
+}
+
+.clean-ayah-box {
+  max-width: 800px;
+  margin: 0 auto 24px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 22px;
+}
+
+.clean-ayah-box h2 {
+  color: white;
+  margin-bottom: 12px;
+}
+
+.clean-ayah-box p {
+  font-size: 26px;
+  line-height: 2.1;
+  margin-bottom: 10px;
+}
+
+.clean-ayah-box span {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.hero-actions button {
+  background: white;
+  color: #1f6f50;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.search-box {
+  max-width: 420px;
+  margin: 0 auto 16px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+}
+
+.home-main {
+  padding: 30px 20px;
+}
+
+.quick-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  max-width: 1050px;
+  margin: 0 auto 35px;
+}
+
+.quick-card {
+  background: white;
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.quick-card h3 {
+  color: #1f6f50;
+  margin-bottom: 10px;
+}
+
+.quick-card p {
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+.home-section {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-head {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.section-head h2 {
+  font-size: 34px;
+  color: #174c39;
+  margin-bottom: 8px;
+}
+
+.section-head p {
+  color: #6b7d76;
+}
+
+body.dark .simple-hero {
+  background: linear-gradient(135deg, #0f241d, #15392d);
+}
+
+body.dark .quick-card {
+  background: #1e1e1e;
+  color: #f1f1f1;
+}
+
+body.dark .clean-ayah-box {
+  background: rgba(255,255,255,0.06);
+}
+
+body.dark .hero-actions button {
+  background: #1e1e1e;
+  color: white;
+}
+
+body.dark .search-box input {
+  background: #1e1e1e;
+  color: white;
+  border: 1px solid #444;
+}
+
+body.dark .section-head h2 {
+  color: #8ce0b3;
+}
+
+body.dark .section-head p {
+  color: #b9c5bf;
+}
