@@ -4,11 +4,17 @@ async function loadDetails() {
   const detailsCard = document.getElementById("detailsCard");
 
   if (!chapterId) {
-    detailsCard.innerHTML = "<p>السورة غير موجودة</p>";
+    detailsCard.innerHTML = "<p style='text-align:center;'>السورة غير موجودة</p>";
     return;
   }
 
-  detailsCard.innerHTML = "<p>جاري تحميل السورة...</p>";
+  // أنيميشن ديال التحميل
+  detailsCard.innerHTML = `
+    <div style="text-align: center; color: #1f6f50; font-weight: bold; padding: 40px;">
+      <i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 10px;"></i>
+      <p>جاري تحميل السورة...</p>
+    </div>
+  `;
 
   try {
     const [chaptersRes, versesRes] = await Promise.all([
@@ -23,33 +29,46 @@ async function loadDetails() {
     const verses = versesData.verses || [];
 
     if (!chapter) {
-      detailsCard.innerHTML = "<p>السورة غير موجودة</p>";
+      detailsCard.innerHTML = "<p style='text-align:center;'>السورة غير موجودة</p>";
       return;
     }
 
+    // ربط الآيات مع الكلاسات الجديدة ديال CSS
     const versesHtml = verses.map(v => `
-      <span class="ayah">
-        ${v.text_uthmani}
-        <span class="ayah-number">﴿${v.verse_key.split(":")[1]}﴾</span>
-      </span>
+      <span class="ayah-text">${v.text_uthmani}</span>
+      <span class="ayah-number-circle">${v.verse_key.split(":")[1]}</span>
     `).join(" ");
 
-    detailsCard.innerHTML = `
-     <h2 class="quran-title">${chapter.name_arabic}</h2>
-      <p><strong>${chapter.verses_count} آية</strong></p>
-      <div class="surah-text">${versesHtml}</div>
+    // إضافة البسملة لجميع السور باستثناء الفاتحة (لأنها أصلا فيها البسملة آية 1) والتوبة
+    let bismillahHtml = "";
+    if (chapterId !== 1 && chapterId !== 9) {
+      bismillahHtml = `<p class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>`;
+    }
 
-      <div class="audio-box">
-        <button id="playAudioBtn">تشغيل صوت السورة</button>
-        <audio id="surahAudio" controls style="display:none; width:100%; margin-top:15px;"></audio>
+    detailsCard.innerHTML = `
+      <div class="surah-title-header">
+        <h1>سُورَةُ ${chapter.name_arabic.replace('سورة ', '')}</h1>
+        ${bismillahHtml}
+      </div>
+
+      <div class="quran-reader-text">
+        ${versesHtml}
+      </div>
+
+      <div class="audio-box" style="margin-top: 40px; text-align: center; border-top: 1px dashed #e8f5ee; padding-top: 30px;">
+        <button id="playAudioBtn" style="background: #1f6f50; color: white; border: none; padding: 12px 24px; border-radius: 12px; font-family: 'Cairo', sans-serif; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-circle-play" style="font-size: 20px;"></i> استمع للسورة
+        </button>
+        <audio id="surahAudio" controls style="display:none; width:100%; margin-top:20px; border-radius: 30px;"></audio>
       </div>
     `;
 
     document.getElementById("playAudioBtn").addEventListener("click", () => {
       loadAudio(chapterId);
     });
+
   } catch (error) {
-    detailsCard.innerHTML = "<p>وقع مشكل فتحميل السورة</p>";
+    detailsCard.innerHTML = "<p style='text-align:center; color:#e74c3c;'>وقع مشكل في تحميل السورة. تأكد من اتصالك بالأنترنت.</p>";
     console.error(error);
   }
 }
@@ -57,22 +76,33 @@ async function loadDetails() {
 async function loadAudio(chapterId) {
   try {
     const audio = document.getElementById("surahAudio");
+    const playBtn = document.getElementById("playAudioBtn");
+    
+    // تغيير النص واللون ملي يورك على الزر
+    playBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="font-size: 20px;"></i> جاري التحميل...';
+    playBtn.style.opacity = "0.7";
+
     const response = await fetch(`https://api.quran.com/api/v4/chapter_recitations/1/${chapterId}`);
     const result = await response.json();
 
     const audioFile = result.audio_file;
 
     if (!audioFile || !audioFile.audio_url) {
-      alert("الصوت ما توفرش دابا");
+      alert("الصوت غير متوفر حالياً لهذه السورة");
+      playBtn.innerHTML = '<i class="fa-solid fa-circle-play" style="font-size: 20px;"></i> استمع للسورة';
+      playBtn.style.opacity = "1";
       return;
     }
 
+    // إخفاء الزر وإظهار قارئ الصوت
+    playBtn.style.display = "none";
     audio.src = audioFile.audio_url;
     audio.style.display = "block";
     audio.play();
+
   } catch (error) {
     console.error(error);
-    alert("وقع مشكل فالصوت");
+    alert("وقع مشكل في تحميل الصوت");
   }
 }
 
@@ -82,7 +112,9 @@ function setupTheme() {
 
   if (savedTheme === "dark") {
     document.body.classList.add("dark");
-    if (themeToggle) themeToggle.textContent = "☀️ الوضع النهاري";
+    if (themeToggle) {
+      themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+    }
   }
 
   if (themeToggle) {
@@ -91,14 +123,16 @@ function setupTheme() {
 
       if (document.body.classList.contains("dark")) {
         localStorage.setItem("theme", "dark");
-        themeToggle.textContent = "☀️ الوضع النهاري";
+        themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
       } else {
         localStorage.setItem("theme", "light");
-        themeToggle.textContent = "🌙 الوضع الليلي";
+        themeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
       }
     });
   }
 }
 
-loadDetails();
-setupTheme();
+document.addEventListener("DOMContentLoaded", () => {
+  loadDetails();
+  setupTheme();
+});
