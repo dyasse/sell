@@ -7,38 +7,61 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="hero">
-    <h1>نور</h1>
-    <p>تطبيق قرآن وأذكار يومية</p>
-    <input type="text" id="searchInput" placeholder="ابحث عن سورة أو ذكر" />
-    <button id="themeToggle" class="theme-btn">🌙 الوضع الليلي</button>
-  </header>
-<div style="text-align:center; margin:20px 0;">
-  <a href="favorites.html" class="back-btn">فتح المفضلة</a>
-</div>
-  <main class="home-main">
-  <section class="home-grid">
-    <div class="home-card">
-      <h2>القرآن الكريم</h2>
-      <p>تصفح السور الكريمة واقرأ القرآن بخط واضح وجميل</p>
-      <button onclick="scrollToQuran()">فتح القرآن</button>
-    </div>
+  <header class="hero premium-hero">
+    <div class="hero-overlay"></div>
 
-    <div class="home-card">
-      <h2>الأذكار</h2>
-      <p>أذكار الصباح والمساء مع عداد ذكي وتقدم محفوظ</p>
-      <div class="card-actions">
+    <div class="hero-content">
+      <h1>نور</h1>
+      <p class="hero-subtitle">رفيقك اليومي للقرآن الكريم والأذكار</p>
+
+      <div class="ayah-box">
+        <h2>آية اليوم</h2>
+        <p id="dailyAyahText">جاري تحميل آية اليوم...</p>
+        <span id="dailyAyahRef"></span>
+      </div>
+
+      <div class="hero-actions">
+        <button onclick="scrollToQuran()">القرآن الكريم</button>
         <button onclick="goToAdhkar('sabah')">أذكار الصباح</button>
         <button onclick="goToAdhkar('masa')">أذكار المساء</button>
       </div>
-    </div>
-  </section>
 
-  <section id="quranSection" class="home-section">
-    <h2>القرآن الكريم</h2>
-    <div id="quranList" class="cards"></div>
-  </section>
-</main>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="ابحث عن سورة..." />
+      </div>
+
+      <button id="themeToggle" class="theme-btn">🌙 الوضع الليلي</button>
+    </div>
+  </header>
+
+  <main class="home-main">
+    <section class="quick-sections">
+      <div class="quick-card">
+        <h3>القرآن الكريم</h3>
+        <p>تصفح السور واقرأ النص القرآني بخط واضح وجميل.</p>
+        <button onclick="scrollToQuran()">فتح القرآن</button>
+      </div>
+
+      <div class="quick-card">
+        <h3>الأذكار</h3>
+        <p>أذكار الصباح والمساء مع عداد ذكي وتقدم محفوظ.</p>
+        <div class="card-actions">
+          <button onclick="goToAdhkar('sabah')">الصباح</button>
+          <button onclick="goToAdhkar('masa')">المساء</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="quranSection" class="home-section">
+      <div class="section-head">
+        <h2>القرآن الكريم</h2>
+        <p>اختر السورة التي تريد قراءتها</p>
+      </div>
+
+      <div id="quranList" class="cards"></div>
+    </section>
+  </main>
+
   <script src="script.js"></script>
 </body>
 </html>
