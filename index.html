@@ -7,14 +7,12 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="hero premium-hero">
-    <div class="hero-overlay"></div>
-
-    <div class="hero-content">
+  <header class="simple-hero">
+    <div class="simple-hero-content">
       <h1>نور</h1>
       <p class="hero-subtitle">رفيقك اليومي للقرآن الكريم والأذكار</p>
 
-      <div class="ayah-box">
+      <div class="ayah-box clean-ayah-box">
         <h2>آية اليوم</h2>
         <p id="dailyAyahText">جاري تحميل آية اليوم...</p>
         <span id="dailyAyahRef"></span>
@@ -38,8 +36,8 @@
     <section class="quick-sections">
       <div class="quick-card">
         <h3>القرآن الكريم</h3>
-        <p>تصفح السور واقرأ النص القرآني بخط واضح وجميل.</p>
-        <button onclick="scrollToQuran()">فتح القرآن</button>
+        <p>تصفح السور الكريمة من فهرس منظم واحترافي.</p>
+        <button onclick="scrollToQuran()">فتح الفهرس</button>
       </div>
 
       <div class="quick-card">
@@ -52,14 +50,14 @@
       </div>
     </section>
 
- <section id="quranSection" class="home-section">
-  <div class="section-head">
-    <h2>فهرس القرآن الكريم</h2>
-    <p>اختر السورة التي تريد قراءتها من فهرس منظم وأنيق</p>
-  </div>
+    <section id="quranSection" class="home-section">
+      <div class="section-head">
+        <h2>فهرس القرآن الكريم</h2>
+        <p>اختر السورة التي تريد قراءتها</p>
+      </div>
 
-  <div id="quranList" class="cards"></div>
-</section>
+      <div id="quranList" class="cards"></div>
+    </section>
   </main>
 
   <script src="script.js"></script>
