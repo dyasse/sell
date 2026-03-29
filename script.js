@@ -14,9 +14,15 @@ async function loadChapters() {
 
       items.forEach(chapter => {
         const card = document.createElement("div");
-        card.className = "card";
+        card.className = "card surah-card";
         card.innerHTML = `
-          <h3>${chapter.name_arabic}</h3>
+          <div class="surah-top">
+            <span class="surah-number">${chapter.id}</span>
+            <div>
+              <h3>${chapter.name_arabic}</h3>
+              <p>${chapter.name_simple}</p>
+            </div>
+          </div>
           <p>${chapter.verses_count} آية</p>
           <button onclick="goToDetails(${chapter.id})">فتح السورة</button>
         `;
@@ -27,15 +33,40 @@ async function loadChapters() {
     render(chapters);
 
     searchInput.addEventListener("input", e => {
-      const value = e.target.value.trim();
+      const value = e.target.value.trim().toLowerCase();
       const filtered = chapters.filter(chapter =>
         chapter.name_arabic.includes(value) ||
-        chapter.name_simple.toLowerCase().includes(value.toLowerCase())
+        chapter.name_simple.toLowerCase().includes(value)
       );
       render(filtered);
     });
   } catch (error) {
     quranList.innerHTML = "<p>وقع مشكل فتحميل السور</p>";
+    console.error(error);
+  }
+}
+
+async function loadDailyAyah() {
+  const dailyAyahText = document.getElementById("dailyAyahText");
+  const dailyAyahRef = document.getElementById("dailyAyahRef");
+
+  try {
+    const day = new Date().getDate();
+    const surahNumber = (day % 114) + 1;
+
+    const response = await fetch(`https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${surahNumber}`);
+    const result = await response.json();
+    const verses = result.verses || [];
+
+    if (verses.length > 0) {
+      const firstVerse = verses[0];
+      dailyAyahText.textContent = firstVerse.text_uthmani;
+      dailyAyahRef.textContent = `سورة رقم ${surahNumber} - الآية 1`;
+    } else {
+      dailyAyahText.textContent = "تعذر تحميل آية اليوم";
+    }
+  } catch (error) {
+    dailyAyahText.textContent = "وقع مشكل فتحميل آية اليوم";
     console.error(error);
   }
 }
@@ -61,7 +92,9 @@ function setupTheme() {
 
   if (savedTheme === "dark") {
     document.body.classList.add("dark");
-    if (themeToggle) themeToggle.textContent = "☀️ الوضع النهاري";
+    if (themeToggle) {
+      themeToggle.textContent = "☀️ الوضع النهاري";
+    }
   }
 
   if (themeToggle) {
@@ -80,4 +113,5 @@ function setupTheme() {
 }
 
 loadChapters();
+loadDailyAyah();
 setupTheme();
