@@ -7,22 +7,32 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="hero">
-    <h1 id="adhkarTitle">الأذكار</h1>
-    <p id="adhkarSubtitle">أذكار يومية</p>
-    <button id="themeToggle" class="theme-btn">🌙 الوضع الليلي</button>
+  <header class="hero premium-hero adhkar-hero">
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <h1 id="adhkarTitle">الأذكار</h1>
+      <p id="adhkarSubtitle" class="hero-subtitle">أذكار يومية مع عداد ذكي</p>
+
+      <div class="adhkar-hero-actions">
+        <a href="adhkar.html?type=sabah" class="hero-link-btn">أذكار الصباح</a>
+        <a href="adhkar.html?type=masa" class="hero-link-btn">أذكار المساء</a>
+        <a href="index.html" class="hero-link-btn secondary-btn">الرجوع للرئيسية</a>
+      </div>
+
+      <button id="themeToggle" class="theme-btn">🌙 الوضع الليلي</button>
+    </div>
   </header>
 
-  <main>
-    <div id="doneBox" class="done-box" style="display:none;"></div>
-
-    <section>
-      <div id="adhkarContainer" class="adhkar-container"></div>
+  <main class="adhkar-main">
+    <section class="adhkar-top-section">
+      <div id="doneBox" class="done-box premium-done-box" style="display:none;"></div>
+      <div id="adhkarStats" class="adhkar-stats-box"></div>
     </section>
 
-    <div style="text-align:center; margin-top:20px;">
-      <a href="index.html" class="back-btn">رجوع للرئيسية</a>
-    </div>
+    <section>
+      <div id="adhkarContainer" class="adhkar-container premium-adhkar-grid"></div>
+    </section>
   </main>
 
   <script src="adhkar.js"></script>
