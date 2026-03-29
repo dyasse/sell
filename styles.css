@@ -243,3 +243,64 @@ body.dark .surah-text {
   font-family: "Amiri Quran", serif;
   font-size: 42px;
 }
+.adhkar-container {
+  display: grid;
+  gap: 20px;
+}
+
+.adhkar-card {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.dhikr-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.repeat-badge {
+  background: #dff3e8;
+  color: #1f6f50;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.dhikr-stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.small-progress {
+  margin-top: 15px;
+  height: 12px;
+}
+
+.done-box {
+  max-width: 850px;
+  margin: 0 auto 20px;
+  background: #dff3e8;
+  color: #1f6f50;
+  padding: 14px 18px;
+  border-radius: 14px;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+
+body.dark .repeat-badge {
+  background: #2a3a33;
+  color: #8ce0b3;
+}
+
+body.dark .done-box {
+  background: #1d2b24;
+  color: #8ce0b3;
+}
