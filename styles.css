@@ -721,3 +721,153 @@ body.dark .soft-btn {
   background: #2a3a33 !important;
   color: #8ce0b3 !important;
 }
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 22px;
+}
+
+.premium-surah-card {
+  border-radius: 24px;
+  padding: 22px;
+  background: linear-gradient(180deg, #ffffff, #f8fcf9);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(31, 111, 80, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.premium-surah-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
+}
+
+.surah-card-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.surah-number-box {
+  min-width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #1f6f50, #49a078);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: bold;
+  box-shadow: 0 8px 16px rgba(31, 111, 80, 0.25);
+}
+
+.surah-main-info {
+  flex: 1;
+}
+
+.surah-name-ar {
+  margin: 0 0 6px;
+  font-size: 28px;
+  color: #174c39;
+}
+
+.surah-name-en {
+  margin: 0;
+  color: #6b7d76;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+}
+
+.surah-type-badge {
+  background: #e8f5ee;
+  color: #1f6f50;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.surah-meta {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.meta-item {
+  background: #f4faf6;
+  border-radius: 16px;
+  padding: 14px;
+  text-align: center;
+}
+
+.meta-label {
+  display: block;
+  font-size: 13px;
+  color: #6b7d76;
+  margin-bottom: 6px;
+}
+
+.meta-item strong {
+  font-size: 22px;
+  color: #1f6f50;
+}
+
+.surah-card-actions button {
+  width: 100%;
+  padding: 14px 18px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #1f6f50, #2d8a63);
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(31, 111, 80, 0.2);
+}
+
+.surah-card-actions button:hover {
+  opacity: 0.95;
+}
+
+.section-head h2 {
+  font-size: 34px;
+  color: #174c39;
+}
+
+.section-head p {
+  color: #6b7d76;
+  font-size: 16px;
+}
+
+body.dark .premium-surah-card {
+  background: linear-gradient(180deg, #1b1b1b, #202020);
+  border-color: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+body.dark .surah-name-ar {
+  color: #f1f1f1;
+}
+
+body.dark .surah-name-en,
+body.dark .meta-label,
+body.dark .section-head p {
+  color: #b9c5bf;
+}
+
+body.dark .surah-type-badge {
+  background: #2a3a33;
+  color: #8ce0b3;
+}
+
+body.dark .meta-item {
+  background: #252525;
+}
+
+body.dark .meta-item strong,
+body.dark .section-head h2 {
+  color: #8ce0b3;
+}
