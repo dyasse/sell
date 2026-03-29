@@ -7,7 +7,6 @@ async function loadAdhkar() {
   const container = document.getElementById("adhkarContainer");
   const statsBox = document.getElementById("adhkarStats");
 
-  // Highlight active button in hero
   const btnSabah = document.getElementById("btnSabah");
   const btnMasa = document.getElementById("btnMasa");
   if(type === "sabah" && btnSabah) btnSabah.classList.add("active");
@@ -31,12 +30,12 @@ async function loadAdhkar() {
 
     adhkarGroup.items.forEach((dhikr, index) => {
       const card = document.createElement("div");
-      card.className = "premium-adhkar-card"; // Class updated for new CSS
+      card.className = "premium-adhkar-card"; 
 
       card.innerHTML = `
         <div class="premium-dhikr-head">
           <div>
-            <h3 style="color:#1f6f50; font-size:18px;">ذكر ${index + 1}</h3>
+            <h3 style="color:#1f6f50; font-size:18px; margin-bottom: 5px;">ذكر ${index + 1}</h3>
             <p class="dhikr-mini-label">ورد يومي</p>
           </div>
           <span class="repeat-badge">${dhikr.repeat} مرات</span>
@@ -45,11 +44,11 @@ async function loadAdhkar() {
         <p class="adhkar-text">${dhikr.text}</p>
 
         <div style="display:flex; gap:15px; margin-bottom:15px; text-align:center;">
-          <div style="flex:1; background:#f9fbfb; padding:10px; border-radius:10px;">
+          <div style="flex:1; background:#f9fbfb; padding:10px; border-radius:10px;" class="mini-stat-bg">
              <span style="font-size:12px; color:#6b7d76; display:block;">المنجز</span>
              <strong id="count-${type}-${dhikr.id}" style="color:#1f6f50; font-size:20px;">0</strong>
           </div>
-          <div style="flex:1; background:#f9fbfb; padding:10px; border-radius:10px;">
+          <div style="flex:1; background:#f9fbfb; padding:10px; border-radius:10px;" class="mini-stat-bg">
              <span style="font-size:12px; color:#6b7d76; display:block;">المتبقي</span>
              <strong id="remaining-${type}-${dhikr.id}" style="color:#f59e0b; font-size:20px;">${dhikr.repeat}</strong>
           </div>
@@ -62,7 +61,7 @@ async function loadAdhkar() {
         </div>
 
         <div class="premium-card-actions">
-          <button onclick="increaseDhikr('${type}', ${dhikr.id}, ${dhikr.repeat})">
+          <button onclick="increaseDhikr(event, '${type}', ${dhikr.id}, ${dhikr.repeat})">
             <i class="fa-solid fa-hand-holding-heart"></i> تسبيح
           </button>
           <button onclick="resetDhikr('${type}', ${dhikr.id}, ${dhikr.repeat})" class="soft-btn">
@@ -78,7 +77,7 @@ async function loadAdhkar() {
     updateDoneState(type, adhkarGroup.items);
     updateGroupStats(type, adhkarGroup.items, statsBox);
   } catch (error) {
-    container.innerHTML = "<p style='text-align:center; color:#e74c3c;'>وقع مشكل في تحميل الأذكار. تأكد من اتصالك.</p>";
+    container.innerHTML = "<p style='text-align:center; color:#e74c3c;'>وقع مشكل في تحميل الأذكار. تأكد من اتصالك بالأنترنت.</p>";
     console.error(error);
   }
 }
@@ -87,7 +86,7 @@ function getDhikrStorageKey(type, id) {
   return `dhikr_${type}_${id}`;
 }
 
-function increaseDhikr(type, id, repeat) {
+function increaseDhikr(event, type, id, repeat) {
   const key = getDhikrStorageKey(type, id);
   let count = parseInt(localStorage.getItem(key) || "0", 10);
 
@@ -95,18 +94,13 @@ function increaseDhikr(type, id, repeat) {
     count++;
     localStorage.setItem(key, count);
     
-    // Add a tiny animation to the button
+    // أنيميشن صغيرة للزر
     const btn = event.currentTarget;
     btn.style.transform = "scale(0.95)";
-    setTimeout(() => btn.style.transform = "scale(1) translateY(-2px)", 100);
+    setTimeout(() => btn.style.transform = "scale(1)", 150);
 
     updateDhikrUI(type, id, repeat);
     refreshGroupCompletion(type);
-
-    if (count === repeat) {
-       // Optional: play a subtle sound or just show an alert
-       // alert("ما شاء الله، أكملت هذا الذكر");
-    }
   }
 }
 
@@ -133,9 +127,9 @@ function updateDhikrUI(type, id, repeat) {
   if (progressEl) {
     progressEl.style.width = `${percent}%`;
     if (percent === 100) {
-      progressEl.style.background = "linear-gradient(90deg, #10b981, #34d399)"; // Green when done
+      progressEl.style.background = "linear-gradient(90deg, #10b981, #34d399)";
     } else {
-      progressEl.style.background = "linear-gradient(90deg, #1f6f50, #a3e4c7)"; // Normal color
+      progressEl.style.background = "linear-gradient(90deg, #1f6f50, #a3e4c7)";
     }
   }
 }
@@ -182,10 +176,7 @@ function updateGroupStats(type, items, statsBox) {
     const count = parseInt(localStorage.getItem(getDhikrStorageKey(type, item.id)) || "0", 10);
     totalRequired += item.repeat;
     totalDone += Math.min(count, item.repeat);
-
-    if (count >= item.repeat) {
-      completed++;
-    }
+    if (count >= item.repeat) completed++;
   });
 
   const percent = totalRequired > 0 ? Math.round((totalDone / totalRequired) * 100) : 0;
@@ -206,6 +197,88 @@ function updateGroupStats(type, items, statsBox) {
   `;
 }
 
+// ==========================================
+// قسم الإشعارات (Notifications)
+// ==========================================
+function setupNotifications() {
+  const notifBtn = document.getElementById("notifToggle");
+  if (!notifBtn) return;
+
+  if (Notification.permission === "granted") {
+    notifBtn.innerHTML = '<i class="fa-solid fa-bell" style="color:#f59e0b;"></i>';
+    startNotificationChecker();
+  }
+
+  notifBtn.addEventListener("click", () => {
+    if (!("Notification" in window)) {
+      alert("عذراً، متصفحك لا يدعم الإشعارات.");
+      return;
+    }
+
+    if (Notification.permission === "granted") {
+      alert("الإشعارات مفعلة مسبقاً. سيصلك تذكير صباحاً ومساءً.");
+    } else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          notifBtn.innerHTML = '<i class="fa-solid fa-bell" style="color:#f59e0b;"></i>';
+          alert("تم تفعيل الإشعارات بنجاح! 🔔");
+          startNotificationChecker();
+        } else {
+          alert("لم تقم بتفعيل الإشعارات.");
+        }
+      });
+    } else {
+      alert("لقد قمت بحظر الإشعارات من إعدادات المتصفح.");
+    }
+  });
+}
+
+function startNotificationChecker() {
+  setInterval(checkTimeForAdhkar, 60000); // يفحص الوقت كل دقيقة
+  checkTimeForAdhkar(); 
+}
+
+function checkTimeForAdhkar() {
+  const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+
+  // تذكير أذكار الصباح مع 07:00
+  if (hours === 7 && minutes === 0) {
+    sendNotification("أذكار الصباح ☀️", "حان الآن موعد أذكار الصباح، ابدأ يومك بذكر الله وحصن نفسك.", "sabah");
+  }
+  
+  // تذكير أذكار المساء مع 17:00 (الخامسة مساء)
+  if (hours === 17 && minutes === 0) {
+    sendNotification("أذكار المساء 🌙", "حان الآن موعد أذكار المساء، اختم يومك بذكر الله والطمأنينة.", "masa");
+  }
+}
+
+function sendNotification(title, body, type) {
+  const dateKey = new Date().toDateString();
+  const storageKey = `notif_sent_${type}_${dateKey}`;
+
+  if (localStorage.getItem(storageKey)) return; 
+
+  if (Notification.permission === "granted") {
+    const notification = new Notification(title, {
+      body: body,
+      icon: "https://cdn-icons-png.flaticon.com/512/3069/3069172.png", 
+      dir: "rtl"
+    });
+
+    notification.onclick = function() {
+      window.focus();
+      window.location.href = `adhkar.html?type=${type}`;
+    };
+
+    localStorage.setItem(storageKey, "true");
+  }
+}
+
+// ==========================================
+// الوضع الليلي
+// ==========================================
 function setupTheme() {
   const themeToggle = document.getElementById("themeToggle");
   const savedTheme = localStorage.getItem("theme");
@@ -218,7 +291,6 @@ function setupTheme() {
   if (themeToggle) {
     themeToggle.addEventListener("click", () => {
       document.body.classList.toggle("dark");
-
       if (document.body.classList.contains("dark")) {
         localStorage.setItem("theme", "dark");
         themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
@@ -230,7 +302,9 @@ function setupTheme() {
   }
 }
 
+// تشغيل كل شيء عند تحميل الصفحة
 document.addEventListener("DOMContentLoaded", () => {
   loadAdhkar();
   setupTheme();
+  setupNotifications();
 });
