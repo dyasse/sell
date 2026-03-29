@@ -35,7 +35,7 @@ async function loadDetails() {
     `).join(" ");
 
     detailsCard.innerHTML = `
-      <h2>${chapter.name_arabic}</h2>
+     <h2 class="quran-title">${chapter.name_arabic}</h2>
       <p><strong>${chapter.verses_count} آية</strong></p>
       <div class="surah-text">${versesHtml}</div>
 
