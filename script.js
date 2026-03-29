@@ -1,21 +1,8 @@
 async function loadChapters() {
   const quranList = document.getElementById("quranList");
-  const adhkarList = document.getElementById("adhkarList");
   const searchInput = document.getElementById("searchInput");
 
   quranList.innerHTML = "<p>جاري تحميل السور...</p>";
-  adhkarList.innerHTML = `
-    <div class="card">
-      <h3>أذكار الصباح</h3>
-      <p>مجموعة أذكار يومية</p>
-      <button onclick="goToAdhkar('sabah')">فتح</button>
-    </div>
-    <div class="card">
-      <h3>أذكار المساء</h3>
-      <p>مجموعة أذكار يومية</p>
-      <button onclick="goToAdhkar('masa')">فتح</button>
-    </div>
-  `;
 
   try {
     const response = await fetch("https://api.quran.com/api/v4/chapters?language=ar");
@@ -58,7 +45,14 @@ function goToDetails(id) {
 }
 
 function goToAdhkar(type) {
-  alert(`صفحة ${type} نزيدوها من بعد`);
+  window.location.href = `adhkar.html?type=${type}`;
+}
+
+function scrollToQuran() {
+  const section = document.getElementById("quranSection");
+  if (section) {
+    section.scrollIntoView({ behavior: "smooth" });
+  }
 }
 
 function setupTheme() {
