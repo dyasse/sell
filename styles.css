@@ -1,425 +1,71 @@
-/* =========================================
-   Reset & Base Styles
-========================================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ================== BASE & RESET ================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Cairo', sans-serif; background-color: #f7fbf8; color: #1f2d2a; direction: rtl; line-height: 1.6; transition: 0.3s; }
 
-body {
-  font-family: 'Cairo', sans-serif; /* الخط الأساسي للواجهة */
-  background-color: #f7fbf8; /* لون خلفية مريح للعين */
-  color: #1f2d2a;
-  direction: rtl;
-  line-height: 1.6;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
+/* ================== NAVBAR ================== */
+.navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background-color: #ffffff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+.logo { display: flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 700; color: #1f6f50; cursor: pointer; }
+.theme-btn { background: none; border: none; font-size: 20px; color: #1f6f50; cursor: pointer; padding: 8px; border-radius: 50%; }
+.nav-actions { display: flex; gap: 15px; align-items: center; }
+.back-btn { background: none; border: none; font-family: 'Cairo', sans-serif; font-size: 16px; color: #1f6f50; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
 
-/* =========================================
-   Navbar (شريط التنقل)
-========================================= */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 5%;
-  background-color: #ffffff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 24px;
-  font-weight: 700;
-  color: #1f6f50; /* اللون الأخضر المميز للتطبيق */
-}
-
-.logo i {
-  font-size: 28px;
-}
-
-.theme-btn {
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #1f6f50;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 50%;
-  transition: background-color 0.3s ease;
-}
-
-.theme-btn:hover {
-  background-color: #e8f5ee;
-}
-
-/* =========================================
-   Hero Section (القسم الترحيبي)
-========================================= */
-.hero-section {
-  background: linear-gradient(135deg, #184d3b 0%, #1f6f50 100%);
-  color: white;
-  text-align: center;
-  padding: 60px 20px 80px;
-  border-bottom-left-radius: 40px;
-  border-bottom-right-radius: 40px;
-  box-shadow: 0 10px 30px rgba(31, 111, 80, 0.2);
-}
-
-.hero-content {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.hero-title {
-  font-size: 42px;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.hero-title span {
-  color: #a3e4c7; /* لون أخضر فاتح لإبراز اسم التطبيق */
-}
-
-.hero-subtitle {
-  font-size: 18px;
-  opacity: 0.9;
-  margin-bottom: 40px;
-}
-
-/* بطاقة آية اليوم */
-.daily-ayah-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px); /* تأثير الزجاج */
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  padding: 30px 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-}
-
-.ayah-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 15px;
-  color: #a3e4c7;
-}
-
-.ayah-header h2 {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.quran-text {
-  font-family: 'Amiri', serif; /* خط القرآن */
-  font-size: 28px;
-  line-height: 1.8;
-  margin-bottom: 15px;
-}
-
-.ayah-ref {
-  font-size: 14px;
-  opacity: 0.8;
-  display: block;
-}
-
-/* =========================================
-   Main Content & Services Grid (البطاقات)
-========================================= */
-.main-content {
-  padding: 40px 5%;
-  margin-top: -50px; /* لرفع البطاقات قليلاً فوق قسم الترحيب */
-}
-
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 25px;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.service-card {
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 30px 25px;
-  text-align: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid transparent;
-}
-
-.service-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 35px rgba(31, 111, 80, 0.15);
-  border-color: #e8f5ee;
-}
-
-.card-icon {
-  width: 70px;
-  height: 70px;
-  margin: 0 auto 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 30px;
-  transition: transform 0.3s ease;
-}
-
-.service-card:hover .card-icon {
-  transform: scale(1.1);
-}
-
-/* ألوان الأيقونات لكل بطاقة */
+/* ================== HOME PAGE ================== */
+.hero-section { background: linear-gradient(135deg, #184d3b 0%, #1f6f50 100%); color: white; text-align: center; padding: 60px 20px 80px; border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; }
+.hero-content { max-width: 800px; margin: 0 auto; }
+.hero-title { font-size: 42px; font-weight: 700; margin-bottom: 10px; }
+.hero-title span { color: #a3e4c7; }
+.hero-subtitle { font-size: 18px; opacity: 0.9; margin-bottom: 40px; }
+.daily-ayah-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 30px 20px; }
+.ayah-header { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px; color: #a3e4c7; }
+.quran-text { font-family: 'Amiri', serif; font-size: 28px; line-height: 1.8; margin-bottom: 15px; }
+.main-content { padding: 40px 5%; margin-top: -50px; }
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; max-width: 1100px; margin: 0 auto; }
+.service-card { background: #ffffff; border-radius: 20px; padding: 30px 25px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; }
+.service-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(31,111,80,0.15); }
+.card-icon { width: 70px; height: 70px; margin: 0 auto 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; }
 .quran-icon { background: #e8f5ee; color: #1f6f50; }
 .sun-icon { background: #fff5e6; color: #f59e0b; }
 .moon-icon { background: #f0f4f8; color: #3b82f6; }
 
-.service-card h3 {
-  font-size: 22px;
-  color: #1f2d2a;
-  margin-bottom: 12px;
-  font-weight: 700;
-}
+/* ================== QURAN PAGE ================== */
+.quran-hero { padding: 40px 20px 60px; }
+.search-container { position: relative; max-width: 500px; margin: 0 auto; }
+.search-input { width: 100%; padding: 16px 45px 16px 20px; font-family: 'Cairo', sans-serif; font-size: 16px; border: none; border-radius: 30px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); outline: none; }
+.search-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #1f6f50; font-size: 18px; }
+.surah-section { margin-top: 40px; }
+.surah-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+.surah-card { background: #ffffff; border-radius: 20px; padding: 25px; display: flex; flex-direction: column; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid transparent; cursor: pointer; transition: 0.3s; }
+.surah-card:hover { transform: translateY(-5px); border-color: #e8f5ee; box-shadow: 0 12px 25px rgba(31,111,80,0.1); }
+.surah-card-top { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+.surah-number-box { width: 50px; height: 50px; background: #e8f5ee; color: #1f6f50; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; }
+.surah-main-info { flex: 1; text-align: right; }
+.surah-name-ar { font-family: 'Amiri', serif; font-size: 26px; color: #1f2d2a; margin: 0 0 5px; }
+.surah-name-en { font-size: 13px; color: #6b7d76; margin: 0; }
+.surah-type-badge { background: #f0f7f3; color: #1f6f50; padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: bold; }
+.surah-meta { display: flex; justify-content: space-between; margin-bottom: 20px; background: #f9fbfb; padding: 12px; border-radius: 12px; }
+.meta-item { display: flex; flex-direction: column; align-items: center; font-size: 13px; color: #6b7d76; }
+.meta-item strong { color: #1f6f50; font-size: 16px; margin-top: 5px; }
+.surah-card-actions button { width: 100%; background: #1f6f50; color: white; border: none; padding: 12px; border-radius: 12px; font-family: 'Cairo', sans-serif; font-weight: 600; cursor: pointer; transition: 0.3s; }
+.surah-card-actions button:hover { background: #184d3b; }
 
-.service-card p {
-  color: #6b7d76;
-  font-size: 15px;
-  margin-bottom: 20px;
-}
+/* ================== READING PAGE (DETAILS) ================== */
+.reading-main { padding: 40px 5%; min-height: 80vh; display: flex; justify-content: center; }
+.reading-container { background: #ffffff; width: 100%; max-width: 900px; border-radius: 20px; padding: 50px 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+.surah-title-header { text-align: center; margin-bottom: 40px; padding-bottom: 30px; border-bottom: 2px dashed #e8f5ee; }
+.surah-title-header h1 { font-family: 'Amiri', serif; font-size: 42px; color: #1f6f50; margin-bottom: 15px; }
+.bismillah { font-family: 'Amiri', serif; font-size: 28px; color: #1f2d2a; }
+.quran-reader-text { font-family: 'Amiri', serif; font-size: 32px; line-height: 2.4; text-align: justify; color: #1f2d2a; }
+.ayah-text { display: inline; }
+.ayah-number-circle { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: #f0f7f3; color: #1f6f50; font-size: 16px; font-family: 'Cairo', sans-serif; font-weight: bold; margin: 0 8px; border: 1px solid #cce8d9; }
 
-.card-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: #1f6f50;
-  font-weight: 600;
-  font-size: 15px;
-  transition: gap 0.3s ease;
-}
-
-.service-card:hover .card-link {
-  gap: 12px; /* تحريك السهم عند التمرير */
-}
-
-/* =========================================
-   Footer
-========================================= */
-footer {
-  text-align: center;
-  padding: 30px 20px;
-  color: #6b7d76;
-  font-size: 14px;
-  margin-top: 40px;
-}
-
-/* =========================================
-   Dark Mode (الوضع الليلي)
-========================================= */
-body.dark {
-  background-color: #121212;
-  color: #f1f1f1;
-}
-
-body.dark .navbar {
-  background-color: #1e1e1e;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-body.dark .logo {
-  color: #a3e4c7;
-}
-
-body.dark .theme-btn {
-  color: #a3e4c7;
-}
-
-body.dark .theme-btn:hover {
-  background-color: #2a3a33;
-}
-
-body.dark .hero-section {
-  background: linear-gradient(135deg, #0f241d 0%, #15392d 100%);
-}
-
-body.dark .daily-ayah-card {
-  background: rgba(0, 0, 0, 0.2);
-  border-color: rgba(255, 255, 255, 0.05);
-}
-
-body.dark .service-card {
-  background: #1e1e1e;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-
-body.dark .service-card:hover {
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-  border-color: #2a3a33;
-}
-
-body.dark .service-card h3 {
-  color: #f1f1f1;
-}
-
-body.dark .service-card p {
-  color: #b9c5bf;
-}
-
-body.dark .card-link {
-  color: #a3e4c7;
-}
-
-body.dark .quran-icon { background: #1a2f26; color: #a3e4c7; }
-body.dark .sun-icon { background: #332711; color: #fcd34d; }
-body.dark .moon-icon { background: #172133; color: #93c5fd; }
-
-/* =========================================
-   Responsive Design (التجاوب مع الشاشات)
-========================================= */
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 32px;
-  }
-  
-  .quran-text {
-    font-size: 24px;
-  }
-  
-  .main-content {
-    margin-top: -30px;
-  }
-  
-  .services-grid {
-    grid-template-columns: 1fr; /* بطاقة واحدة في كل سطر في الهواتف */
-  }
-}
-/* =========================================
-   Reading Page (صفحة القراءة - التفاصيل)
-========================================= */
-.reading-main {
-  padding: 40px 5%;
-  min-height: 80vh;
-  display: flex;
-  justify-content: center;
-}
-
-.reading-container {
-  background: #ffffff;
-  width: 100%;
-  max-width: 900px;
-  border-radius: 20px;
-  padding: 50px 40px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e8f5ee;
-}
-
-/* تنسيق رأس السورة (البسملة والاسم) */
-.surah-title-header {
-  text-align: center;
-  margin-bottom: 40px;
-  padding-bottom: 30px;
-  border-bottom: 2px dashed #e8f5ee;
-}
-
-.surah-title-header h1 {
-  font-family: 'Amiri', serif;
-  font-size: 42px;
-  color: #1f6f50;
-  margin-bottom: 15px;
-}
-
-.bismillah {
-  font-family: 'Amiri', serif;
-  font-size: 28px;
-  color: #1f2d2a;
-}
-
-/* نص القرآن */
-.quran-reader-text {
-  font-family: 'Amiri', serif;
-  font-size: 32px; /* خط كبير ومقروء */
-  line-height: 2.4; /* مساحة مريحة بين السطور */
-  text-align: justify;
-  color: #1f2d2a;
-  direction: rtl;
-}
-
-.ayah-text {
-  display: inline;
-}
-
-/* أرقام الآيات */
-.ayah-number-circle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #f0f7f3;
-  color: #1f6f50;
-  font-size: 16px;
-  font-family: 'Cairo', sans-serif;
-  font-weight: bold;
-  margin: 0 8px;
-  border: 1px solid #cce8d9;
-}
-
-/* =========================================
-   الوضع الليلي (Dark Mode) - صفحة القراءة
-========================================= */
-body.dark .reading-container {
-  background: #1e1e1e;
-  border-color: #2a3a33;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-body.dark .surah-title-header {
-  border-bottom-color: #2a3a33;
-}
-
-body.dark .surah-title-header h1 {
-  color: #a3e4c7;
-}
-
-body.dark .bismillah,
-body.dark .quran-reader-text {
-  color: #f1f1f1;
-}
-
-body.dark .ayah-number-circle {
-  background: #1a2f26;
-  color: #a3e4c7;
-  border-color: #2a3a33;
-}
-
-/* تجاوب الشاشات الصغيرة (الهواتف) */
-@media (max-width: 768px) {
-  .reading-container {
-    padding: 30px 20px;
-  }
-  .surah-title-header h1 {
-    font-size: 34px;
-  }
-  .bismillah {
-    font-size: 24px;
-  }
-  .quran-reader-text {
-    font-size: 26px;
-    line-height: 2.2;
-  }
-  .ayah-number-circle {
-    width: 35px;
-    height: 35px;
-    font-size: 14px;
-  }
-}
+/* ================== DARK MODE ================== */
+body.dark { background-color: #121212; color: #f1f1f1; }
+body.dark .navbar { background-color: #1e1e1e; }
+body.dark .logo, body.dark .theme-btn, body.dark .back-btn { color: #a3e4c7; }
+body.dark .hero-section { background: linear-gradient(135deg, #0f241d 0%, #15392d 100%); }
+body.dark .service-card, body.dark .surah-card, body.dark .reading-container { background: #1e1e1e; border-color: #2a3a33; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+body.dark .service-card h3, body.dark .surah-name-ar, body.dark .bismillah, body.dark .quran-reader-text { color: #f1f1f1; }
+body.dark .search-input { background: #1e1e1e; color: white; border: 1px solid #333; }
+body.dark .surah-number-box, body.dark .ayah-number-circle { background: #1a2f26; color: #a3e4c7; border-color: #2a3a33; }
+body.dark .surah-meta { background: #1a1a1a; }
+body.dark .surah-card-actions button { background: #2a3a33; color: #a3e4c7; }
