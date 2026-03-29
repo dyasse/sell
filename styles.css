@@ -124,3 +124,5 @@ body.dark .premium-card-actions button:first-child { background: #2a3a33; color:
 body.dark .premium-card-actions button:first-child:hover { background: #1a2f26; }
 body.dark .soft-btn { background: #1e1e1e; color: #888; border: 1px solid #333; }
 body.dark .soft-btn:hover { color: #f1f1f1; border-color: #555; }
+/* ================== SALAT CARD COLORS ================== */
+body.dark .mosque-icon { background: #1a2333; color: #60a5fa !important; }
