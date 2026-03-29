@@ -19,13 +19,9 @@
       </div>
 
       <div class="hero-actions">
-        <button onclick="scrollToQuran()">القرآن الكريم</button>
+        <button onclick="goToQuran()">القرآن الكريم</button>
         <button onclick="goToAdhkar('sabah')">أذكار الصباح</button>
         <button onclick="goToAdhkar('masa')">أذكار المساء</button>
-      </div>
-
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="ابحث عن سورة..." />
       </div>
 
       <button id="themeToggle" class="theme-btn">🌙 الوضع الليلي</button>
@@ -36,8 +32,8 @@
     <section class="quick-sections">
       <div class="quick-card">
         <h3>القرآن الكريم</h3>
-        <p>تصفح السور الكريمة من فهرس منظم واحترافي.</p>
-        <button onclick="scrollToQuran()">فتح الفهرس</button>
+        <p>انتقل إلى فهرس السور واقرأ القرآن الكريم بخط واضح وجميل.</p>
+        <button onclick="goToQuran()">فتح القرآن</button>
       </div>
 
       <div class="quick-card">
@@ -48,15 +44,6 @@
           <button onclick="goToAdhkar('masa')">المساء</button>
         </div>
       </div>
-    </section>
-
-    <section id="quranSection" class="home-section">
-      <div class="section-head">
-        <h2>فهرس القرآن الكريم</h2>
-        <p>اختر السورة التي تريد قراءتها</p>
-      </div>
-
-      <div id="quranList" class="cards"></div>
     </section>
   </main>
 
