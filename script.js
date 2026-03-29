@@ -13,19 +13,41 @@ async function loadChapters() {
       quranList.innerHTML = "";
 
       items.forEach(chapter => {
+        const revelationText =
+          chapter.revelation_place === "makkah" ? "مكية" : "مدنية";
+
         const card = document.createElement("div");
-        card.className = "card surah-card";
+        card.className = "card surah-card premium-surah-card";
+
         card.innerHTML = `
-          <div class="surah-top">
-            <span class="surah-number">${chapter.id}</span>
-            <div>
-              <h3>${chapter.name_arabic}</h3>
-              <p>${chapter.name_simple}</p>
+          <div class="surah-card-top">
+            <div class="surah-number-box">${chapter.id}</div>
+
+            <div class="surah-main-info">
+              <h3 class="surah-name-ar">${chapter.name_arabic}</h3>
+              <p class="surah-name-en">${chapter.name_simple}</p>
+            </div>
+
+            <div class="surah-type-badge">${revelationText}</div>
+          </div>
+
+          <div class="surah-meta">
+            <div class="meta-item">
+              <span class="meta-label">عدد الآيات</span>
+              <strong>${chapter.verses_count}</strong>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-label">الترتيب</span>
+              <strong>${chapter.id}</strong>
             </div>
           </div>
-          <p>${chapter.verses_count} آية</p>
-          <button onclick="goToDetails(${chapter.id})">فتح السورة</button>
+
+          <div class="surah-card-actions">
+            <button onclick="goToDetails(${chapter.id})">قراءة السورة</button>
+          </div>
         `;
+
         quranList.appendChild(card);
       });
     }
@@ -34,10 +56,12 @@ async function loadChapters() {
 
     searchInput.addEventListener("input", e => {
       const value = e.target.value.trim().toLowerCase();
+
       const filtered = chapters.filter(chapter =>
         chapter.name_arabic.includes(value) ||
         chapter.name_simple.toLowerCase().includes(value)
       );
+
       render(filtered);
     });
   } catch (error) {
