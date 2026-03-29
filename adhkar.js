@@ -5,7 +5,7 @@ async function loadAdhkar() {
   const title = document.getElementById("adhkarTitle");
   const subtitle = document.getElementById("adhkarSubtitle");
   const container = document.getElementById("adhkarContainer");
-  const doneBox = document.getElementById("doneBox");
+  const statsBox = document.getElementById("adhkarStats");
 
   try {
     const response = await fetch("adhkar.json");
@@ -19,34 +19,45 @@ async function loadAdhkar() {
     }
 
     title.textContent = adhkarGroup.title;
-    subtitle.textContent = "أذكار يومية مع عداد ذكي";
+    subtitle.textContent = type === "masa"
+      ? "وردك المسائي مع تتبع التقدم"
+      : "وردك الصباحي مع تتبع التقدم";
 
     container.innerHTML = "";
 
     adhkarGroup.items.forEach((dhikr, index) => {
       const card = document.createElement("div");
-      card.className = "card adhkar-card";
+      card.className = "card adhkar-card premium-adhkar-card";
 
       card.innerHTML = `
-        <div class="dhikr-head">
-          <h3>ذكر ${index + 1}</h3>
+        <div class="dhikr-head premium-dhikr-head">
+          <div>
+            <h3>ذكر ${index + 1}</h3>
+            <p class="dhikr-mini-label">ذكر يومي</p>
+          </div>
           <span class="repeat-badge">${dhikr.repeat} مرات</span>
         </div>
 
-        <p class="content-text">${dhikr.text}</p>
+        <p class="content-text adhkar-text">${dhikr.text}</p>
 
-        <div class="dhikr-stats">
-          <p>المنجز: <span id="count-${type}-${dhikr.id}">0</span></p>
-          <p>المتبقي: <span id="remaining-${type}-${dhikr.id}">${dhikr.repeat}</span></p>
+        <div class="dhikr-stats premium-dhikr-stats">
+          <div class="mini-stat">
+            <span class="mini-stat-label">المنجز</span>
+            <strong id="count-${type}-${dhikr.id}">0</strong>
+          </div>
+          <div class="mini-stat">
+            <span class="mini-stat-label">المتبقي</span>
+            <strong id="remaining-${type}-${dhikr.id}">${dhikr.repeat}</strong>
+          </div>
         </div>
 
-        <div class="card-actions">
-          <button onclick="increaseDhikr('${type}', ${dhikr.id}, ${dhikr.repeat})">تسبيح</button>
-          <button onclick="resetDhikr('${type}', ${dhikr.id}, ${dhikr.repeat})">إعادة</button>
-        </div>
-
-        <div class="progress-bar small-progress">
+        <div class="progress-bar small-progress premium-progress">
           <div id="progress-${type}-${dhikr.id}" class="progress-fill"></div>
+        </div>
+
+        <div class="card-actions premium-card-actions">
+          <button onclick="increaseDhikr('${type}', ${dhikr.id}, ${dhikr.repeat})">تسبيح</button>
+          <button onclick="resetDhikr('${type}', ${dhikr.id}, ${dhikr.repeat})" class="soft-btn">إعادة</button>
         </div>
       `;
 
@@ -55,6 +66,7 @@ async function loadAdhkar() {
     });
 
     updateDoneState(type, adhkarGroup.items);
+    updateGroupStats(type, adhkarGroup.items, statsBox);
   } catch (error) {
     container.innerHTML = "<p>وقع مشكل فتحميل الأذكار</p>";
     console.error(error);
@@ -116,14 +128,17 @@ async function refreshGroupCompletion(type) {
   const response = await fetch("adhkar.json");
   const data = await response.json();
   const adhkarGroup = data[type];
+  const statsBox = document.getElementById("adhkarStats");
 
   if (!adhkarGroup) return;
 
   updateDoneState(type, adhkarGroup.items);
+  updateGroupStats(type, adhkarGroup.items, statsBox);
 }
 
 function updateDoneState(type, items) {
   const doneBox = document.getElementById("doneBox");
+
   const allDone = items.every(item => {
     const count = parseInt(localStorage.getItem(getDhikrStorageKey(type, item.id)) || "0", 10);
     return count >= item.repeat;
@@ -135,6 +150,40 @@ function updateDoneState(type, items) {
   } else {
     doneBox.style.display = "none";
   }
+}
+
+function updateGroupStats(type, items, statsBox) {
+  const total = items.length;
+  let completed = 0;
+  let totalRequired = 0;
+  let totalDone = 0;
+
+  items.forEach(item => {
+    const count = parseInt(localStorage.getItem(getDhikrStorageKey(type, item.id)) || "0", 10);
+    totalRequired += item.repeat;
+    totalDone += Math.min(count, item.repeat);
+
+    if (count >= item.repeat) {
+      completed++;
+    }
+  });
+
+  const percent = totalRequired > 0 ? Math.round((totalDone / totalRequired) * 100) : 0;
+
+  statsBox.innerHTML = `
+    <div class="stat-card">
+      <span class="stat-label">عدد الأذكار</span>
+      <strong>${total}</strong>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">المكتمل</span>
+      <strong>${completed}</strong>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">نسبة التقدم</span>
+      <strong>${percent}%</strong>
+    </div>
+  `;
 }
 
 function setupTheme() {
