@@ -1,7 +1,7 @@
 async function loadDetails() {
   const params = new URLSearchParams(window.location.search);
   const chapterId = parseInt(params.get("id"));
-  const targetAyah = params.get("ayah"); // كنقرأو رقم الآية يلا جاية من "متابعة"
+  const targetAyah = params.get("ayah");
   const detailsCard = document.getElementById("detailsCard");
 
   if (!chapterId || isNaN(chapterId)) {
@@ -12,7 +12,7 @@ async function loadDetails() {
   detailsCard.innerHTML = `
     <div style="text-align: center; color: #1f6f50; font-weight: bold; padding: 60px;">
       <i class="fa-solid fa-spinner fa-spin" style="font-size: 30px; margin-bottom: 15px;"></i>
-      <p>جاري تحميل آيات الله...</p>
+      <p>جاري تحميل السورة والتفسير...</p>
     </div>
   `;
 
@@ -29,12 +29,11 @@ async function loadDetails() {
     const chapter = chapters.find(c => c.id === chapterId);
     const verses = versesData.verses || [];
 
-    // رسم الآيات مع إضافة ID لكل آية باش نقدروا نديرو Scroll
     const versesHtml = verses.map(v => {
       const verseNumber = v.verse_key.split(":")[1];
       return `
-        <span class="ayah-container" id="ayah-${verseNumber}" style="display: inline;">
-          <span class="ayah-text" onclick="saveBookmark(${chapterId}, ${verseNumber}, '${chapter.name_arabic}')" title="اضغط لحفظ علامة توقف هنا">
+        <span class="ayah-container" id="ayah-${verseNumber}" style="display: inline; transition: background 1s;">
+          <span class="ayah-text" onclick="showTafsir(${chapterId}, ${verseNumber}, '${chapter.name_arabic}')" style="cursor:pointer;" title="اضغط للتفسير وحفظ العلامة">
             ${v.text_uthmani}
           </span>
           <span class="ayah-number-circle">${verseNumber}</span>
@@ -44,7 +43,6 @@ async function loadDetails() {
 
     let bismillahHtml = (chapterId !== 1 && chapterId !== 9) ? `<p class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>` : "";
     const nextChapterId = chapterId < 114 ? chapterId + 1 : null;
-    const nextChapter = nextChapterId ? chapters.find(c => c.id === nextChapterId) : null;
 
     detailsCard.innerHTML = `
       <div class="surah-title-header">
@@ -52,6 +50,14 @@ async function loadDetails() {
         ${bismillahHtml}
       </div>
       <div class="quran-reader-text">${versesHtml}</div>
+      <div id="tafsirModal" class="tafsir-modal">
+        <div class="tafsir-content">
+          <span class="close-tafsir" onclick="closeTafsir()">&times;</span>
+          <h3 id="tafsirTitle">تفسير الآية</h3>
+          <p id="tafsirText">جاري تحميل التفسير...</p>
+          <div style="font-size:12px; color:#1f6f50; margin-top:10px;">تم حفظ هذه الآية كعلامة توقف تلقائياً ✅</div>
+        </div>
+      </div>
       <div class="audio-box" style="margin-top: 40px; text-align: center; border-top: 1px dashed #e8f5ee; padding-top: 30px;">
         <button id="playAudioBtn" style="background: #1f6f50; color: white; border: none; padding: 12px 24px; border-radius: 12px; cursor: pointer; font-family: 'Cairo'; font-weight: bold;">
           <i class="fa-solid fa-circle-play"></i> استمع للسورة
@@ -59,40 +65,59 @@ async function loadDetails() {
         <audio id="surahAudio" controls style="display:none; width:100%; margin-top:20px;"></audio>
       </div>
       <div class="navigation-box" style="margin-top: 50px; display: flex; justify-content: center; gap: 15px; border-top: 1px solid #eee; padding-top: 30px;">
-        ${nextChapter ? `<button onclick="window.location.href='details.html?id=${nextChapterId}'" class="next-surah-btn">السورة التالية: ${nextChapter.name_arabic} <i class="fa-solid fa-arrow-left"></i></button>` : ''}
+        ${nextChapterId ? `<button onclick="window.location.href='details.html?id=${nextChapterId}'" class="next-surah-btn">السورة التالية <i class="fa-solid fa-arrow-left"></i></button>` : ''}
         <button onclick="window.location.href='quran.html'" style="background:#f1f5f9; padding:15px 25px; border-radius:15px; cursor:pointer; border:none; font-family:'Cairo'; font-weight:bold;">الفهرس</button>
       </div>
     `;
 
     document.getElementById("playAudioBtn").addEventListener("click", () => loadAudio(chapterId));
 
-    // السحر هنا: التحرك آلياً للآية المحفوظة
     if (targetAyah) {
       setTimeout(() => {
         const ayahElement = document.getElementById(`ayah-${targetAyah}`);
         if (ayahElement) {
           ayahElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          ayahElement.style.backgroundColor = "rgba(245, 158, 11, 0.2)"; // تمييز الآية بلون خفيف
-          setTimeout(() => ayahElement.style.backgroundColor = "transparent", 3000);
+          ayahElement.style.backgroundColor = "rgba(245, 158, 11, 0.3)";
+          setTimeout(() => { ayahElement.style.backgroundColor = "transparent"; }, 3000);
         }
-      }, 500);
+      }, 800);
     }
 
+  } catch (error) { console.error(error); }
+}
+
+// دالة جلب التفسير وإظهاره
+async function showTafsir(chapterId, verseNumber, surahName) {
+  const modal = document.getElementById("tafsirModal");
+  const tafsirText = document.getElementById("tafsirText");
+  const tafsirTitle = document.getElementById("tafsirTitle");
+
+  tafsirTitle.textContent = `تفسير سورة ${surahName} - آية ${verseNumber}`;
+  tafsirText.textContent = "جاري جلب التفسير من الميسر...";
+  modal.style.display = "block";
+
+  // حفظ العلامة تلقائياً عند طلب التفسير
+  const bookmark = { id: chapterId, verse: verseNumber, name: surahName };
+  localStorage.setItem('nour_bookmark', JSON.stringify(bookmark));
+
+  try {
+    // استعمال API التفسير (تفسير الميسر)
+    const res = await fetch(`https://api.quran.com/api/v4/tafsirs/169/by_ayah/${chapterId}:${verseNumber}`);
+    const data = await res.json();
+    tafsirText.innerHTML = data.tafsir.text;
   } catch (error) {
-    console.error(error);
+    tafsirText.textContent = "تعذر تحميل التفسير حالياً. تأكد من اتصالك بالأنترنت.";
   }
 }
 
-function saveBookmark(chapterId, verseNumber, surahName) {
-  const bookmark = { id: chapterId, verse: verseNumber, name: surahName };
-  localStorage.setItem('nour_bookmark', JSON.stringify(bookmark));
-  
-  // إشعار بسيط بدل الـ Alert المزعج
-  const toast = document.createElement("div");
-  toast.innerHTML = `تم حفظ العلامة: سورة ${surahName} آية ${verseNumber}`;
-  toast.style = "position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#1f6f50; color:white; padding:10px 20px; border-radius:30px; z-index:10000; font-family:Cairo;";
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 2000);
+function closeTafsir() {
+  document.getElementById("tafsirModal").style.display = "none";
+}
+
+// إغلاق النافذة عند الضغط خارجها
+window.onclick = function(event) {
+  const modal = document.getElementById("tafsirModal");
+  if (event.target == modal) { modal.style.display = "none"; }
 }
 
 async function loadAudio(chapterId) {
