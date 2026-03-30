@@ -126,3 +126,29 @@ body.dark .soft-btn { background: #1e1e1e; color: #888; border: 1px solid #333; 
 body.dark .soft-btn:hover { color: #f1f1f1; border-color: #555; }
 /* ================== SALAT CARD COLORS ================== */
 body.dark .mosque-icon { background: #1a2333; color: #60a5fa !important; }
+/* زر السورة الموالية */
+.next-surah-btn {
+  background: linear-gradient(135deg, #1f6f50, #2d8a63);
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 15px;
+  font-family: 'Cairo', sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 5px 15px rgba(31, 111, 80, 0.2);
+  transition: 0.3s;
+}
+
+.next-surah-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(31, 111, 80, 0.3);
+}
+
+body.dark .next-surah-btn {
+  background: #2a3a33;
+  color: #a3e4c7;
+}
