@@ -49,23 +49,27 @@ async function loadDetails() {
         <h1>سُورَةُ ${chapter.name_arabic.replace('سورة ', '')}</h1>
         ${bismillahHtml}
       </div>
+
       <div class="quran-reader-text">${versesHtml}</div>
-      <div id="tafsirModal" class="tafsir-modal">
+
+      <div id="tafsirModal" class="tafsir-modal" style="display:none;">
         <div class="tafsir-content">
           <span class="close-tafsir" onclick="closeTafsir()">&times;</span>
-          <h3 id="tafsirTitle">تفسير الآية</h3>
-          <p id="tafsirText">جاري تحميل التفسير...</p>
-          <div style="font-size:12px; color:#1f6f50; margin-top:10px;">تم حفظ هذه الآية كعلامة توقف تلقائياً ✅</div>
+          <h3 id="tafsirTitle" style="font-family:'Cairo'; color:#1f6f50; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">تفسير الآية</h3>
+          <p id="tafsirText" style="font-family:'Amiri'; font-size:22px; line-height:1.8; text-align:justify; color:#333;"></p>
+          <p style="font-size:12px; color:#1f6f50; margin-top:15px; font-family:'Cairo';">✅ تم حفظ موضع القراءة تلقائياً</p>
         </div>
       </div>
+
       <div class="audio-box" style="margin-top: 40px; text-align: center; border-top: 1px dashed #e8f5ee; padding-top: 30px;">
         <button id="playAudioBtn" style="background: #1f6f50; color: white; border: none; padding: 12px 24px; border-radius: 12px; cursor: pointer; font-family: 'Cairo'; font-weight: bold;">
           <i class="fa-solid fa-circle-play"></i> استمع للسورة
         </button>
         <audio id="surahAudio" controls style="display:none; width:100%; margin-top:20px;"></audio>
       </div>
+
       <div class="navigation-box" style="margin-top: 50px; display: flex; justify-content: center; gap: 15px; border-top: 1px solid #eee; padding-top: 30px;">
-        ${nextChapterId ? `<button onclick="window.location.href='details.html?id=${nextChapterId}'" class="next-surah-btn">السورة التالية <i class="fa-solid fa-arrow-left"></i></button>` : ''}
+        ${nextChapterId ? `<button onclick="window.location.href='details.html?id=${nextChapterId}'" class="next-surah-btn" style="background:#1f6f50; color:white; border:none; padding:15px 25px; border-radius:15px; cursor:pointer; font-family:'Cairo';">السورة التالية <i class="fa-solid fa-arrow-left"></i></button>` : ''}
         <button onclick="window.location.href='quran.html'" style="background:#f1f5f9; padding:15px 25px; border-radius:15px; cursor:pointer; border:none; font-family:'Cairo'; font-weight:bold;">الفهرس</button>
       </div>
     `;
@@ -86,27 +90,28 @@ async function loadDetails() {
   } catch (error) { console.error(error); }
 }
 
-// دالة جلب التفسير وإظهاره
+// دالة إظهار التفسير باللغة العربية (تفسير الميسر)
 async function showTafsir(chapterId, verseNumber, surahName) {
   const modal = document.getElementById("tafsirModal");
   const tafsirText = document.getElementById("tafsirText");
   const tafsirTitle = document.getElementById("tafsirTitle");
 
   tafsirTitle.textContent = `تفسير سورة ${surahName} - آية ${verseNumber}`;
-  tafsirText.textContent = "جاري جلب التفسير من الميسر...";
-  modal.style.display = "block";
+  tafsirText.textContent = "جاري تحميل التفسير الميسر...";
+  modal.style.display = "flex"; // تفعيل العرض
 
-  // حفظ العلامة تلقائياً عند طلب التفسير
+  // حفظ العلامة (Bookmark) آلياً
   const bookmark = { id: chapterId, verse: verseNumber, name: surahName };
   localStorage.setItem('nour_bookmark', JSON.stringify(bookmark));
 
   try {
-    // استعمال API التفسير (تفسير الميسر)
+    // جلب التفسير الميسر (رقم 169 في API quran.com هو التفسير الميسر بالعربية)
     const res = await fetch(`https://api.quran.com/api/v4/tafsirs/169/by_ayah/${chapterId}:${verseNumber}`);
     const data = await res.json();
+    // عرض النص فقط بدون أي لغات أخرى
     tafsirText.innerHTML = data.tafsir.text;
   } catch (error) {
-    tafsirText.textContent = "تعذر تحميل التفسير حالياً. تأكد من اتصالك بالأنترنت.";
+    tafsirText.textContent = "عذراً، لم نتمكن من جلب التفسير. تأكد من اتصالك بالإنترنت.";
   }
 }
 
@@ -114,7 +119,7 @@ function closeTafsir() {
   document.getElementById("tafsirModal").style.display = "none";
 }
 
-// إغلاق النافذة عند الضغط خارجها
+// إغلاق النافذة عند الضغط خارج المربع الأبيض
 window.onclick = function(event) {
   const modal = document.getElementById("tafsirModal");
   if (event.target == modal) { modal.style.display = "none"; }
