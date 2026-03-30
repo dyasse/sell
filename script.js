@@ -1,68 +1,59 @@
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(reg => console.log('Service Worker خدام بنجاح!'))
-      .catch(err => console.log('وقع مشكل في الـ Service Worker', err));
-  });
-}
-async function loadDailyAyah() {
-  const dailyAyahText = document.getElementById("dailyAyahText");
-  const dailyAyahRef = document.getElementById("dailyAyahRef");
-
+// دالة لجلب آية اليوم (عشوائية)
+async function fetchDailyAyah() {
   try {
-    const day = new Date().getDate();
-    const surahNumber = (day % 114) + 1;
+    const randomAyah = Math.floor(Math.random() * 6236) + 1;
+    const response = await fetch(`https://api.alquran.cloud/v1/ayah/${randomAyah}/ar.uthmani`);
+    const data = await response.json();
 
-    const response = await fetch(`https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${surahNumber}`);
-    const result = await response.json();
-    const verses = result.verses || [];
-
-    if (verses.length > 0) {
-      const firstVerse = verses[0];
-      dailyAyahText.textContent = firstVerse.text_uthmani;
-      dailyAyahRef.textContent = `سورة رقم ${surahNumber} - الآية 1`;
-    } else {
-      dailyAyahText.textContent = "تعذر تحميل آية اليوم";
+    if (data.code === 200) {
+      document.getElementById("dailyAyahText").textContent = data.data.text;
+      document.getElementById("dailyAyahRef").textContent = `${data.data.surah.name} - آية ${data.data.numberInSurah}`;
     }
   } catch (error) {
-    dailyAyahText.textContent = "وقع مشكل فتحميل آية اليوم";
-    console.error(error);
+    document.getElementById("dailyAyahText").textContent = "اللهم صل على محمد وعلى آل محمد";
   }
 }
 
-function goToQuran() {
-  window.location.href = "quran.html";
+// دالة فحص علامة القراءة (Bookmark)
+function checkBookmark() {
+  const bookmark = JSON.parse(localStorage.getItem('nour_bookmark'));
+  const card = document.getElementById('bookmarkCard');
+  const text = document.getElementById('bookmarkText');
+  const btn = document.getElementById('resumeBtn');
+
+  if (bookmark && card) {
+    card.style.display = 'block';
+    text.innerHTML = `آخر ما قرأت: <strong>سورة ${bookmark.name}</strong> (آية ${bookmark.verse})`;
+    
+    btn.onclick = () => {
+      // كنمشيو للصفحة مع رقم الآية كـ Parameter
+      window.location.href = `details.html?id=${bookmark.id}&ayah=${bookmark.verse}`;
+    };
+  }
 }
 
-function goToAdhkar(type) {
-  window.location.href = `adhkar.html?type=${type}`;
-}
+function goToQuran() { window.location.href = "quran.html"; }
+function goToAdhkar(type) { window.location.href = `adhkar.html?type=${type}`; }
 
 function setupTheme() {
   const themeToggle = document.getElementById("themeToggle");
   const savedTheme = localStorage.getItem("theme");
-
   if (savedTheme === "dark") {
     document.body.classList.add("dark");
-    if (themeToggle) {
-      themeToggle.textContent = "☀️ الوضع النهاري";
-    }
+    if (themeToggle) themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
   }
-
   if (themeToggle) {
     themeToggle.addEventListener("click", () => {
       document.body.classList.toggle("dark");
-
-      if (document.body.classList.contains("dark")) {
-        localStorage.setItem("theme", "dark");
-        themeToggle.textContent = "☀️ الوضع النهاري";
-      } else {
-        localStorage.setItem("theme", "light");
-        themeToggle.textContent = "🌙 الوضع الليلي";
-      }
+      const isDark = document.body.classList.contains("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+      themeToggle.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
     });
   }
 }
 
-loadDailyAyah();
-setupTheme();
+document.addEventListener("DOMContentLoaded", () => {
+  fetchDailyAyah();
+  checkBookmark(); // تشغيل فحص العلامة
+  setupTheme();
+});
