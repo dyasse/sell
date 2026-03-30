@@ -1,3 +1,10 @@
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('Service Worker خدام بنجاح!'))
+      .catch(err => console.log('وقع مشكل في الـ Service Worker', err));
+  });
+}
 async function loadChapters() {
   const quranList = document.getElementById("quranList");
   const searchInput = document.getElementById("searchInput");
