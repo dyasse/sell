@@ -4,17 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>فهرس القرآن الكريم - نور</title>
-  <link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3208/3208035.png" />
   
-  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3208/3208035.png" />
-  
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3208/3208035.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -25,31 +20,24 @@
       <span>نور</span>
     </div>
     <div class="nav-actions">
-      <button onclick="window.location.href='index.html'" class="back-btn">
+      <button onclick="window.location.href='index.html'" class="soft-btn" style="padding: 8px 15px;">
         <i class="fa-solid fa-house"></i> الرئيسية
       </button>
-      <button id="themeToggle" class="theme-btn" aria-label="تغيير المظهر">
+      <button id="themeToggle" class="theme-btn">
         <i class="fa-solid fa-moon"></i>
       </button>
     </div>
   </nav>
 
-  <header class="hero-section quran-hero">
-    <div class="hero-content">
-      <h1 class="hero-title">فهرس <span>القرآن الكريم</span></h1>
-      <p class="hero-subtitle">تصفح السور واقرأ براحة وسكينة</p>
-
-      <div class="search-container">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input type="text" id="searchInput" class="search-input" placeholder="ابحث عن سورة (مثال: الكهف)..." />
-      </div>
-    </div>
+  <header class="hero-section" style="padding: 40px 5%; border-radius: 0 0 30px 30px;">
+    <h1 class="main-logo-text" style="font-size: 40px; color: white;">فهرس السور</h1>
+    <p style="opacity: 0.9;">اختر السورة لتبدأ التلاوة</p>
   </header>
 
   <main class="main-content">
-    <section class="surah-section">
-      <div id="quranList" class="surah-grid cards"></div>
-    </section>
+    <div id="quranContainer" class="services-grid">
+      <p style="text-align: center; grid-column: 1/-1;">جاري تحميل الفهرس...</p>
+    </div>
   </main>
 
   <script src="quran.js"></script>
