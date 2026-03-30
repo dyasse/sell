@@ -12,7 +12,7 @@ async function loadDetails() {
   detailsCard.innerHTML = `
     <div style="text-align: center; color: #1f6f50; font-weight: bold; padding: 60px;">
       <i class="fa-solid fa-spinner fa-spin" style="font-size: 30px; margin-bottom: 15px;"></i>
-      <p>جاري تحميل السورة والتفسير...</p>
+      <p>جاري تحميل السورة والتفسير العربي...</p>
     </div>
   `;
 
@@ -32,8 +32,8 @@ async function loadDetails() {
     const versesHtml = verses.map(v => {
       const verseNumber = v.verse_key.split(":")[1];
       return `
-        <span class="ayah-container" id="ayah-${verseNumber}" style="display: inline; transition: background 1s;">
-          <span class="ayah-text" onclick="showTafsir(${chapterId}, ${verseNumber}, '${chapter.name_arabic}')" style="cursor:pointer;" title="اضغط للتفسير وحفظ العلامة">
+        <span class="ayah-container" id="ayah-${verseNumber}" style="display: inline;">
+          <span class="ayah-text" onclick="showTafsir(${chapterId}, ${verseNumber}, '${chapter.name_arabic}')" title="اضغط للتفسير وحفظ العلامة">
             ${v.text_uthmani}
           </span>
           <span class="ayah-number-circle">${verseNumber}</span>
@@ -52,25 +52,25 @@ async function loadDetails() {
 
       <div class="quran-reader-text">${versesHtml}</div>
 
-      <div id="tafsirModal" class="tafsir-modal" style="display:none;">
+      <div id="tafsirModal" class="tafsir-modal">
         <div class="tafsir-content">
           <span class="close-tafsir" onclick="closeTafsir()">&times;</span>
-          <h3 id="tafsirTitle" style="font-family:'Cairo'; color:#1f6f50; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">تفسير الآية</h3>
-          <p id="tafsirText" style="font-family:'Amiri'; font-size:22px; line-height:1.8; text-align:justify; color:#333;"></p>
-          <p style="font-size:12px; color:#1f6f50; margin-top:15px; font-family:'Cairo';">✅ تم حفظ موضع القراءة تلقائياً</p>
+          <h3 id="tafsirTitle">تفسير الآية</h3>
+          <div id="tafsirText">جاري تحميل التفسير الميسر...</div>
+          <p style="font-size:12px; color:#1f6f50; margin-top:15px; font-family:'Cairo'; text-align:center;">✅ تم حفظ موضع القراءة تلقائياً</p>
         </div>
       </div>
 
-      <div class="audio-box" style="margin-top: 40px; text-align: center; border-top: 1px dashed #e8f5ee; padding-top: 30px;">
-        <button id="playAudioBtn" style="background: #1f6f50; color: white; border: none; padding: 12px 24px; border-radius: 12px; cursor: pointer; font-family: 'Cairo'; font-weight: bold;">
+      <div class="audio-box">
+        <button id="playAudioBtn" class="hero-link-btn" style="background:#1f6f50; color:white; border:none; margin:0 auto;">
           <i class="fa-solid fa-circle-play"></i> استمع للسورة
         </button>
         <audio id="surahAudio" controls style="display:none; width:100%; margin-top:20px;"></audio>
       </div>
 
-      <div class="navigation-box" style="margin-top: 50px; display: flex; justify-content: center; gap: 15px; border-top: 1px solid #eee; padding-top: 30px;">
-        ${nextChapterId ? `<button onclick="window.location.href='details.html?id=${nextChapterId}'" class="next-surah-btn" style="background:#1f6f50; color:white; border:none; padding:15px 25px; border-radius:15px; cursor:pointer; font-family:'Cairo';">السورة التالية <i class="fa-solid fa-arrow-left"></i></button>` : ''}
-        <button onclick="window.location.href='quran.html'" style="background:#f1f5f9; padding:15px 25px; border-radius:15px; cursor:pointer; border:none; font-family:'Cairo'; font-weight:bold;">الفهرس</button>
+      <div class="navigation-box">
+        ${nextChapterId ? `<button onclick="window.location.href='details.html?id=${nextChapterId}'" class="next-surah-btn">السورة التالية <i class="fa-solid fa-arrow-left"></i></button>` : ''}
+        <button onclick="window.location.href='quran.html'" class="soft-btn">الفهرس</button>
       </div>
     `;
 
@@ -81,7 +81,7 @@ async function loadDetails() {
         const ayahElement = document.getElementById(`ayah-${targetAyah}`);
         if (ayahElement) {
           ayahElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          ayahElement.style.backgroundColor = "rgba(245, 158, 11, 0.3)";
+          ayahElement.style.backgroundColor = "rgba(245, 158, 11, 0.2)";
           setTimeout(() => { ayahElement.style.backgroundColor = "transparent"; }, 3000);
         }
       }, 800);
@@ -90,36 +90,35 @@ async function loadDetails() {
   } catch (error) { console.error(error); }
 }
 
-// دالة إظهار التفسير باللغة العربية (تفسير الميسر)
 async function showTafsir(chapterId, verseNumber, surahName) {
   const modal = document.getElementById("tafsirModal");
   const tafsirText = document.getElementById("tafsirText");
   const tafsirTitle = document.getElementById("tafsirTitle");
 
   tafsirTitle.textContent = `تفسير سورة ${surahName} - آية ${verseNumber}`;
-  tafsirText.textContent = "جاري تحميل التفسير الميسر...";
-  modal.style.display = "flex"; // تفعيل العرض
+  tafsirText.innerHTML = '<p style="text-align:center;"><i class="fa-solid fa-spinner fa-spin"></i> جاري جلب التفسير العربي...</p>';
+  modal.style.display = "flex";
 
-  // حفظ العلامة (Bookmark) آلياً
   const bookmark = { id: chapterId, verse: verseNumber, name: surahName };
   localStorage.setItem('nour_bookmark', JSON.stringify(bookmark));
 
   try {
-    // جلب التفسير الميسر (رقم 169 في API quran.com هو التفسير الميسر بالعربية)
-    const res = await fetch(`https://api.quran.com/api/v4/tafsirs/169/by_ayah/${chapterId}:${verseNumber}`);
+    // استعمال API Alquran.cloud للتفسير الميسر العربي الصرف
+    const res = await fetch(`https://api.alquran.cloud/v1/ayah/${chapterId}:${verseNumber}/ar.muyassar`);
     const data = await res.json();
-    // عرض النص فقط بدون أي لغات أخرى
-    tafsirText.innerHTML = data.tafsir.text;
+    
+    if (data.status === "OK") {
+      tafsirText.innerHTML = `<p style="font-family:'Amiri'; font-size:22px; line-height:1.8; text-align:justify;">${data.data.text}</p>`;
+    } else {
+      tafsirText.textContent = "تعذر تحميل التفسير حالياً.";
+    }
   } catch (error) {
-    tafsirText.textContent = "عذراً، لم نتمكن من جلب التفسير. تأكد من اتصالك بالإنترنت.";
+    tafsirText.textContent = "خطأ في الاتصال. جرب مرة أخرى.";
   }
 }
 
-function closeTafsir() {
-  document.getElementById("tafsirModal").style.display = "none";
-}
+function closeTafsir() { document.getElementById("tafsirModal").style.display = "none"; }
 
-// إغلاق النافذة عند الضغط خارج المربع الأبيض
 window.onclick = function(event) {
   const modal = document.getElementById("tafsirModal");
   if (event.target == modal) { modal.style.display = "none"; }
