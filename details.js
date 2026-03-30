@@ -1,3 +1,10 @@
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('Service Worker خدام بنجاح!'))
+      .catch(err => console.log('وقع مشكل في الـ Service Worker', err));
+  });
+}
 async function loadDetails() {
   const params = new URLSearchParams(window.location.search);
   const chapterId = parseInt(params.get("id"));
