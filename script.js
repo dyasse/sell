@@ -140,3 +140,47 @@ document.addEventListener("DOMContentLoaded", () => {
   handleSupportPopup(); // Launch popup
   // setupTheme() etc...
 });
+// --- Modal Login ---
+function openLoginModal() {
+  document.getElementById("loginModal").style.display = "flex";
+}
+function closeLoginModal() {
+  document.getElementById("loginModal").style.display = "none";
+}
+
+// --- Support Popup (20s) ---
+function handleSupportPopup() {
+  const popup = document.getElementById("supportPopup");
+  const timerBar = document.getElementById("popupTimer");
+  setTimeout(() => {
+    if (popup) {
+      popup.style.display = "block";
+      if (timerBar) timerBar.style.width = "0%";
+      setTimeout(() => { closeSupportPopup(); }, 20000);
+    }
+  }, 3000);
+}
+function closeSupportPopup() {
+  const popup = document.getElementById("supportPopup");
+  if (popup) {
+    popup.style.opacity = "0";
+    setTimeout(() => popup.style.display = "none", 500);
+  }
+}
+
+// --- General Functions ---
+function shareApp() {
+  if (navigator.share) {
+    navigator.share({ title: 'تطبيق نور', url: window.location.href });
+  }
+}
+
+window.onclick = function(event) {
+  const loginModal = document.getElementById("loginModal");
+  if (event.target == loginModal) loginModal.style.display = "none";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Existing: fetchDailyAyah(), checkBookmark()...
+  handleSupportPopup();
+});
