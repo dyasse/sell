@@ -3,47 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>فهرس القرآن الكريم - نور</title>
-  
+  <title>فهرس السور - نور</title>
   <link rel="icon" type="image/png" href="assets/favicon.png">
-  <link rel="apple-touch-icon" href="assets/favicon.png">
-  
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
   <nav class="navbar">
-    <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
-      <img src="assets/favicon.png" alt="لوغو نور">
-      <span>نور</span>
-    </div>
-    <div class="nav-actions">
-      <button onclick="window.location.href='index.html'" class="soft-btn">
-        <i class="fa-solid fa-house"></i> الرئيسية
-      </button>
-      <button id="themeToggle" class="theme-btn">
-        <i class="fa-solid fa-moon"></i>
-      </button>
-    </div>
+    <a href="index.html" class="logo"><img src="assets/favicon.png"> <span>نور</span></a>
+    <button onclick="location.href='index.html'" class="theme-btn" style="font-size:14px; width:auto; padding:5px 15px;">الرئيسية</button>
   </nav>
 
-  <header class="hero-section" style="padding: 40px 5%; border-radius: 0 0 40px 40px;">
-    <h1 style="font-family:'Amiri'; font-size: 45px; color: white;">فهرس السور</h1>
-    <p style="color: white; opacity: 0.9;">اختر السورة لتبدأ التلاوة العطرة</p>
+  <header class="hero-section" style="padding:40px 5%; border-radius: 0 0 30px 30px;">
+    <h1>فهرس السور</h1>
   </header>
 
   <main class="main-content">
-    <div id="quranContainer" class="table-container">
-      <div style="text-align: center; padding: 50px;">
-        <i class="fa-solid fa-spinner fa-spin fa-2x" style="color: var(--primary);"></i>
-        <p style="margin-top: 15px;">جاري تحميل الفهرس المبارك...</p>
+    <div id="quranContainer" class="quran-container" style="padding:0; overflow:hidden;">
       </div>
-    </div>
   </main>
-
   <script src="quran.js"></script>
 </body>
 </html>
