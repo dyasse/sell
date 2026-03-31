@@ -57,3 +57,33 @@ document.addEventListener("DOMContentLoaded", () => {
   checkBookmark(); // تشغيل فحص العلامة
   setupTheme();
 });
+// --- وظيفة مشاركة التطبيق ---
+function shareApp() {
+  if (navigator.share) {
+    navigator.share({
+      title: 'تطبيق نور 🌙',
+      text: 'أنصحك بتجربة تطبيق نور للقرآن الكريم والأذكار ومواقيت الصلاة. تطبيق رائع وبدون إعلانات!',
+      url: window.location.origin // كياخد رابط الموقع ديالك فين ما كان
+    }).catch(console.error);
+  } else {
+    navigator.clipboard.writeText(window.location.origin);
+    alert("تم نسخ رابط التطبيق! شاركه مع أصدقائك.");
+  }
+}
+
+// --- وظائف نافذة التسجيل ---
+function openLoginModal() {
+  document.getElementById("loginModal").style.display = "flex";
+}
+
+function closeLoginModal() {
+  document.getElementById("loginModal").style.display = "none";
+}
+
+// إغلاق النافذة عند الضغط خارجها
+window.onclick = function(event) {
+  const loginModal = document.getElementById("loginModal");
+  if (event.target == loginModal) {
+    loginModal.style.display = "none";
+  }
+}
