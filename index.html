@@ -5,27 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>نور - رفيقك الروحاني</title>
   
-  <meta name="description" content="تطبيق نور - رفيقك الروحاني للقرآن الكريم، الأذكار، ومواقيت الصلاة بدون إعلانات.">
   <link rel="canonical" href="https://nour-quran.com" />
-  
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="apple-touch-icon" href="assets/favicon.png">
 
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
   <nav class="navbar">
-    <div class="logo" onclick="window.location.reload()" style="cursor: pointer;">
-      <img src="assets/favicon.png" alt="لوغو نور" style="height: 35px; width: auto; margin-left: 10px; border-radius: 5px;">
+    <div class="logo" onclick="location.reload()" style="cursor: pointer;">
+      <img src="assets/favicon.png" alt="لوغو نور">
       <span>نور</span>
     </div>
+    
     <div class="nav-actions">
-      <button onclick="shareApp()" class="theme-btn" title="مشاركة"><i class="fa-solid fa-share-nodes"></i></button>
-      <button onclick="openLoginModal()" class="theme-btn" title="حسابي"><i class="fa-solid fa-user-circle"></i></button>
-      <button id="themeToggle" class="theme-btn"><i class="fa-solid fa-moon"></i></button>
+      <button onclick="shareApp()" class="theme-btn" title="مشاركة">
+        <i class="fa-solid fa-share-nodes"></i>
+      </button>
+      <button onclick="openLoginModal()" class="theme-btn" title="حسابي">
+        <i class="fa-solid fa-user-circle"></i>
+      </button>
+      <button id="themeToggle" class="theme-btn" title="الوضع الليلي">
+        <i class="fa-solid fa-moon"></i>
+      </button>
     </div>
   </nav>
 
@@ -33,18 +39,24 @@
     <div class="hero-content">
       <div class="main-logo-container">
         <div class="logo-icon-circle">
-          <img src="assets/favicon.png" alt="نور" style="width: 70px; height: 70px; border-radius: 15px;" />
+          <img src="assets/favicon.png" alt="نور">
         </div>
         <h1 class="main-logo-text">نور</h1>
       </div>
       
+      <p class="hero-subtitle">رفيقك اليومي للتقرب من الله بدون إعلانات</p>
+
       <div class="daily-ayah-card small-ayah">
-        <p id="dailyAyahText" class="quran-text">جاري التحميل...</p>
+        <div class="ayah-header">
+          <i class="fa-solid fa-star-and-crescent"></i>
+          <span>آية اليوم</span>
+        </div>
+        <p id="dailyAyahText" class="quran-text">جاري تحميل آية اليوم...</p>
         <span id="dailyAyahRef" class="ayah-ref"></span>
       </div>
 
       <div id="bookmarkCard" class="daily-ayah-card bookmark-mini" style="display:none;">
-        <button id="resumeBtn" class="hero-link-btn" style="background:#f59e0b;">
+        <button id="resumeBtn" class="hero-link-btn" style="background:#f59e0b; border:none; margin:0 auto;">
           <i class="fa-solid fa-bookmark"></i> متابعة: <span id="bookmarkText"></span>
         </button>
       </div>
@@ -53,30 +65,37 @@
 
   <main class="main-content">
     <div class="services-grid">
+      
       <div class="service-card mini" onclick="window.location.href='quran.html'">
-        <i class="fa-solid fa-book-open-reader icon-green"></i>
+        <i class="fa-solid fa-book-open icon-green"></i>
         <h4>القرآن</h4>
       </div>
+
       <div class="service-card mini" onclick="window.location.href='duas.html'">
         <i class="fa-solid fa-hands-praying icon-red"></i>
         <h4>الأدعية</h4>
       </div>
+
       <div class="service-card mini" onclick="window.location.href='salat.html'">
         <i class="fa-solid fa-mosque icon-blue"></i>
         <h4>الصلاة</h4>
       </div>
+
       <div class="service-card mini" onclick="window.location.href='adhkar.html?type=sabah'">
         <i class="fa-solid fa-sun icon-orange"></i>
         <h4>الصباح</h4>
       </div>
+
       <div class="service-card mini" onclick="window.location.href='adhkar.html?type=masa'">
         <i class="fa-solid fa-moon icon-blue-dark"></i>
         <h4>المساء</h4>
       </div>
+
       <div class="service-card mini support-accent" onclick="window.location.href='support.html'">
         <i class="fa-solid fa-heart pulse"></i>
         <h4>ادعمنا</h4>
       </div>
+
     </div>
 
     <div class="login-promo-card" onclick="openLoginModal()">
@@ -91,32 +110,4 @@
     </div>
   </main>
 
-  <div id="loginModal" class="tafsir-modal">
-    <div class="tafsir-content" style="text-align: center;">
-      <span class="close-tafsir" onclick="closeLoginModal()">&times;</span>
-      <h2 style="font-family:'Cairo'; color: var(--primary-color);">حساب نور</h2>
-      <p style="font-size: 14px; margin-bottom: 25px; opacity: 0.8;">سجل لتزامن بياناتك عبر جميع أجهزتك</p>
-      
-      <div style="display: flex; flex-direction: column; gap: 12px;">
-        <button class="social-btn google-btn"><i class="fa-brands fa-google"></i> متابعة بجوجل</button>
-        <button class="social-btn facebook-btn"><i class="fa-brands fa-facebook"></i> متابعة بفيسبوك</button>
-        <div style="margin: 10px 0; color: #ccc; font-size: 12px;">أو عبر البريد</div>
-        <input type="email" placeholder="البريد الإلكتروني" class="login-input">
-        <button class="pay-now-btn" style="width: 100%; margin: 0;">إنشاء حساب جديد</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="supportPopup" class="support-popup">
-    <div class="popup-content">
-      <span class="close-popup" onclick="closeSupportPopup()">&times;</span>
-      <div class="popup-icon"><i class="fa-solid fa-heart"></i></div>
-      <p style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">ساهم في أجر تطبيق نور</p>
-      <button onclick="window.location.href='support.html'" class="pay-now-btn" style="font-size: 12px; padding: 8px 15px;">كيفية الدعم</button>
-      <div id="popupTimer" class="popup-timer"></div>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-</html>
+  <div
