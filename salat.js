@@ -9,13 +9,14 @@ const salatNamesAr = {
 };
 
 let prayerTimes = {};
+let isAudioEnabled = false; // متغير للتحقق من إذن الصوت
 const adhanAudio = new Audio('https://www.islamcan.com/common/audio/adhan/turkey.mp3'); 
 
 const salatTimesContainer = document.getElementById('salatTimesContainer');
 const cityNameEl = document.getElementById('cityName');
 const nextSalatText = document.getElementById('nextSalatText');
 
-// 1. تحديد موقع المستخدم
+// 1. تحديد موقع المستخدم وجلب الأوقات
 function getUserLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -26,7 +27,6 @@ function getUserLocation() {
         getCityName(lat, lon);
       },
       (error) => {
-        console.error("Error getting location:", error);
         cityNameEl.textContent = "الرباط (افتراضي)";
         fetchSalatTimes(34.020882, -6.841650);
       }
@@ -34,7 +34,6 @@ function getUserLocation() {
   }
 }
 
-// 2. جلب اسم المدينة
 async function getCityName(lat, lon) {
   try {
     const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=ar`);
@@ -43,24 +42,22 @@ async function getCityName(lat, lon) {
   } catch (error) { console.error(error); }
 }
 
-// 3. جلب أوقات الصلاة
 async function fetchSalatTimes(lat, lon) {
   try {
     const date = new Date();
     const timestamp = Math.floor(date.getTime() / 1000);
     const res = await fetch(`https://api.aladhan.com/v1/timings/${timestamp}?latitude=${lat}&longitude=${lon}&method=3`);
     const data = await res.json();
-    
     if(data.code === 200) {
       prayerTimes = data.data.timings;
       displaySalatTimes(prayerTimes);
     }
   } catch (error) {
-    salatTimesContainer.innerHTML = "<p>وقع مشكل في تحميل الأوقات</p>";
+    salatTimesContainer.innerHTML = "<p>تعذر تحميل أوقات الصلاة</p>";
   }
 }
 
-// 4. عرض الأوقات وتفعيل مراقب الأذان
+// 2. عرض الأوقات في البطاقات
 function displaySalatTimes(timings) {
   salatTimesContainer.innerHTML = '';
   const now = new Date();
@@ -95,11 +92,35 @@ function displaySalatTimes(timings) {
   if (nextSalat) {
     nextSalatText.innerHTML = `الصلاة القادمة هي <strong>${salatNamesAr[nextSalat]}</strong>`;
   }
-
   startAdhanMonitor();
 }
 
-// 5. مراقب الأذان
+// 3. زر تفعيل الصوت (حل مشكلة Chrome)
+function createAudioActivationBtn() {
+  if (document.getElementById('enableAudioBtn')) return;
+  
+  const btn = document.createElement('button');
+  btn.id = 'enableAudioBtn';
+  btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> تفعيل صوت الأذان';
+  btn.style = "background:#3b82f6; color:white; border:none; padding:10px 20px; border-radius:12px; cursor:pointer; font-family:Cairo; font-weight:bold; margin-bottom:20px; display:block; margin-inline:auto;";
+  
+  btn.onclick = () => {
+    isAudioEnabled = true;
+    // تشغيل وإيقاف الصوت لحظياً لكسر حاجز المتصفح
+    adhanAudio.play().then(() => {
+      adhanAudio.pause();
+      adhanAudio.currentTime = 0;
+      btn.innerHTML = '<i class="fa-solid fa-check"></i> تم تفعيل الصوت';
+      btn.style.background = "#10b981";
+      setTimeout(() => btn.remove(), 3000); // إخفاء الزر بعد النجاح
+    }).catch(err => console.log("خطأ في التفعيل"));
+  };
+  
+  const header = document.querySelector('.hero-section');
+  header.appendChild(btn);
+}
+
+// 4. مراقب الوقت
 function startAdhanMonitor() {
   setInterval(() => {
     const now = new Date();
@@ -114,84 +135,42 @@ function startAdhanMonitor() {
   }, 1000);
 }
 
-// 6. تشغيل الأذان وتنبيه المستخدم
+// 5. تشغيل الأذان
 function triggerAdhan(prayerName) {
   const nameAr = salatNamesAr[prayerName];
   
-  // إشعار المتصفح
+  // إشعار
   if (Notification.permission === "granted") {
-    new Notification(`حان الآن وقت صلاة ${nameAr}`, {
-      body: `الله أكبر، الله أكبر. وقت صلاة ${nameAr} حسب توقيتك المحلي.`,
+    new Notification(`وقت صلاة ${nameAr}`, {
+      body: `حان الآن موعد الأذان حسب توقيتك المحلي.`,
       icon: "https://cdn-icons-png.flaticon.com/512/3208/3208035.png"
     });
   }
 
-  // تشغيل الصوت
-  adhanAudio.play().catch(e => console.log("User interaction required for audio"));
+  // تشغيل الصوت إذا تم تفعيله
+  if (isAudioEnabled) {
+    adhanAudio.play().catch(e => console.log("الصوت محجوب"));
+  }
 
-  // إظهار زر الإيقاف والرسالة
   const stopBox = document.createElement("div");
   stopBox.id = "adhanStopBox";
-  stopBox.style = "position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#1e293b; color:white; padding:20px 40px; border-radius:20px; z-index:10000; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.5); font-family:Cairo;";
+  stopBox.style = "position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#1e293b; color:white; padding:20px; border-radius:20px; z-index:10000; text-align:center; min-width:250px;";
   stopBox.innerHTML = `
-    <p style="margin-bottom:15px; font-weight:bold;">📢 أذان صلاة ${nameAr} كاين دابا...</p>
-    <button onclick="stopAdhan()" style="background:#ef4444; color:white; border:none; padding:10px 25px; border-radius:12px; cursor:pointer; font-weight:bold; font-family:Cairo;">إيقاف الأذان</button>
+    <p style="margin-bottom:10px;">📢 أذان صلاة ${nameAr}...</p>
+    <button onclick="stopAdhan()" style="background:#ef4444; color:white; border:none; padding:8px 20px; border-radius:10px; cursor:pointer;">إيقاف</button>
   `;
   document.body.appendChild(stopBox);
 }
 
-// 7. إيقاف الأذان
 window.stopAdhan = function() {
   adhanAudio.pause();
   adhanAudio.currentTime = 0;
-  const stopBox = document.getElementById("adhanStopBox");
-  if(stopBox) stopBox.remove();
+  const box = document.getElementById("adhanStopBox");
+  if(box) box.remove();
 };
-
-// ==========================================
-// قسم القبلة (Qibla Compass)
-// ==========================================
-let qiblaAngle = 100; 
-const needle = document.getElementById('compassNeedle');
-const statusText = document.getElementById('qiblaStatus');
-
-window.startCompass = function() {
-  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-    DeviceOrientationEvent.requestPermission().then(state => {
-      if (state === 'granted') window.addEventListener('deviceorientation', handleOrientation);
-    });
-  } else {
-    window.addEventListener('deviceorientationabsolute', handleOrientation);
-    window.addEventListener('deviceorientation', handleOrientation);
-  }
-};
-
-function handleOrientation(event) {
-  let compass = event.webkitCompassHeading || Math.abs(event.alpha - 360);
-  if (compass) {
-    let needleRotation = qiblaAngle - compass;
-    needle.style.transform = `rotate(${needleRotation}deg)`;
-    needle.style.background = (Math.abs(needleRotation) < 5 || Math.abs(needleRotation) > 355) ? "#10b981" : "#ef4444";
-  }
-}
-
-// ==========================================
-// المظهر والتشغيل
-// ==========================================
-function setupTheme() {
-  const themeToggle = document.getElementById("themeToggle");
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "dark") document.body.classList.add("dark");
-  if (themeToggle) {
-    themeToggle.addEventListener("click", () => {
-      document.body.classList.toggle("dark");
-      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
-    });
-  }
-}
 
 document.addEventListener("DOMContentLoaded", () => {
-  setupTheme();
   getUserLocation();
+  createAudioActivationBtn(); // إظهار زر التفعيل عند التحميل
   if (Notification.permission !== "granted") Notification.requestPermission();
 });
