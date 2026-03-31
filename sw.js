@@ -43,3 +43,32 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
+const CACHE_NAME = 'nour-v2';
+const ASSETS_TO_CACHE = [
+  '/',
+  '/index.html',
+  '/quran.html',
+  '/details.html',
+  '/salat.html',
+  '/adhkar.html',
+  '/duas.html', // جديد
+  '/styles.css',
+  '/script.js',
+  '/quran.js',
+  '/details.js',
+  '/salat.js',
+  '/duas.js', // جديد
+  'https://cdn-icons-png.flaticon.com/512/3208/3208035.png'
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE))
+  );
+});
+
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => response || fetch(event.request))
+  );
+});
