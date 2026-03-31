@@ -20,9 +20,17 @@
       <i class="fa-solid fa-book-quran"></i>
       <span>نور</span>
     </div>
-    <button id="themeToggle" class="theme-btn">
-      <i class="fa-solid fa-moon"></i>
-    </button>
+    <div class="nav-actions" style="display: flex; gap: 10px; align-items: center;">
+      <button onclick="shareApp()" class="theme-btn" title="مشاركة التطبيق">
+        <i class="fa-solid fa-share-nodes"></i>
+      </button>
+      <button onclick="openLoginModal()" class="theme-btn" title="تسجيل الدخول">
+        <i class="fa-solid fa-user-circle"></i>
+      </button>
+      <button id="themeToggle" class="theme-btn">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
   </nav>
 
   <header class="hero-section">
@@ -33,7 +41,6 @@
         </div>
         <h1 class="main-logo-text">نور</h1>
       </div>
-
       <p class="hero-subtitle">رفيقك اليومي للتقرب إلى الله</p>
 
       <div class="daily-ayah-card">
@@ -58,11 +65,10 @@
 
   <main class="main-content">
     <section class="services-grid">
-
       <div class="service-card" onclick="window.location.href='quran.html'">
         <div class="card-icon" style="background: #e8f5ee; color: #1f6f50;"><i class="fa-solid fa-book-open-reader"></i></div>
         <h3>القرآن الكريم</h3>
-        <p>تلاوة خاشعة وتفسير ميسر للآيات.</p>
+        <p>تلاوة خاشعة وتفسير ميسر.</p>
       </div>
 
       <div class="service-card" onclick="window.location.href='duas.html'">
@@ -74,23 +80,40 @@
       <div class="service-card" onclick="window.location.href='salat.html'">
         <div class="card-icon" style="background: #e6f0ff; color: #2563eb;"><i class="fa-solid fa-mosque"></i></div>
         <h3>أوقات الصلاة</h3>
-        <p>مواقيت دقيقة مع تنبيهات الأذان.</p>
+        <p>مواقيت دقيقة مع الأذان.</p>
       </div>
 
       <div class="service-card" onclick="window.location.href='adhkar.html?type=sabah'">
         <div class="card-icon" style="background: #fff5e6; color: #f59e0b;"><i class="fa-solid fa-sun"></i></div>
         <h3>أذكار الصباح</h3>
-        <p>حصن نفسك بذكر الله في الصباح.</p>
       </div>
 
       <div class="service-card" onclick="window.location.href='adhkar.html?type=masa'">
         <div class="card-icon" style="background: #f0f4f8; color: #3b82f6;"><i class="fa-solid fa-moon"></i></div>
         <h3>أذكار المساء</h3>
-        <p>طمأنينة وذكر قبل النوم.</p>
       </div>
-
     </section>
   </main>
+
+  <div id="loginModal" class="tafsir-modal">
+    <div class="tafsir-content" style="text-align: center;">
+      <span class="close-tafsir" onclick="closeLoginModal()">&times;</span>
+      <h2 style="font-family:'Cairo'; color: #1f6f50; margin-bottom: 20px;">انضم إلى عائلة نور</h2>
+      <p style="font-size: 14px; color: #666; margin-bottom: 25px;">سجل دخولك لحفظ تقدمك ومزامنة أذكارك</p>
+      
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <button class="social-btn google-btn">
+          <i class="fa-brands fa-google"></i> متابعة باستخدام جوجل
+        </button>
+        <button class="social-btn facebook-btn">
+          <i class="fa-brands fa-facebook"></i> متابعة باستخدام فيسبوك
+        </button>
+        <div style="margin: 10px 0; color: #ccc;">أو</div>
+        <input type="email" placeholder="البريد الإلكتروني" style="padding: 12px; border-radius: 10px; border: 1px solid #ddd; outline: none;">
+        <button class="hero-link-btn" style="background: #1f6f50; border: none; width: 100%;">إنشاء حساب مجاني</button>
+      </div>
+    </div>
+  </div>
 
   <footer>
     <p>تم التصميم بحب 🤍 - تطبيق نور</p>
