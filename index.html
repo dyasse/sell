@@ -1,113 +1,28 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>نور - رفيقك الروحاني</title>
-  
-  <link rel="canonical" href="https://nour-quran.com" />
-  <link rel="icon" type="image/png" href="assets/favicon.png">
-  <link rel="apple-touch-icon" href="assets/favicon.png">
+<nav class="navbar">
+  <div class="logo" onclick="location.reload()">
+    <img src="assets/favicon.png" alt="Logo">
+    <span>نور</span>
+  </div>
+  <div class="nav-actions">
+    <button onclick="openLoginModal()" class="theme-btn"><i class="fa-solid fa-user-circle"></i></button>
+    <button id="themeToggle" class="theme-btn">🌙</button>
+  </div>
+</nav>
 
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-
-  <nav class="navbar">
-    <div class="logo" onclick="location.reload()" style="cursor: pointer;">
-      <img src="assets/favicon.png" alt="لوغو نور">
-      <span>نور</span>
+<header class="hero-section">
+  <div class="main-logo-container">
+    <div class="logo-icon-circle">
+      <img src="assets/favicon.png" alt="Logo">
     </div>
-    
-    <div class="nav-actions">
-      <button onclick="shareApp()" class="theme-btn" title="مشاركة">
-        <i class="fa-solid fa-share-nodes"></i>
-      </button>
-      <button onclick="openLoginModal()" class="theme-btn" title="حسابي">
-        <i class="fa-solid fa-user-circle"></i>
-      </button>
-      <button id="themeToggle" class="theme-btn" title="الوضع الليلي">
-        <i class="fa-solid fa-moon"></i>
-      </button>
+    <h1 style="font-family:'Amiri'; font-size: 50px; color: white;">نور</h1>
+  </div>
+</header>
+
+<main class="main-content">
+  <div class="services-grid">
+    <div class="service-card mini" onclick="location.href='quran.html'">
+      <i class="fa-solid fa-book-open" style="color:var(--primary)"></i>
+      <h4>القرآن</h4>
     </div>
-  </nav>
-
-  <header class="hero-section">
-    <div class="hero-content">
-      <div class="main-logo-container">
-        <div class="logo-icon-circle">
-          <img src="assets/favicon.png" alt="نور">
-        </div>
-        <h1 class="main-logo-text">نور</h1>
-      </div>
-      
-      <p class="hero-subtitle">رفيقك اليومي للتقرب من الله بدون إعلانات</p>
-
-      <div class="daily-ayah-card small-ayah">
-        <div class="ayah-header">
-          <i class="fa-solid fa-star-and-crescent"></i>
-          <span>آية اليوم</span>
-        </div>
-        <p id="dailyAyahText" class="quran-text">جاري تحميل آية اليوم...</p>
-        <span id="dailyAyahRef" class="ayah-ref"></span>
-      </div>
-
-      <div id="bookmarkCard" class="daily-ayah-card bookmark-mini" style="display:none;">
-        <button id="resumeBtn" class="hero-link-btn" style="background:#f59e0b; border:none; margin:0 auto;">
-          <i class="fa-solid fa-bookmark"></i> متابعة: <span id="bookmarkText"></span>
-        </button>
-      </div>
     </div>
-  </header>
-
-  <main class="main-content">
-    <div class="services-grid">
-      
-      <div class="service-card mini" onclick="window.location.href='quran.html'">
-        <i class="fa-solid fa-book-open icon-green"></i>
-        <h4>القرآن</h4>
-      </div>
-
-      <div class="service-card mini" onclick="window.location.href='duas.html'">
-        <i class="fa-solid fa-hands-praying icon-red"></i>
-        <h4>الأدعية</h4>
-      </div>
-
-      <div class="service-card mini" onclick="window.location.href='salat.html'">
-        <i class="fa-solid fa-mosque icon-blue"></i>
-        <h4>الصلاة</h4>
-      </div>
-
-      <div class="service-card mini" onclick="window.location.href='adhkar.html?type=sabah'">
-        <i class="fa-solid fa-sun icon-orange"></i>
-        <h4>الصباح</h4>
-      </div>
-
-      <div class="service-card mini" onclick="window.location.href='adhkar.html?type=masa'">
-        <i class="fa-solid fa-moon icon-blue-dark"></i>
-        <h4>المساء</h4>
-      </div>
-
-      <div class="service-card mini support-accent" onclick="window.location.href='support.html'">
-        <i class="fa-solid fa-heart pulse"></i>
-        <h4>ادعمنا</h4>
-      </div>
-
-    </div>
-
-    <div class="login-promo-card" onclick="openLoginModal()">
-      <div class="promo-content">
-        <i class="fa-solid fa-user-plus"></i>
-        <div>
-          <h5>انضم إلينا</h5>
-          <p>سجل لحفظ تقدمك في الختمة والأذكار</p>
-        </div>
-      </div>
-      <i class="fa-solid fa-chevron-left"></i>
-    </div>
-  </main>
-
-  <div
+</main>
