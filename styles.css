@@ -1,12 +1,12 @@
-/* ================== المتغيرات والتأسيس ================== */
+/* ================== 1. التأسيس والألوان ================== */
 :root {
   --primary: #1f6f50;
-  --primary-light: #e8f5ee;
+  --primary-dark: #164e38;
+  --secondary: #a3e4c7;
   --bg: #f8fafc;
   --card: #ffffff;
   --text: #1e293b;
-  --accent: #f59e0b;
-  --shadow: 0 10px 25px rgba(0,0,0,0.05);
+  --white: #ffffff;
 }
 
 body.dark {
@@ -16,139 +16,110 @@ body.dark {
   --primary: #4ade80;
 }
 
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
   font-family: 'Cairo', sans-serif;
   background-color: var(--bg);
   color: var(--text);
-  margin: 0; direction: rtl;
-  transition: 0.3s;
+  direction: rtl;
+  line-height: 1.6;
 }
 
-/* ================== الجدول (Surah Table) ================== */
-.table-container {
-  overflow-x: auto;
-  background: var(--card);
-  border-radius: 20px;
-  box-shadow: var(--shadow);
-  margin-top: 20px;
-}
-
-.surah-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 600px;
-}
-
-.surah-table th {
-  background: var(--primary-light);
-  color: var(--primary);
-  padding: 15px;
-  font-size: 14px;
-  text-align: center;
-}
-
-.surah-table td {
-  padding: 18px 15px;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-  text-align: center;
-  transition: 0.2s;
-}
-
-.surah-table tr:hover td {
-  background-color: rgba(31, 111, 80, 0.03);
-  cursor: pointer;
-}
-
-.surah-name-cell {
-  font-family: 'Amiri', serif;
-  font-size: 22px;
-  font-weight: bold;
-  color: var(--primary);
-}
-
-/* شارات مكة والمدينة */
-.badge {
-  padding: 5px 12px;
-  border-radius: 50px;
-  font-size: 12px;
-  font-weight: 600;
-}
-.makkah { background: #fef3c7; color: #92400e; }
-.madinah { background: #dcfce7; color: #166534; }
-
-/* ================== قارئ القرآن (Quran Reader) ================== */
-.quran-container {
-  max-width: 1000px;
-  margin: 30px auto;
-  padding: 40px;
-  background: var(--card);
-  border-radius: 30px;
-  box-shadow: var(--shadow);
-}
-
-.quran-text {
-  font-family: 'Amiri', serif; /* هاد الخط كيدعم الرسم العثماني */
-  font-size: 38px;
-  line-height: 2.5;
-  text-align: center;
-  word-spacing: 6px;
-  padding: 20px;
-}
-
-.ayah-num {
-  font-family: 'Cairo';
-  font-size: 18px;
-  color: var(--primary);
-  border: 2px solid var(--primary);
-  border-radius: 50%;
-  width: 35px;
-  height: 35px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 10px;
-}
-
-/* ================== الأزرار (Modern Buttons) ================== */
-.action-btn {
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 50px;
-  font-family: 'Cairo';
-  font-weight: bold;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  transition: 0.3s;
-  text-decoration: none;
-}
-
-.action-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-.btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
-
-/* ================== الهيدر والنافبار ================== */
+/* ================== 2. شريط التنقل (Navbar) ================== */
 .navbar {
-  display: flex; justify-content: space-between; padding: 15px 5%;
-  background: var(--card); box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 5%;
+  background: var(--card);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   position: sticky; top: 0; z-index: 1000;
 }
 
-.hero-header {
+.logo { display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none; color: var(--primary); font-weight: bold; font-size: 20px; }
+.logo img { height: 40px; width: auto; border-radius: 8px; }
+
+.nav-actions { display: flex; gap: 10px; align-items: center; }
+
+/* ================== 3. الهيرو (Hero Section) - هنا كان المشكل ================== */
+.hero-section {
   background: linear-gradient(135deg, #1f6f50 0%, #164e38 100%);
-  color: white; padding: 40px 5%; text-align: center;
-  border-radius: 0 0 40px 40px;
+  color: white !important; /* تأكيد اللون الأبيض للكتابة */
+  padding: 60px 5% 100px;
+  text-align: center;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  width: 100%;
 }
 
-/* التفسير (Modal) */
-.tafsir-modal {
-  display: none; position: fixed; z-index: 9999; left: 0; top: 0;
-  width: 100%; height: 100%; background: rgba(0,0,0,0.75);
-  justify-content: center; align-items: center; backdrop-filter: blur(5px);
+.hero-section h1, .hero-section p, .hero-section h2 {
+  color: white !important; /* باش ما يبقاش التكست مخبي */
+  margin-bottom: 15px;
 }
-.tafsir-content {
-  background: var(--card); width: 90%; max-width: 500px;
-  padding: 30px; border-radius: 25px; text-align: center;
+
+.main-logo-container { margin-bottom: 30px; }
+.logo-icon-circle {
+  width: 90px; height: 90px; background: white; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+.logo-icon-circle img { width: 60px; height: 60px; border-radius: 10px; }
+
+/* ================== 4. الشبكة والبطاقات (Grids) ================== */
+.main-content {
+  padding: 0 5% 50px;
+  max-width: 1100px;
+  margin: -60px auto 0; /* باش تطلع الكارطس فوق الهيرو */
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.service-card.mini {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.service-card.mini:hover { transform: translateY(-5px); }
+.service-card.mini i { font-size: 28px; margin-bottom: 10px; display: block; }
+.service-card.mini h4 { font-size: 14px; color: var(--text); }
+
+/* ================== 5. الجدول (Index Table) ================== */
+.table-container {
+  background: var(--card);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  margin-top: 20px;
+}
+
+.surah-table { width: 100%; border-collapse: collapse; text-align: center; }
+.surah-table th { background: #f1f5f9; padding: 15px; color: var(--primary); font-size: 14px; }
+.surah-table td { padding: 15px; border-bottom: 1px solid #f1f5f9; }
+.surah-table tr:hover td { background: #f8fafc; cursor: pointer; }
+
+/* ================== 6. قارئ القرآن ================== */
+.quran-container {
+  background: var(--card);
+  padding: 40px 20px;
+  border-radius: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  margin: 30px auto;
+  max-width: 900px;
+}
+
+.quran-text {
+  font-family: 'Amiri', serif;
+  font-size: 34px;
+  line-height: 2.2;
+  text-align: center;
 }
