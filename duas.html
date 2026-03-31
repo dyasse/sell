@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الأدعية - نور</title>
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3208/3208035.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+      <i class="fa-solid fa-book-quran"></i>
+      <span>نور</span>
+    </div>
+    <div class="nav-actions">
+      <button onclick="window.location.href='index.html'" class="soft-btn"><i class="fa-solid fa-house"></i> الرئيسية</button>
+      <button id="themeToggle" class="theme-btn"><i class="fa-solid fa-moon"></i></button>
+    </div>
+  </nav>
+
+  <header class="hero-section" style="padding: 40px 5%; border-radius: 0 0 30px 30px;">
+    <h1 class="main-logo-text" style="font-size: 40px; color: white;">الأدعية المستجابة</h1>
+    <p style="opacity: 0.9;">"وَقَالَ رَبُّكُمُ ادْعُونِي أَسْتَجِبْ لَكُمْ"</p>
+  </header>
+
+  <main class="main-content">
+    <div id="duasContainer">
+      <p style="text-align: center;">جاري تحميل الأدعية...</p>
+    </div>
+  </main>
+
+  <script src="duas.js"></script>
+</body>
+</html>
