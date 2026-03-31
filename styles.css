@@ -201,3 +201,45 @@ body.dark .support-accent { background: #451a1a !important; border-color: #ef444
 @media (min-width: 768px) {
   .services-grid { grid-template-columns: repeat(6, 1fr); }
 }
+/* --- بطاقة التسجيل الصغيرة --- */
+.login-promo-card {
+  background: var(--card-bg);
+  margin-top: 30px;
+  padding: 15px 20px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  border: 1px dashed var(--primary-color);
+  transition: 0.3s;
+}
+
+.login-promo-card:hover { background: rgba(31, 111, 80, 0.05); }
+
+.promo-content { display: flex; align-items: center; gap: 15px; }
+.promo-content i { font-size: 20px; color: var(--primary-color); }
+.promo-content h5 { margin: 0; font-size: 15px; }
+.promo-content p { margin: 0; font-size: 12px; opacity: 0.7; }
+
+/* --- Login Modal Adjustments --- */
+.login-input {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  outline: none;
+  text-align: center;
+  font-family: 'Cairo';
+}
+
+.social-btn {
+  width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #eee;
+  background: white; font-family: 'Cairo'; font-weight: bold; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.google-btn { color: #4285f4; }
+.facebook-btn { background: #1877f2; color: white; border: none; }
+
+/* Popup Size Adjustment */
+.support-popup { width: 260px; }
