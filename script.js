@@ -24,7 +24,59 @@ function checkBookmark() {
   if (bookmark && card) {
     card.style.display = 'block';
     text.innerHTML = `آخر ما قرأت: <strong>سورة ${bookmark.name}</strong> (آية ${bookmark.verse})`;
-    
+    // --- Logic l-Popup dyal l-Support ---
+function handleSupportPopup() {
+  const popup = document.getElementById("supportPopup");
+  const timerBar = document.getElementById("popupTimer");
+
+  // Show after 2 seconds
+  setTimeout(() => {
+    if (popup) {
+      popup.style.display = "block";
+      if (timerBar) timerBar.style.width = "0%"; // Start shrinking
+      
+      // Auto-hide after 20 seconds
+      setTimeout(() => {
+        closeSupportPopup();
+      }, 20000);
+    }
+  }, 2000);
+}
+
+function closeSupportPopup() {
+  const popup = document.getElementById("supportPopup");
+  if (popup) popup.style.opacity = "0";
+  setTimeout(() => { if(popup) popup.style.display = "none"; }, 500);
+}
+
+// --- Daily Ayah & Bookmark (Existing logic m-adapty) ---
+async function fetchDailyAyah() {
+  try {
+    const res = await fetch(`https://api.alquran.cloud/v1/ayah/${Math.floor(Math.random() * 6236) + 1}/ar.uthmani`);
+    const data = await res.json();
+    document.getElementById("dailyAyahText").textContent = data.data.text;
+    document.getElementById("dailyAyahRef").textContent = data.data.surah.name;
+  } catch (e) { console.log(e); }
+}
+
+function checkBookmark() {
+  const bookmark = JSON.parse(localStorage.getItem('nour_bookmark'));
+  if (bookmark) {
+    document.getElementById('bookmarkCard').style.display = 'block';
+    document.getElementById('bookmarkText').textContent = bookmark.name;
+    document.getElementById('resumeBtn').onclick = () => {
+      window.location.href = `details.html?id=${bookmark.id}&ayah=${bookmark.verse}`;
+    };
+  }
+}
+
+// Start everything
+document.addEventListener("DOMContentLoaded", () => {
+  fetchDailyAyah();
+  checkBookmark();
+  handleSupportPopup(); // Launch popup
+  // setupTheme() etc...
+});
     btn.onclick = () => {
       // كنمشيو للصفحة مع رقم الآية كـ Parameter
       window.location.href = `details.html?id=${bookmark.id}&ayah=${bookmark.verse}`;
