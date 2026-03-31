@@ -12,10 +12,10 @@
 <body>
 
   <nav class="navbar">
-    <div class="logo" onclick="location.reload()">
+    <a href="index.html" class="logo">
       <img src="assets/favicon.png" alt="لوغو">
       <span>نور</span>
-    </div>
+    </a>
     <div class="nav-actions">
       <button onclick="shareApp()" class="theme-btn"><i class="fa-solid fa-share-nodes"></i></button>
       <button onclick="openLoginModal()" class="theme-btn"><i class="fa-solid fa-user-circle"></i></button>
@@ -25,9 +25,7 @@
 
   <header class="hero-section">
     <div class="main-logo-container">
-      <div class="logo-icon-circle">
-        <img src="assets/favicon.png" alt="نور">
-      </div>
+      <div class="logo-icon-circle"><img src="assets/favicon.png" alt="نور"></div>
       <h1 class="main-logo-text">نور</h1>
       <p style="opacity: 0.9;">رفيقك اليومي للتقرب من الله</p>
     </div>
@@ -36,31 +34,40 @@
   <main class="main-content">
     <div class="services-grid">
       <div class="service-card mini" onclick="location.href='quran.html'">
-        <i class="fa-solid fa-book-open icon-green"></i>
+        <i class="fa-solid fa-book-open" style="color:#1f6f50;"></i>
         <h4>القرآن</h4>
       </div>
       <div class="service-card mini" onclick="location.href='duas.html'">
-        <i class="fa-solid fa-hands-praying icon-red"></i>
+        <i class="fa-solid fa-hands-praying" style="color:#ef4444;"></i>
         <h4>الأدعية</h4>
       </div>
       <div class="service-card mini" onclick="location.href='salat.html'">
-        <i class="fa-solid fa-mosque icon-blue"></i>
+        <i class="fa-solid fa-mosque" style="color:#3b82f6;"></i>
         <h4>الصلاة</h4>
       </div>
       <div class="service-card mini" onclick="location.href='adhkar.html?type=sabah'">
-        <i class="fa-solid fa-sun" style="color: #f59e0b;"></i>
+        <i class="fa-solid fa-sun" style="color:#f59e0b;"></i>
         <h4>الصباح</h4>
       </div>
       <div class="service-card mini" onclick="location.href='adhkar.html?type=masa'">
-        <i class="fa-solid fa-moon" style="color: #1e3a8a;"></i>
+        <i class="fa-solid fa-moon" style="color:#1e3a8a;"></i>
         <h4>المساء</h4>
       </div>
-      <div class="service-card mini" onclick="location.href='support.html'" style="border: 1px dashed #ef4444;">
-        <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
+      <div class="service-card mini" onclick="location.href='support.html'" style="background:#fff1f2; border:1px dashed #ef4444;">
+        <i class="fa-solid fa-heart" style="color:#ef4444;"></i>
         <h4>ادعمنا</h4>
       </div>
     </div>
   </main>
+
+  <div id="loginModal" class="tafsir-modal">
+    <div class="tafsir-content">
+      <span onclick="closeLoginModal()" style="position:absolute; left:20px; top:15px; cursor:pointer; font-size:20px;">&times;</span>
+      <h2 style="margin-bottom:20px;">حساب نور</h2>
+      <input type="email" placeholder="البريد الإلكتروني" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; margin-bottom:15px; text-align:center;">
+      <button style="width:100%; padding:12px; border-radius:10px; background:var(--primary); color:white; border:none; font-weight:bold; cursor:pointer;">دخول / تسجيل</button>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
