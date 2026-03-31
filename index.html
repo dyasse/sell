@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8"><title>نور - رفيقك الروحاني</title>
+    <meta charset="UTF-8"><title>نور - الرئيسية</title>
     <link rel="icon" href="assets/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
@@ -11,36 +11,31 @@
     <nav class="navbar">
         <a href="index.html" class="logo"><img src="assets/favicon.png"> <span>نور</span></a>
         <div class="nav-actions">
-            <button onclick="openModal('loginModal')" class="theme-btn"><i class="fa-solid fa-user-circle"></i></button>
-            <button id="themeToggle" class="theme-btn">🌙</button>
+            <button onclick="document.getElementById('loginModal').style.display='flex'" style="background:none; border:none; cursor:pointer;"><i class="fa-solid fa-user-circle fa-2x" style="color:var(--primary)"></i></button>
+            <button id="themeToggle" style="background:none; border:none; cursor:pointer; margin-right:10px;"><i class="fa-solid fa-moon fa-xl"></i></button>
         </div>
     </nav>
-
     <header class="hero-section">
-        <h1 style="font-family:Amiri; font-size:50px;">نور</h1>
-        <div id="resumeCard" class="bookmark-card">
-            <p style="font-size: 13px;"><i class="fa-solid fa-bookmark"></i> واصل القراءة</p>
-            <button id="resumeBtn" class="btn-primary" style="background:var(--accent); margin-top:10px;">سورة <span id="lastSurah"></span></button>
+        <h1>نور</h1>
+        <div id="resumeCard" style="display:none; background:rgba(255,255,255,0.2); padding:15px; border-radius:15px; margin-top:20px; max-width:300px; margin-inline:auto;">
+            <p style="font-size:14px;">واصل من حيث توقفت:</p>
+            <button id="resumeBtn" class="btn-primary" style="background:var(--accent);">سورة <span id="lastSurah"></span></button>
         </div>
     </header>
-
     <main class="main-content">
         <div class="services-grid">
-            <div class="service-card" onclick="location.href='quran.html'"><i class="fa-solid fa-book-open" style="color:var(--primary); font-size:28px;"></i><h4>القرآن</h4></div>
-            <div class="service-card" onclick="location.href='adhkar.html?type=sabah'"><i class="fa-solid fa-sun" style="color:#f59e0b; font-size:28px;"></i><h4>أذكار</h4></div>
-            <div class="service-card" onclick="location.href='duas.html'"><i class="fa-solid fa-hands-praying" style="color:#ef4444; font-size:28px;"></i><h4>أدعية</h4></div>
-            <div class="service-card" onclick="location.href='support.html'"><i class="fa-solid fa-heart" style="color:#ef4444; font-size:28px;"></i><h4>ادعمنا</h4></div>
+            <div class="service-card" onclick="location.href='quran.html'"><i class="fa-solid fa-book-open"></i><h4>القرآن</h4></div>
+            <div class="service-card" onclick="location.href='adhkar.html?type=sabah'"><i class="fa-solid fa-sun" style="color:#f59e0b;"></i><h4>أذكار</h4></div>
+            <div class="service-card" onclick="location.href='duas.html'"><i class="fa-solid fa-hands-praying" style="color:#ef4444;"></i><h4>أدعية</h4></div>
+            <div class="service-card" onclick="location.href='support.html'"><i class="fa-solid fa-heart" style="color:#ef4444;"></i><h4>ادعمنا</h4></div>
         </div>
     </main>
-
     <div id="loginModal" class="modal">
         <div class="modal-content">
-            <span onclick="closeModal('loginModal')" style="position:absolute; left:20px; top:15px; cursor:pointer;">&times;</span>
-            <h2 style="margin-bottom:20px;">حساب نور</h2>
-            <button class="social-btn google-btn"><i class="fa-brands fa-google"></i> متابعة بجوجل</button>
-            <button class="social-btn facebook-btn"><i class="fa-brands fa-facebook"></i> متابعة بفيسبوك</button>
-            <input type="email" placeholder="البريد الإلكتروني" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; margin:15px 0; text-align:center;">
-            <button class="btn-primary">دخول / تسجيل</button>
+            <span onclick="this.parentElement.parentElement.style.display='none'" style="cursor:pointer; position:absolute; left:20px;">&times;</span>
+            <h2 style="margin-bottom:20px;">تسجيل الدخول</h2>
+            <button class="btn-primary" style="background:#4285f4; margin-bottom:10px;"><i class="fa-brands fa-google"></i> Google</button>
+            <button class="btn-primary" style="background:#1877f2;"><i class="fa-brands fa-facebook"></i> Facebook</button>
         </div>
     </div>
     <script src="script.js"></script>
