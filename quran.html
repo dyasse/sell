@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>فهرس القرآن الكريم - نور</title>
   
-  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3208/3208035.png" />
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/favicon.png">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
@@ -16,7 +18,7 @@
 
   <nav class="navbar">
     <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
-      <i class="fa-solid fa-book-quran"></i>
+      <img src="assets/favicon.png" alt="لوغو نور" style="height: 35px; width: auto; margin-left: 10px; border-radius: 5px;">
       <span>نور</span>
     </div>
     <div class="nav-actions">
@@ -31,12 +33,15 @@
 
   <header class="hero-section" style="padding: 40px 5%; border-radius: 0 0 30px 30px;">
     <h1 class="main-logo-text" style="font-size: 40px; color: white;">فهرس السور</h1>
-    <p style="opacity: 0.9;">اختر السورة لتبدأ التلاوة</p>
+    <p style="opacity: 0.9;">اختر السورة لتبدأ التلاوة العطرة</p>
   </header>
 
   <main class="main-content">
     <div id="quranContainer" class="services-grid">
-      <p style="text-align: center; grid-column: 1/-1;">جاري تحميل الفهرس...</p>
+      <div style="text-align: center; grid-column: 1/-1; padding: 50px;">
+        <i class="fa-solid fa-spinner fa-spin" style="font-size: 30px; color: var(--primary-color);"></i>
+        <p>جاري تحميل الفهرس...</p>
+      </div>
     </div>
   </main>
 
