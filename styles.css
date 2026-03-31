@@ -150,3 +150,54 @@ footer { text-align: center; padding: 50px; opacity: 0.6; font-size: 14px; }
 }
 .google-btn { color: #4285f4; }
 .facebook-btn { background: #1877f2; color: white; border: none; }
+/* ================== GRID & MINI CARDS ================== */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
+  gap: 15px;
+  margin-top: -50px;
+  padding: 0 10px;
+}
+
+.service-card.mini {
+  background: var(--card-bg);
+  padding: 15px 10px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  transition: 0.3s;
+}
+
+.service-card.mini i { font-size: 24px; margin-bottom: 8px; display: block; }
+.service-card.mini h4 { margin: 0; font-size: 14px; font-weight: 700; }
+
+/* Colors */
+.icon-green { color: #1f6f50; }
+.icon-red { color: #ef4444; }
+.icon-blue { color: #3b82f6; }
+.icon-orange { color: #f59e0b; }
+.icon-blue-dark { color: #1e3a8a; }
+
+.support-accent { border: 1px solid #fca5a5; background: #fff1f2 !important; }
+body.dark .support-accent { background: #451a1a !important; border-color: #ef4444; }
+
+/* ================== SUPPORT POPUP ================== */
+.support-popup {
+  display: none; position: fixed; bottom: 20px; right: 20px;
+  z-index: 9999; width: 300px;
+}
+
+.popup-content {
+  background: var(--card-bg); padding: 20px; border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2); position: relative;
+  border: 1px solid var(--secondary-color); text-align: center;
+}
+
+.popup-icon { font-size: 40px; color: #ef4444; margin-bottom: 10px; }
+.close-popup { position: absolute; top: 10px; left: 15px; cursor: pointer; font-size: 20px; color: #999; }
+.popup-timer { height: 3px; background: #ef4444; width: 100%; position: absolute; bottom: 0; left: 0; border-radius: 0 0 20px 20px; transition: width 20s linear; }
+
+/* Desktop Adjustment */
+@media (min-width: 768px) {
+  .services-grid { grid-template-columns: repeat(6, 1fr); }
+}
