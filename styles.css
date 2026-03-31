@@ -113,3 +113,40 @@ body.dark .copy-box { background: rgba(255,255,255,0.05); }
 /* ================== MISC ================== */
 .soft-btn { background: rgba(31, 111, 80, 0.1); color: var(--primary-color); border: none; padding: 10px 20px; border-radius: 12px; cursor: pointer; font-family: 'Cairo'; font-weight: bold; }
 footer { text-align: center; padding: 50px; opacity: 0.6; font-size: 14px; }
+/* Animation لبطاقة الدعم */
+.support-card-pulse {
+  border: 2px dashed var(--danger-color) !important;
+  animation: card-glow 2s infinite;
+}
+
+@keyframes card-glow {
+  0% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); }
+  100% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.2); }
+}
+
+/* Modal Global Style (للتفسير وللوجن) */
+.tafsir-modal {
+  display: none; position: fixed; z-index: 9999;
+  left: 0; top: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
+  justify-content: center; align-items: center;
+}
+
+.tafsir-content {
+  background: var(--card-bg); width: 90%; max-width: 500px;
+  padding: 30px; border-radius: 25px; position: relative;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  animation: modalSlide 0.3s ease;
+}
+
+@keyframes modalSlide { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* أزرار التواصل الاجتماعي */
+.social-btn {
+  width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd;
+  background: white; font-family: 'Cairo'; font-weight: bold; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s;
+}
+.google-btn { color: #4285f4; }
+.facebook-btn { background: #1877f2; color: white; border: none; }
