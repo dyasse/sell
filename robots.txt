@@ -1,0 +1,14 @@
+# User-agent: * يعني هاد القواعد كتطبق على كاع محركات البحث
+User-agent: *
+
+# السماح بأرشفة كل شيء بشكل عام
+Allow: /
+
+# منع أرشفة ملفات تقنية ما عندها تا فايدة للمستخدم في نتائج البحث
+Disallow: /sw.js
+Disallow: /manifest.json
+Disallow: /css/
+Disallow: /js/
+
+# إرشاد محرك البحث لمكان خريطة الموقع (Sitemap)
+Sitemap: https://nour-quran.com/sitemap.xml
