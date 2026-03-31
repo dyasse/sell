@@ -1,4 +1,4 @@
-/* ================== GLOBAL VARIABLES ================== */
+/* ================== 1. متغيرات الألوان (Root Variables) ================== */
 :root {
   --primary-color: #1f6f50;
   --secondary-color: #a3e4c7;
@@ -8,6 +8,7 @@
   --accent-color: #f59e0b;
   --danger-color: #ef4444;
   --shadow: 0 10px 25px rgba(0,0,0,0.05);
+  --transition: all 0.3s ease;
 }
 
 body.dark {
@@ -18,160 +19,88 @@ body.dark {
   --shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
-/* ================== BASE STYLES ================== */
+/* ================== 2. التنسيق الأساسي (Base Styles) ================== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
   font-family: 'Cairo', sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
-  margin: 0; padding: 0; direction: rtl;
-  transition: all 0.3s ease;
+  direction: rtl;
+  transition: var(--transition);
+  line-height: 1.6;
 }
 
-/* ================== NAVBAR ================== */
+/* ================== 3. شريط التنقل (Navbar) ================== */
 .navbar {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 15px 5%; background: var(--card-bg);
+  padding: 12px 5%; background: var(--card-bg);
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   position: sticky; top: 0; z-index: 1000;
 }
-.logo { display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 22px; color: var(--primary-color); text-decoration: none; }
 
-/* ================== HERO SECTION ================== */
+.logo { 
+  display: flex; align-items: center; gap: 10px; 
+  font-weight: bold; font-size: 22px; color: var(--primary-color); 
+  text-decoration: none; 
+}
+
+.logo img { height: 35px; width: auto; border-radius: 5px; }
+
+.nav-actions { display: flex; gap: 8px; align-items: center; }
+
+.theme-btn { 
+  background: rgba(31, 111, 80, 0.05); border: none; 
+  font-size: 18px; cursor: pointer; color: var(--text-color);
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+}
+
+body.dark .theme-btn { background: rgba(255, 255, 255, 0.05); }
+
+/* ================== 4. قسم الهيرو (Hero Section) ================== */
 .hero-section {
   background: linear-gradient(135deg, #1f6f50 0%, #164e38 100%);
-  color: white; padding: 70px 5%; text-align: center;
-  border-bottom-left-radius: 60px; border-bottom-right-radius: 60px;
+  color: white; padding: 50px 5% 80px; text-align: center;
+  border-bottom-left-radius: 50px; border-bottom-right-radius: 50px;
 }
+
 .logo-icon-circle {
-  width: 110px; height: 110px; background: white; border-radius: 50%;
+  width: 100px; height: 100px; background: white; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-}
-.logo-icon-circle img { width: 70px; height: 70px; }
-.main-logo-text { font-family: 'Amiri', serif; font-size: 70px; color: #a3e4c7; margin: 0; }
-
-/* ================== GRIDS & CARDS ================== */
-.main-content { padding: 40px 5%; max-width: 1100px; margin: 0 auto; }
-.services-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 25px; margin-top: -90px;
-}
-.service-card {
-  background: var(--card-bg); padding: 30px; border-radius: 25px;
-  text-align: center; box-shadow: var(--shadow);
-  transition: 0.3s ease; cursor: pointer; border: 1px solid rgba(0,0,0,0.03);
-}
-.service-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-
-/* ================== SUPPORT PAGE ================== */
-.support-msg {
-  background: var(--card-bg); padding: 50px 30px; border-radius: 35px;
-  box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.05);
-  text-align: center; margin-bottom: 50px;
-}
-.heart-icon { font-size: 60px; color: var(--danger-color); margin-bottom: 25px; animation: heartbeat 1.5s infinite; }
-@keyframes heartbeat { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-
-.emotional-text { font-size: 19px; line-height: 1.9; color: #475569; text-align: justify; }
-.quran-quote { font-family: 'Amiri'; font-size: 26px; color: var(--primary-color); margin-top: 35px; padding-top: 25px; border-top: 1px dashed #cbd5e1; }
-
-.payment-card {
-  background: var(--card-bg); padding: 25px; border-radius: 20px;
-  border: 1px solid rgba(0,0,0,0.05); text-align: center;
-  transition: 0.3s; box-shadow: var(--shadow);
-}
-.payment-card:hover { border-color: var(--primary-color); transform: scale(1.03); }
-.payment-header { display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 700; margin-bottom: 15px; font-size: 19px; }
-
-.stripe { border-top: 5px solid #6366f1; }
-.paypal { border-top: 5px solid #2563eb; }
-.coffee { border-top: 5px solid #ffdd00; }
-.crypto { border-top: 5px solid #f7931a; }
-
-.pay-now-btn {
-  background: var(--primary-color); color: white; border: none;
-  padding: 10px 25px; border-radius: 50px; cursor: pointer;
-  font-weight: bold; margin-top: 15px; width: 100%; transition: 0.3s;
-}
-.pay-now-btn:hover { filter: brightness(1.1); }
-
-.copy-box { background: rgba(0,0,0,0.03); padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
-body.dark .copy-box { background: rgba(255,255,255,0.05); }
-
-/* ================== QURAN READER ================== */
-.quran-reader-text {
-  font-family: 'Amiri', serif; font-size: 34px; line-height: 2.3;
-  padding: 40px; background: var(--card-bg); border-radius: 30px;
-  box-shadow: var(--shadow);
-}
-.ayah-number-circle {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 40px; height: 40px; border: 2px solid var(--primary-color);
-  border-radius: 50%; font-size: 16px; margin: 0 10px; color: var(--primary-color);
+  margin: 0 auto 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
-/* ================== MISC ================== */
-.soft-btn { background: rgba(31, 111, 80, 0.1); color: var(--primary-color); border: none; padding: 10px 20px; border-radius: 12px; cursor: pointer; font-family: 'Cairo'; font-weight: bold; }
-footer { text-align: center; padding: 50px; opacity: 0.6; font-size: 14px; }
-/* Animation لبطاقة الدعم */
-.support-card-pulse {
-  border: 2px dashed var(--danger-color) !important;
-  animation: card-glow 2s infinite;
-}
+.logo-icon-circle img { width: 65px; height: 65px; border-radius: 12px; }
 
-@keyframes card-glow {
-  0% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.2); }
-  50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); }
-  100% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.2); }
-}
+.main-logo-text { font-family: 'Amiri', serif; font-size: 55px; color: #a3e4c7; margin: 0; }
 
-/* Modal Global Style (للتفسير وللوجن) */
-.tafsir-modal {
-  display: none; position: fixed; z-index: 9999;
-  left: 0; top: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
-  justify-content: center; align-items: center;
-}
+.hero-subtitle { font-size: 14px; opacity: 0.9; margin-bottom: 20px; }
 
-.tafsir-content {
-  background: var(--card-bg); width: 90%; max-width: 500px;
-  padding: 30px; border-radius: 25px; position: relative;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-  animation: modalSlide 0.3s ease;
-}
+/* ================== 5. البطاقات والشبكة (Grids & Cards) ================== */
+.main-content { padding: 20px 5% 40px; max-width: 1100px; margin: 0 auto; }
 
-@keyframes modalSlide { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-/* أزرار التواصل الاجتماعي */
-.social-btn {
-  width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd;
-  background: white; font-family: 'Cairo'; font-weight: bold; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s;
-}
-.google-btn { color: #4285f4; }
-.facebook-btn { background: #1877f2; color: white; border: none; }
-/* ================== GRID & MINI CARDS ================== */
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
-  gap: 15px;
+  grid-template-columns: repeat(3, 1fr); /* 3 بطاقات في الصف للهاتف */
+  gap: 12px;
   margin-top: -50px;
-  padding: 0 10px;
 }
 
 .service-card.mini {
-  background: var(--card-bg);
-  padding: 15px 10px;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  transition: 0.3s;
+  background: var(--card-bg); padding: 15px 10px;
+  border-radius: 20px; text-align: center;
+  box-shadow: var(--shadow); transition: var(--transition);
+  cursor: pointer; border: 1px solid rgba(0,0,0,0.02);
 }
 
-.service-card.mini i { font-size: 24px; margin-bottom: 8px; display: block; }
-.service-card.mini h4 { margin: 0; font-size: 14px; font-weight: 700; }
+.service-card.mini:hover { transform: translateY(-5px); }
 
-/* Colors */
+.service-card.mini i { font-size: 24px; margin-bottom: 8px; display: block; }
+.service-card.mini h4 { margin: 0; font-size: 13px; font-weight: 700; }
+
+/* ألوان الأيقونات */
 .icon-green { color: #1f6f50; }
 .icon-red { color: #ef4444; }
 .icon-blue { color: #3b82f6; }
@@ -181,10 +110,53 @@ footer { text-align: center; padding: 50px; opacity: 0.6; font-size: 14px; }
 .support-accent { border: 1px solid #fca5a5; background: #fff1f2 !important; }
 body.dark .support-accent { background: #451a1a !important; border-color: #ef4444; }
 
-/* ================== SUPPORT POPUP ================== */
+/* ================== 6. بطاقات القراءة والأدعية ================== */
+.daily-ayah-card {
+  background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+  padding: 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
+  margin: 15px auto; max-width: 500px;
+}
+
+.small-ayah .quran-text { font-family: 'Amiri'; font-size: 20px; line-height: 1.6; margin-bottom: 5px; }
+
+.login-promo-card {
+  background: var(--card-bg); margin-top: 30px; padding: 15px 20px;
+  border-radius: 15px; display: flex; justify-content: space-between;
+  align-items: center; box-shadow: var(--shadow);
+  cursor: pointer; border: 1px dashed var(--primary-color); transition: var(--transition);
+}
+
+.promo-content { display: flex; align-items: center; gap: 12px; }
+.promo-content i { font-size: 20px; color: var(--primary-color); }
+.promo-content h5 { margin: 0; font-size: 15px; }
+.promo-content p { margin: 0; font-size: 11px; opacity: 0.7; }
+
+/* ================== 7. النوافذ المنبثقة (Modals & Popups) ================== */
+.tafsir-modal {
+  display: none; position: fixed; z-index: 2000;
+  left: 0; top: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
+  justify-content: center; align-items: center;
+}
+
+.tafsir-content {
+  background: var(--card-bg); width: 90%; max-width: 450px;
+  padding: 30px; border-radius: 25px; position: relative;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  animation: modalSlide 0.3s ease;
+}
+
+.close-tafsir { position: absolute; left: 20px; top: 15px; font-size: 25px; cursor: pointer; color: #999; }
+
+.login-input {
+  width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd;
+  margin: 10px 0; outline: none; text-align: center; font-family: 'Cairo';
+}
+
+/* ================== 8. دعم المشروع (Support) ================== */
 .support-popup {
   display: none; position: fixed; bottom: 20px; right: 20px;
-  z-index: 9999; width: 300px;
+  z-index: 9999; width: 280px;
 }
 
 .popup-content {
@@ -193,53 +165,39 @@ body.dark .support-accent { background: #451a1a !important; border-color: #ef444
   border: 1px solid var(--secondary-color); text-align: center;
 }
 
-.popup-icon { font-size: 40px; color: #ef4444; margin-bottom: 10px; }
-.close-popup { position: absolute; top: 10px; left: 15px; cursor: pointer; font-size: 20px; color: #999; }
-.popup-timer { height: 3px; background: #ef4444; width: 100%; position: absolute; bottom: 0; left: 0; border-radius: 0 0 20px 20px; transition: width 20s linear; }
-
-/* Desktop Adjustment */
-@media (min-width: 768px) {
-  .services-grid { grid-template-columns: repeat(6, 1fr); }
-}
-/* --- بطاقة التسجيل الصغيرة --- */
-.login-promo-card {
-  background: var(--card-bg);
-  margin-top: 30px;
-  padding: 15px 20px;
-  border-radius: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: var(--shadow);
-  cursor: pointer;
-  border: 1px dashed var(--primary-color);
-  transition: 0.3s;
+.popup-timer { 
+  height: 3px; background: var(--danger-color); width: 100%; 
+  position: absolute; bottom: 0; left: 0; border-radius: 0 0 20px 20px; 
+  transition: width 20s linear; 
 }
 
-.login-promo-card:hover { background: rgba(31, 111, 80, 0.05); }
-
-.promo-content { display: flex; align-items: center; gap: 15px; }
-.promo-content i { font-size: 20px; color: var(--primary-color); }
-.promo-content h5 { margin: 0; font-size: 15px; }
-.promo-content p { margin: 0; font-size: 12px; opacity: 0.7; }
-
-/* --- Login Modal Adjustments --- */
-.login-input {
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  outline: none;
-  text-align: center;
-  font-family: 'Cairo';
+/* ================== 9. الأزرار (Buttons) ================== */
+.pay-now-btn, .hero-link-btn {
+  background: var(--primary-color); color: white; border: none;
+  padding: 10px 20px; border-radius: 50px; cursor: pointer;
+  font-weight: bold; font-family: 'Cairo'; transition: 0.3s;
 }
 
 .social-btn {
   width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #eee;
   background: white; font-family: 'Cairo'; font-weight: bold; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
+  display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 8px;
 }
 .google-btn { color: #4285f4; }
 .facebook-btn { background: #1877f2; color: white; border: none; }
 
-/* Popup Size Adjustment */
-.support-popup { width: 260px; }
+/* ================== 10. الحركات (Animations) ================== */
+@keyframes modalSlide { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.pulse { animation: heartbeat 1.5s infinite; }
+@keyframes heartbeat { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+/* ================== 11. التوافق مع الشاشات (Responsive) ================== */
+@media (min-width: 768px) {
+  .services-grid { grid-template-columns: repeat(6, 1fr); }
+  .navbar { padding: 15px 10%; }
+  .main-content { padding: 40px 10%; }
+  .hero-section { padding: 70px 10% 100px; }
+}
+
+footer { text-align: center; padding: 30px; opacity: 0.6; font-size: 12px; }
