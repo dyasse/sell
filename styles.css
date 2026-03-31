@@ -1,130 +1,82 @@
-/* ================== 1. الأساسيات ================== */
+/* ================== Reset & Global ================== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
   --primary: #1f6f50;
   --bg: #f8fafc;
   --card: #ffffff;
   --text: #1e293b;
-  --shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
-
-body.dark {
-  --bg: #0f172a;
-  --card: #1e293b;
-  --text: #f1f5f9;
-  --primary: #4ade80;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'Cairo', sans-serif;
   background-color: var(--bg);
   color: var(--text);
   direction: rtl;
-  overflow-x: hidden;
+  overflow-x: hidden; /* كيحمي السيت من الروينة في الجناب */
 }
 
-/* ================== 2. النافبار (إصلاح الأيقونات) ================== */
+/* ================== Navbar (Fixing Logo Size) ================== */
 .navbar {
-  display: flex;
-  justify-content: space-between; /* باش يفرق اللوغو على البوطونات */
-  align-items: center;
-  padding: 10px 5%;
-  background: var(--card);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 5%; height: 70px; background: var(--card);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   position: sticky; top: 0; z-index: 1000;
-  height: 70px;
 }
 
 .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--primary); font-weight: bold; }
-.logo img { height: 40px; border-radius: 8px; }
 
-.nav-actions { 
-  display: flex; 
-  gap: 15px; /* مسافة بين الأيقونات */
-  align-items: center; 
+/* هنا اللجام ديال اللوغو */
+.logo img { 
+  height: 45px !important; /* طول محدد */
+  width: auto !important; 
+  max-width: 45px; 
+  border-radius: 8px;
+  object-fit: contain;
 }
 
-.theme-btn { 
-  background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text);
-  padding: 5px; display: flex; align-items: center;
-}
+.nav-actions { display: flex; gap: 15px; align-items: center; }
 
-/* ================== 3. المودال (إصلاح تسجيل الدخول) ================== */
-.tafsir-modal {
-  display: none; /* مخفي في الأول */
-  position: fixed; 
-  z-index: 9999; 
-  left: 0; top: 0; 
-  width: 100%; height: 100%; 
-  background: rgba(0,0,0,0.7); /* خلفية مضلمة */
-  backdrop-filter: blur(5px);
-  justify-content: center; 
-  align-items: center;
-}
-
-.tafsir-content {
-  background: var(--card);
-  width: 90%;
-  max-width: 400px; /* باش ما يبقاش مجبود */
-  padding: 30px;
-  border-radius: 25px;
-  position: relative;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-  text-align: center;
-}
-
-.close-tafsir { position: absolute; left: 20px; top: 15px; font-size: 25px; cursor: pointer; color: #999; }
-
-/* أزرار السوشل ميديا */
-.social-btn {
-  width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  background: white;
-  margin-bottom: 10px;
-  font-family: 'Cairo';
-  font-weight: bold;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  transition: 0.3s;
-}
-
-.google-btn { color: #4285f4; border-color: #4285f4; }
-.facebook-btn { background: #1877f2; color: white; border: none; }
-
-.login-input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  margin: 10px 0;
-  text-align: center;
-  outline: none;
-}
-
-/* ================== 4. الهيرو والشبكة ================== */
+/* ================== Hero Section ================== */
 .hero-section {
   background: linear-gradient(135deg, #1f6f50 0%, #164e38 100%);
-  color: white; padding: 60px 5% 100px; text-align: center;
+  color: white; padding: 50px 5% 100px; text-align: center;
   border-bottom-left-radius: 40px; border-bottom-right-radius: 40px;
 }
 
+.logo-icon-circle {
+  width: 90px; height: 90px; background: white; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 15px;
+}
+.logo-icon-circle img { width: 60px; height: 60px; border-radius: 10px; }
+
+/* ================== Grid & Table (Index Fix) ================== */
+.main-content {
+  padding: 0 5% 40px;
+  max-width: 1100px;
+  margin: -60px auto 0; /* كيركب الكارطس فوق الهيرو */
+}
+
+/* الجدول ديال الفهرس */
+.table-container {
+  background: var(--card); border-radius: 20px;
+  overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  width: 100%; /* ضروري باش ما يخرجش على السيطرة */
+}
+
+.surah-table { width: 100%; border-collapse: collapse; text-align: center; }
+.surah-table th { background: #f1f5f9; padding: 15px; color: var(--primary); }
+.surah-table td { padding: 15px; border-bottom: 1px solid #f1f5f9; }
+
+/* ================== Mini Cards (Services) ================== */
 .services-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 15px;
-  max-width: 1100px;
-  margin: -50px auto 30px;
-  padding: 0 5%;
+  gap: 15px; width: 100%;
 }
 
 .service-card.mini {
-  background: var(--card);
-  padding: 20px;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: var(--shadow);
-  cursor: pointer;
+  background: var(--card); padding: 20px; border-radius: 20px;
+  text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
