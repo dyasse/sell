@@ -11,44 +11,38 @@
     <nav class="navbar">
         <a href="index.html" class="logo"><img src="assets/favicon.png"> <span>نور</span></a>
         <div class="nav-actions">
-            <button onclick="openLoginModal()" class="theme-btn"><i class="fa-solid fa-user-circle"></i></button>
+            <button onclick="openModal('loginModal')" class="theme-btn"><i class="fa-solid fa-user-circle"></i></button>
             <button id="themeToggle" class="theme-btn">🌙</button>
         </div>
     </nav>
 
     <header class="hero-section">
         <h1 style="font-family:Amiri; font-size:50px;">نور</h1>
-        <p>رفيقك اليومي للتقرب من الله</p>
-        
         <div id="resumeCard" class="bookmark-card">
-            <p style="font-size: 14px; margin-bottom: 8px;"><i class="fa-solid fa-bookmark"></i> واصل القراءة من حيث توقفت</p>
-            <button id="resumeBtn" class="pay-now-btn" style="background: var(--accent);">
-                متابعة سورة <span id="lastSurah">...</span>
-            </button>
+            <p style="font-size: 13px;"><i class="fa-solid fa-bookmark"></i> واصل القراءة</p>
+            <button id="resumeBtn" class="btn-primary" style="background:var(--accent); margin-top:10px;">سورة <span id="lastSurah"></span></button>
         </div>
     </header>
 
     <main class="main-content">
         <div class="services-grid">
-            <div class="service-card" onclick="location.href='quran.html'"><i class="fa-solid fa-book-open" style="color:var(--primary); font-size:30px;"></i><h4>القرآن</h4></div>
-            <div class="service-card" onclick="location.href='adhkar.html?type=sabah'"><i class="fa-solid fa-sun" style="color:#f59e0b; font-size:30px;"></i><h4>الصباح</h4></div>
-            <div class="service-card" onclick="location.href='adhkar.html?type=masa'"><i class="fa-solid fa-moon" style="color:#1e3a8a; font-size:30px;"></i><h4>المساء</h4></div>
-            <div class="service-card" onclick="location.href='support.html'"><i class="fa-solid fa-heart" style="color:#ef4444; font-size:30px;"></i><h4>ادعمنا</h4></div>
+            <div class="service-card" onclick="location.href='quran.html'"><i class="fa-solid fa-book-open" style="color:var(--primary); font-size:28px;"></i><h4>القرآن</h4></div>
+            <div class="service-card" onclick="location.href='adhkar.html?type=sabah'"><i class="fa-solid fa-sun" style="color:#f59e0b; font-size:28px;"></i><h4>أذكار</h4></div>
+            <div class="service-card" onclick="location.href='duas.html'"><i class="fa-solid fa-hands-praying" style="color:#ef4444; font-size:28px;"></i><h4>أدعية</h4></div>
+            <div class="service-card" onclick="location.href='support.html'"><i class="fa-solid fa-heart" style="color:#ef4444; font-size:28px;"></i><h4>ادعمنا</h4></div>
         </div>
     </main>
 
-    <div id="loginModal" class="tafsir-modal">
+    <div id="loginModal" class="modal">
         <div class="modal-content">
-            <span onclick="closeLoginModal()" style="position:absolute; left:20px; top:15px; cursor:pointer;">&times;</span>
-            <h2 style="margin-bottom:20px; font-family:'Cairo';">حساب نور</h2>
+            <span onclick="closeModal('loginModal')" style="position:absolute; left:20px; top:15px; cursor:pointer;">&times;</span>
+            <h2 style="margin-bottom:20px;">حساب نور</h2>
             <button class="social-btn google-btn"><i class="fa-brands fa-google"></i> متابعة بجوجل</button>
             <button class="social-btn facebook-btn"><i class="fa-brands fa-facebook"></i> متابعة بفيسبوك</button>
-            <hr style="margin: 15px 0; opacity: 0.2;">
-            <input type="email" placeholder="البريد الإلكتروني" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; margin-bottom:15px; text-align:center;">
-            <button class="pay-now-btn">إنشاء حساب جديد</button>
+            <input type="email" placeholder="البريد الإلكتروني" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; margin:15px 0; text-align:center;">
+            <button class="btn-primary">دخول / تسجيل</button>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
