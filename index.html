@@ -1,55 +1,123 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نور - رفيقك الروحاني</title>
-    <link rel="icon" href="assets/favicon.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>نور - القرآن الكريم والأذكار</title>
+
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3208/3208035.png" />
+  <link rel="manifest" href="manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <nav class="navbar">
-        <a href="index.html" class="logo"><img src="assets/favicon.png"> <span>نور</span></a>
-        <div class="nav-actions">
-            <button onclick="openModal('loginModal')" class="theme-btn"><i class="fa-solid fa-user-circle"></i></button>
-            <button id="themeToggle" class="theme-btn">🌙</button>
-        </div>
-    </nav>
 
-    <header class="hero-section">
-        <h1>نور</h1>
-        <p>رفيقك اليومي للتقرب من الله</p>
-        
-        <div id="resumeCard" class="bookmark-card">
-            <p style="font-size: 14px; margin-bottom: 10px;"><i class="fa-solid fa-bookmark"></i> واصل القراءة:</p>
-            <button id="resumeBtn" class="btn-primary" style="background: var(--accent);">سورة <span id="lastSurah">...</span></button>
-        </div>
-    </header>
-
-    <main class="main-content">
-        <div class="services-grid">
-            <div class="service-card" onclick="location.href='quran.html'"><i class="fa-solid fa-book-open" style="color:var(--primary);"></i><h4>القرآن</h4></div>
-            <div class="service-card" onclick="location.href='adhkar.html?type=sabah'"><i class="fa-solid fa-sun" style="color:#f59e0b;"></i><h4>أذكار الصباح</h4></div>
-            <div class="service-card" onclick="location.href='adhkar.html?type=masa'"><i class="fa-solid fa-moon" style="color:#1e3a8a;"></i><h4>أذكار المساء</h4></div>
-            <div class="service-card" onclick="location.href='duas.html'"><i class="fa-solid fa-hands-praying" style="color:#ef4444;"></i><h4>الأدعية</h4></div>
-            <div class="service-card" onclick="location.href='support.html'" style="border: 1px dashed #ef4444;"><i class="fa-solid fa-heart" style="color:#ef4444;"></i><h4>ادعمنا</h4></div>
-        </div>
-    </main>
-
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
-            <h2 style="margin-bottom: 20px;">حساب نور</h2>
-            <button class="social-btn google-btn"><i class="fa-brands fa-google"></i> متابعة بجوجل</button>
-            <button class="social-btn facebook-btn"><i class="fa-brands fa-facebook"></i> متابعة بفيسبوك</button>
-            <div style="margin: 15px 0; font-size: 12px; color: #999;">أو عبر البريد</div>
-            <input type="email" placeholder="البريد الإلكتروني" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; margin-bottom:15px; text-align:center;">
-            <button class="btn-primary">إنشاء حساب جديد</button>
-        </div>
+  <nav class="navbar">
+    <div class="logo" onclick="window.location.reload()" style="cursor: pointer;">
+      <i class="fa-solid fa-book-quran"></i>
+      <span>نور</span>
     </div>
+    <div class="nav-actions">
+      <button onclick="shareApp()" class="theme-btn" title="مشاركة"><i class="fa-solid fa-share-nodes"></i></button>
+      <button onclick="openLoginModal()" class="theme-btn" title="حسابي"><i class="fa-solid fa-user-circle"></i></button>
+      <button id="themeToggle" class="theme-btn"><i class="fa-solid fa-moon"></i></button>
+    </div>
+  </nav>
 
-    <script src="script.js"></script>
+  <header class="hero-section">
+    <div class="hero-content">
+      <div class="main-logo-container">
+        <div class="logo-icon-circle">
+          <img src="https://cdn-icons-png.flaticon.com/512/3208/3208035.png" alt="نور" />
+        </div>
+        <h1 class="main-logo-text">نور</h1>
+      </div>
+      <p class="hero-subtitle">رفيقك الروحي بتجربة نقية بدون إعلانات</p>
+
+      <div class="daily-ayah-card">
+        <div class="ayah-header">
+          <i class="fa-solid fa-star-and-crescent"></i>
+          <h2>آية اليوم</h2>
+        </div>
+        <p id="dailyAyahText" class="quran-text">جاري التحميل...</p>
+        <span id="dailyAyahRef" class="ayah-ref"></span>
+      </div>
+
+      <div id="bookmarkCard" class="daily-ayah-card" style="display:none; margin-top: 15px; border: 2px solid #f59e0b; background: rgba(245, 158, 11, 0.05);">
+        <div class="ayah-header" style="color: #f59e0b;">
+          <i class="fa-solid fa-bookmark"></i>
+          <h2>متابعة القراءة</h2>
+        </div>
+        <p id="bookmarkText" style="font-size: 18px; margin-bottom: 10px;"></p>
+        <button id="resumeBtn" class="hero-link-btn" style="background: #f59e0b; border: none; margin: 0 auto;">إكمال التلاوة</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="services-grid">
+      
+      <div class="service-card" onclick="window.location.href='quran.html'">
+        <div class="card-icon" style="background: #e8f5ee; color: #1f6f50;"><i class="fa-solid fa-book-open-reader"></i></div>
+        <h3>القرآن الكريم</h3>
+        <p>تصفح السور بتصميم مريح وتفسير ميسر.</p>
+      </div>
+
+      <div class="service-card" onclick="window.location.href='duas.html'">
+        <div class="card-icon" style="background: #fdf2f2; color: #ef4444;"><i class="fa-solid fa-hands-praying"></i></div>
+        <h3>الأدعية الجامِعة</h3>
+        <p>جوامع الدعاء من الكتاب والسنة.</p>
+      </div>
+
+      <div class="service-card" onclick="window.location.href='salat.html'">
+        <div class="card-icon" style="background: #e6f0ff; color: #2563eb;"><i class="fa-solid fa-mosque"></i></div>
+        <h3>مواقيت الصلاة</h3>
+        <p>تنبيهات الأذان والقبلة حسب موقعك.</p>
+      </div>
+
+      <div class="service-card support-card-pulse" onclick="window.location.href='support.html'">
+        <div class="card-icon" style="background: #fff1f2; color: #ef4444;"><i class="fa-solid fa-heart"></i></div>
+        <h3>ادعم مشروع "نور"</h3>
+        <p>ساهم في بقاء التطبيق بدون إعلانات كصدقة جارية.</p>
+        <span style="color: #ef4444; font-weight: bold; font-size: 13px;">كيفية المساهمة <i class="fa-solid fa-arrow-left"></i></span>
+      </div>
+
+      <div class="service-card" onclick="window.location.href='adhkar.html?type=sabah'">
+        <div class="card-icon" style="background: #fff5e6; color: #f59e0b;"><i class="fa-solid fa-sun"></i></div>
+        <h3>أذكار الصباح</h3>
+      </div>
+
+      <div class="service-card" onclick="window.location.href='adhkar.html?type=masa'">
+        <div class="card-icon" style="background: #f0f4f8; color: #3b82f6;"><i class="fa-solid fa-moon"></i></div>
+        <h3>أذكار المساء</h3>
+      </div>
+
+    </section>
+  </main>
+
+  <div id="loginModal" class="tafsir-modal">
+    <div class="tafsir-content" style="text-align: center;">
+      <span class="close-tafsir" onclick="closeLoginModal()">&times;</span>
+      <h2 style="font-family:'Cairo'; color: var(--primary-color);">مرحباً بك في نور</h2>
+      <p style="font-size: 14px; margin-bottom: 25px; opacity: 0.8;">سجل دخولك لمزامنة أذكارك وعلامات القراءة</p>
+      
+      <div style="display: flex; flex-direction: column; gap: 15px;">
+        <button class="social-btn google-btn"><i class="fa-brands fa-google"></i> الدخول بواسطة جوجل</button>
+        <button class="social-btn facebook-btn"><i class="fa-brands fa-facebook"></i> الدخول بواسطة فيسبوك</button>
+        <div style="border-top: 1px solid #eee; margin: 10px 0; position: relative;">
+          <span style="position: absolute; top: -12px; background: var(--card-bg); padding: 0 10px; font-size: 12px; left: 45%;">أو</span>
+        </div>
+        <input type="email" placeholder="البريد الإلكتروني" style="padding: 12px; border-radius: 12px; border: 1px solid #ddd; outline: none; text-align: center;">
+        <button class="pay-now-btn" style="margin: 0;">إنشاء حساب</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>تطبيق نور - جميع الحقوق محفوظة لخدمة كتاب الله 🤍</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
