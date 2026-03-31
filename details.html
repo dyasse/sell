@@ -3,46 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>القراءة - نور</title>
-  <link rel="manifest" href="manifest.json">
-
-  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3208/3208035.png" />
+  <title>القراءة - تطبيق نور</title>
   
-  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3208/3208035.png" />
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/favicon.png">
   
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
   <nav class="navbar">
     <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
-      <i class="fa-solid fa-book-quran"></i>
+      <img src="assets/favicon.png" alt="Logo">
       <span>نور</span>
     </div>
     <div class="nav-actions">
-      <button onclick="window.history.back()" class="back-btn">
-        <i class="fa-solid fa-arrow-right"></i> رجوع
+      <button onclick="window.location.href='quran.html'" class="soft-btn">
+        <i class="fa-solid fa-list"></i> الفهرس
       </button>
-      <button id="themeToggle" class="theme-btn" aria-label="تغيير المظهر">
-        <i class="fa-solid fa-moon"></i>
-      </button>
+      <button id="themeToggle" class="theme-btn"><i class="fa-solid fa-moon"></i></button>
     </div>
   </nav>
 
-  <main class="reading-main">
-    <div id="detailsCard" class="reading-container">
-      <div style="text-align: center; color: #1f6f50; font-weight: bold; padding: 40px;">
-        <i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 10px;"></i>
-        <p>جاري التحميل...</p>
+  <main class="main-content" style="margin-top: 20px;">
+    <div id="detailsCard">
+      <div style="text-align: center; padding: 100px;">
+        <i class="fa-solid fa-spinner fa-spin fa-3x" style="color: var(--primary);"></i>
+        <p style="margin-top: 20px;">جاري فتح كلام الله...</p>
       </div>
     </div>
   </main>
+
+  <div id="tafsirModal" class="tafsir-modal">
+    <div class="tafsir-content">
+      <span class="close-tafsir" onclick="closeTafsir()">&times;</span>
+      <h3 id="tafsirTitle" style="font-family:'Cairo'; color: var(--primary); margin-bottom: 15px;">تفسير الآية</h3>
+      <div id="tafsirText" style="font-family:'Amiri'; font-size: 22px; line-height: 1.8;"></div>
+    </div>
+  </div>
 
   <script src="details.js"></script>
 </body>
