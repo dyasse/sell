@@ -1,15 +1,11 @@
-function openModal(id) { document.getElementById(id).style.display = "flex"; }
-function closeModal(id) { document.getElementById(id).style.display = "none"; }
-
-// ميزة العلامة (Bookmark)
 function checkBookmark() {
-    const bookmark = JSON.parse(localStorage.getItem("nour_bookmark"));
-    const resumeCard = document.getElementById("resumeCard");
-    if (bookmark && resumeCard) {
-        resumeCard.style.display = "block";
-        document.getElementById("lastSurah").innerText = bookmark.surah;
+    const mark = JSON.parse(localStorage.getItem("nour_bookmark"));
+    const card = document.getElementById("resumeCard");
+    if (mark && card) {
+        card.style.display = "block";
+        document.getElementById("lastSurah").innerText = mark.surah;
         document.getElementById("resumeBtn").onclick = () => {
-            location.href = `details.html?id=${bookmark.id}&ayah=${bookmark.verse}`;
+            location.href = `details.html?id=${mark.id}`;
         };
     }
 }
