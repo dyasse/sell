@@ -1,114 +1,67 @@
-/* ================== 1. التأسيس والألوان ================== */
+/* ================== 1. الأساسيات ================== */
 :root {
   --primary: #1f6f50;
   --bg: #f8fafc;
   --card: #ffffff;
   --text: #1e293b;
-  --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  --white: #ffffff;
 }
-
-body.dark {
-  --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --primary: #4ade80;
-}
+body.dark { --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --primary: #4ade80; }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Cairo', sans-serif; background-color: var(--bg); color: var(--text); direction: rtl; overflow-x: hidden; }
 
-body {
-  font-family: 'Cairo', sans-serif;
-  background-color: var(--bg);
-  color: var(--text);
-  direction: rtl;
-  line-height: 1.6;
-}
-
-/* ================== 2. النافبار (إصلاح الأيقونات) ================== */
+/* ================== 2. شريط التنقل (Navbar) ================== */
 .navbar {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 10px 5%; background: var(--card);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  position: sticky; top: 0; z-index: 1000;
-  height: 70px;
+  padding: 0 5%; height: 70px; background: var(--card);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000;
 }
-
-.logo { display: flex; align-items: center; gap: 10px; color: var(--primary); font-weight: bold; text-decoration: none; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--primary); font-weight: bold; font-size: 20px; }
 .logo img { height: 40px; width: 40px; border-radius: 8px; object-fit: cover; }
+.nav-actions { display: flex; gap: 12px; }
+.theme-btn { background: rgba(31, 111, 80, 0.08); border: none; padding: 8px; border-radius: 10px; cursor: pointer; color: var(--primary); font-size: 18px; display: flex; align-items: center; }
 
-.nav-actions { display: flex; gap: 10px; }
-
-/* ستايل الأزرار باش ما يبقاوش ديال الوندوز القديم */
-.theme-btn, .soft-btn {
-  background: rgba(31, 111, 80, 0.08);
-  border: none;
-  padding: 10px;
-  border-radius: 12px;
-  cursor: pointer;
-  color: var(--primary);
-  display: flex; align-items: center; justify-content: center;
-  transition: 0.3s;
-  font-family: 'Cairo';
+/* ================== 3. الهيرو (Hero Section) ================== */
+.hero-section {
+  background: linear-gradient(135deg, #1f6f50 0%, #164e38 100%);
+  color: white; padding: 60px 5% 100px; text-align: center;
+  border-bottom-left-radius: 50px; border-bottom-right-radius: 50px; width: 100%;
 }
-.theme-btn:hover { background: var(--primary); color: white; }
-
-/* ================== 3. قارئ القرآن (تكبير الخط) ================== */
-.quran-container {
-  max-width: 900px;
-  margin: 20px auto;
-  padding: 30px;
-  background: var(--card);
-  border-radius: 25px;
-  box-shadow: var(--shadow);
+.logo-icon-circle {
+  width: 90px; height: 90px; background: white; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;
 }
+.logo-icon-circle img { width: 60px; height: 60px; border-radius: 10px; }
+.main-logo-text { font-family: 'Amiri', serif; font-size: 50px; margin: 0; color: #a3e4c7; }
 
-.quran-text {
-  font-family: 'Amiri', serif;
-  font-size: 36px !important; /* خط كبيييير */
-  line-height: 2.2 !important; /* مسافة بين السطور */
-  text-align: center;
-  word-spacing: 4px;
+/* ================== 4. الشبكة والبطاقات (Grids) ================== */
+.main-content { padding: 0 5% 40px; max-width: 1100px; margin: -60px auto 0; }
+.services-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
+  gap: 15px; width: 100%;
 }
-
-.ayah-num {
-  font-family: 'Cairo'; font-size: 16px;
-  color: var(--primary); border: 1.5px solid var(--primary);
-  border-radius: 50%; width: 35px; height: 35px;
-  display: inline-flex; align-items: center; justify-content: center;
-  margin: 0 8px;
+.service-card.mini {
+  background: var(--card); padding: 20px 10px; border-radius: 20px;
+  text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  cursor: pointer; transition: 0.3s;
 }
+.service-card.mini:hover { transform: translateY(-5px); }
+.service-card.mini i { font-size: 26px; margin-bottom: 10px; display: block; }
+.service-card.mini h4 { font-size: 14px; font-weight: 700; margin: 0; }
 
-/* ================== 4. جدول الفهرس (ترتيب نقي) ================== */
-.table-container {
-  background: var(--card); border-radius: 20px;
-  overflow-x: auto; box-shadow: var(--shadow);
-  margin-top: 20px;
-}
+/* ================== 5. القراءة والفهرس ================== */
+.quran-container { background: var(--card); padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin: 20px auto; max-width: 900px; }
+.quran-text { font-family: 'Amiri', serif; font-size: 34px; line-height: 2.2; text-align: center; }
+.surah-table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 20px; overflow: hidden; }
+.surah-table td, .surah-table th { padding: 15px; border-bottom: 1px solid rgba(0,0,0,0.05); text-align: center; }
 
-.surah-table { width: 100%; border-collapse: collapse; }
-.surah-table th { background: #f1f5f9; padding: 15px; color: var(--primary); font-size: 14px; }
-.surah-table td { padding: 15px; border-bottom: 1px solid rgba(0,0,0,0.03); text-align: center; }
-.surah-table tr:hover td { background: rgba(31, 111, 80, 0.02); cursor: pointer; }
-
-/* ================== 5. المودال (Login) ================== */
+/* ================== 6. المودال (Modals) ================== */
 .tafsir-modal {
-  display: none; position: fixed; z-index: 9999;
-  left: 0; top: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
-  justify-content: center; align-items: center;
+  display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); justify-content: center; align-items: center;
 }
+.tafsir-content { background: var(--card); width: 90%; max-width: 400px; padding: 30px; border-radius: 25px; text-align: center; }
 
-.tafsir-content {
-  background: var(--card); width: 90%; max-width: 400px;
-  padding: 40px 30px; border-radius: 30px; position: relative;
-  text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-}
-
-.login-input {
-  width: 100%; padding: 12px; border-radius: 12px;
-  border: 1px solid #ddd; margin-bottom: 15px; text-align: center;
-  font-family: 'Cairo'; outline: none;
-}
-
-.pay-now-btn {
-  background: var(--primary); color: white; border: none;
-  width: 100%; padding: 14px; border-radius: 15px;
-  font-weight: bold; cursor: pointer; transition: 0.3s;
-}
+/* Mobile Adjustment */
+@media (max-width: 600px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
