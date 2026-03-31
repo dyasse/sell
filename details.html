@@ -3,47 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>القراءة - تطبيق نور</title>
-  
+  <title>القراءة - نور</title>
   <link rel="icon" type="image/png" href="assets/favicon.png">
-  <link rel="apple-touch-icon" href="assets/favicon.png">
-  
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
   <nav class="navbar">
-    <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
-      <img src="assets/favicon.png" alt="Logo">
-      <span>نور</span>
-    </div>
-    <div class="nav-actions">
-      <button onclick="window.location.href='quran.html'" class="soft-btn">
-        <i class="fa-solid fa-list"></i> الفهرس
-      </button>
-      <button id="themeToggle" class="theme-btn"><i class="fa-solid fa-moon"></i></button>
-    </div>
+    <a href="index.html" class="logo"><img src="assets/favicon.png"> <span>نور</span></a>
+    <button onclick="location.href='quran.html'" class="theme-btn" style="font-size:14px; width:auto; padding:5px 15px;">الفهرس</button>
   </nav>
 
-  <main class="main-content" style="margin-top: 20px;">
+  <main class="main-content" style="margin-top:20px;">
     <div id="detailsCard">
-      <div style="text-align: center; padding: 100px;">
-        <i class="fa-solid fa-spinner fa-spin fa-3x" style="color: var(--primary);"></i>
-        <p style="margin-top: 20px;">جاري فتح كلام الله...</p>
       </div>
-    </div>
   </main>
 
   <div id="tafsirModal" class="tafsir-modal">
     <div class="tafsir-content">
-      <span class="close-tafsir" onclick="closeTafsir()">&times;</span>
-      <h3 id="tafsirTitle" style="font-family:'Cairo'; color: var(--primary); margin-bottom: 15px;">تفسير الآية</h3>
-      <div id="tafsirText" style="font-family:'Amiri'; font-size: 22px; line-height: 1.8;"></div>
+      <span onclick="closeTafsir()" style="position:absolute; left:20px; top:15px; cursor:pointer;">&times;</span>
+      <h3 id="tafsirTitle" style="color:var(--primary); margin-bottom:15px;"></h3>
+      <div id="tafsirText"></div>
     </div>
   </div>
-
   <script src="details.js"></script>
 </body>
 </html>
