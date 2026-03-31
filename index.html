@@ -17,8 +17,8 @@
       <span>نور</span>
     </div>
     <div class="nav-actions">
-      <button onclick="shareApp()" class="theme-btn"><i class="fa-solid fa-share-nodes"></i></button>
-      <button onclick="openLoginModal()" class="theme-btn"><i class="fa-solid fa-user-circle"></i></button>
+      <button onclick="shareApp()" class="theme-btn" title="مشاركة"><i class="fa-solid fa-share-nodes"></i></button>
+      <button onclick="openLoginModal()" class="theme-btn" title="حسابي"><i class="fa-solid fa-user-circle"></i></button>
       <button id="themeToggle" class="theme-btn"><i class="fa-solid fa-moon"></i></button>
     </div>
   </nav>
@@ -38,8 +38,8 @@
       </div>
 
       <div id="bookmarkCard" class="daily-ayah-card bookmark-mini" style="display:none;">
-        <button id="resumeBtn" class="hero-link-btn">
-          <i class="fa-solid fa-bookmark"></i> إكمال من: <span id="bookmarkText"></span>
+        <button id="resumeBtn" class="hero-link-btn" style="background:#f59e0b;">
+          <i class="fa-solid fa-bookmark"></i> متابعة: <span id="bookmarkText"></span>
         </button>
       </div>
     </div>
@@ -51,41 +51,62 @@
         <i class="fa-solid fa-book-open-reader icon-green"></i>
         <h4>القرآن</h4>
       </div>
-
       <div class="service-card mini" onclick="window.location.href='duas.html'">
         <i class="fa-solid fa-hands-praying icon-red"></i>
         <h4>الأدعية</h4>
       </div>
-
       <div class="service-card mini" onclick="window.location.href='salat.html'">
         <i class="fa-solid fa-mosque icon-blue"></i>
         <h4>الصلاة</h4>
       </div>
-
       <div class="service-card mini" onclick="window.location.href='adhkar.html?type=sabah'">
         <i class="fa-solid fa-sun icon-orange"></i>
         <h4>الصباح</h4>
       </div>
-
       <div class="service-card mini" onclick="window.location.href='adhkar.html?type=masa'">
         <i class="fa-solid fa-moon icon-blue-dark"></i>
         <h4>المساء</h4>
       </div>
-
       <div class="service-card mini support-accent" onclick="window.location.href='support.html'">
         <i class="fa-solid fa-heart pulse"></i>
         <h4>ادعمنا</h4>
       </div>
     </div>
+
+    <div class="login-promo-card" onclick="openLoginModal()">
+      <div class="promo-content">
+        <i class="fa-solid fa-user-plus"></i>
+        <div>
+          <h5>انضم إلينا</h5>
+          <p>سجل لحفظ تقدمك في الختمة والأذكار</p>
+        </div>
+      </div>
+      <i class="fa-solid fa-chevron-left"></i>
+    </div>
   </main>
+
+  <div id="loginModal" class="tafsir-modal">
+    <div class="tafsir-content" style="text-align: center;">
+      <span class="close-tafsir" onclick="closeLoginModal()">&times;</span>
+      <h2 style="font-family:'Cairo'; color: var(--primary-color);">حساب نور</h2>
+      <p style="font-size: 14px; margin-bottom: 25px; opacity: 0.8;">سجل لتزامن بياناتك عبر جميع أجهزتك</p>
+      
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <button class="social-btn google-btn"><i class="fa-brands fa-google"></i> متابعة بجوجل</button>
+        <button class="social-btn facebook-btn"><i class="fa-brands fa-facebook"></i> متابعة بفيسبوك</button>
+        <div style="margin: 10px 0; color: #ccc; font-size: 12px;">أو عبر البريد</div>
+        <input type="email" placeholder="البريد الإلكتروني" class="login-input">
+        <button class="pay-now-btn" style="width: 100%; margin: 0;">إنشاء حساب جديد</button>
+      </div>
+    </div>
+  </div>
 
   <div id="supportPopup" class="support-popup">
     <div class="popup-content">
       <span class="close-popup" onclick="closeSupportPopup()">&times;</span>
       <div class="popup-icon"><i class="fa-solid fa-heart"></i></div>
-      <h3>ساهم في أجر "نور"</h3>
-      <p>تطبيقنا بدون إعلانات بفضل دعمكم. تبرعك البسيط يضمن استمرار هذا العمل كصدقة جارية.</p>
-      <button onclick="window.location.href='support.html'" class="pay-now-btn">كيفية الدعم</button>
+      <p style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">ساهم في أجر تطبيق نور</p>
+      <button onclick="window.location.href='support.html'" class="pay-now-btn" style="font-size: 12px; padding: 8px 15px;">كيفية الدعم</button>
       <div id="popupTimer" class="popup-timer"></div>
     </div>
   </div>
