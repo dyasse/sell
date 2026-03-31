@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ادعم مشروع نور - صدقة جارية عالمية</title>
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3208/3208035.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+      <i class="fa-solid fa-book-quran"></i> <span>نور</span>
+    </div>
+    <button onclick="window.location.href='index.html'" class="soft-btn">الرئيسية</button>
+  </nav>
+
+  <main class="main-content">
+    <div class="support-msg">
+      <div class="heart-icon"><i class="fa-solid fa-earth-africa"></i></div>
+      <h2>نور لكل القلوب.. استثمارٌ لا ينقطع</h2>
+      <p class="emotional-text">
+        تطبيق <b>"نور"</b> هو رؤية لمشروع تقني إسلامي يجمع المسلمين في كل مكان. هدفنا بسيط وعميق: أن نوفر لك أفضل تجربة للتقرب من الله، <b>بدون إعلانات تجارية</b> تشتت خشوعك أو تستغل بياناتك.
+        <br><br>
+        في عالمٍ مليء بالمشتتات، نسعى أن يكون "نور" واحةً من الطمأنينة. نحن لا نبيع مساحات إعلانية، بل نعتمد كلياً على <b>إيمانكم ودعمكم</b> لنستمر في تطوير هذه الخدمة وتوفيرها مجاناً لكل مسلم في العالم.
+        <br><br>
+        دعمك اليوم ليس مجرد تبرع، بل هو <b>صدقة جارية</b> تساهم في نشر كتاب الله وأذكاره. كل آية تُقرأ بفضل مساهمتك، هي في ميزان حسناتك إلى يوم القيامة.
+      </p>
+      <div class="quran-quote">"وَمَا تُقَدِّمُوا لِأَنفُسِكُم مِّنْ خَيْرٍ تَجِدُوهُ عِندَ اللَّهِ هُوَ خَيْرًا وَأَعْظَمَ أَجْرًا"</div>
+    </div>
+
+    <h3 style="text-align: center; margin-bottom: 30px; font-family: 'Cairo';">وسائل الدعم العالمية</h3>
+
+    <div class="payment-grid">
+      
+      <div class="payment-card stripe" onclick="window.open('https://buy.stripe.com/your-link', '_blank')">
+        <div class="payment-header">
+          <i class="fa-solid fa-credit-card"></i>
+          <span>بطاقة ائتمان / Apple Pay</span>
+        </div>
+        <p>أسرع وسيلة لدعمنا عبر البطاقات البنكية الدولية أو محفظة الهاتف.</p>
+        <button class="pay-now-btn">ادعم الآن</button>
+      </div>
+
+      <div class="payment-card paypal" onclick="window.open('https://paypal.me/yourusername', '_blank')">
+        <div class="payment-header">
+          <i class="fa-brands fa-paypal"></i>
+          <span>PayPal</span>
+        </div>
+        <p>الوسيلة الأكثر أماناً وشهرة عالمياً للدفع الإلكتروني السريع.</p>
+        <button class="pay-now-btn">تبرع عبر بايبال</button>
+      </div>
+
+      <div class="payment-card coffee" onclick="window.open('https://buymeacoffee.com/yourusername', '_blank')">
+        <div class="payment-header">
+          <i class="fa-solid fa-mug-hot"></i>
+          <span>Buy Me a Coffee</span>
+        </div>
+        <p>دعم بسيط وممتع للمطورين للمساعدة في تغطية تكاليف السيرفرات.</p>
+        <button class="pay-now-btn">ادعم المشروع</button>
+      </div>
+
+      <div class="payment-card crypto">
+        <div class="payment-header">
+          <i class="fa-brands fa-bitcoin"></i>
+          <span>عملات رقمية (BTC/ETH)</span>
+        </div>
+        <p>ندعم أيضاً العملات الرقمية للمساهمات التقنية العابرة للحدود.</p>
+        <div class="copy-box" style="font-size: 10px;">
+          <span id="btcAddr">0x123...abc</span>
+          <button onclick="copyText('0x123...abc')">نسخ</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    function copyText(text) {
+      navigator.clipboard.writeText(text);
+      alert("تم النسخ بنجاح. شكر الله سعيك!");
+    }
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") document.body.classList.add("dark");
+  </script>
+</body>
+</html>
