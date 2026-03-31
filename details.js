@@ -1,152 +1,94 @@
 async function loadDetails() {
   const params = new URLSearchParams(window.location.search);
-  const chapterId = parseInt(params.get("id"));
-  const targetAyah = params.get("ayah");
+  const chapterId = params.get("id");
   const detailsCard = document.getElementById("detailsCard");
 
-  if (!chapterId || isNaN(chapterId)) {
-    detailsCard.innerHTML = "<p style='text-align:center; padding:50px;'>السورة غير موجودة</p>";
-    return;
-  }
-
-  detailsCard.innerHTML = `
-    <div style="text-align: center; color: #1f6f50; font-weight: bold; padding: 60px;">
-      <i class="fa-solid fa-spinner fa-spin" style="font-size: 30px; margin-bottom: 15px;"></i>
-      <p>جاري تحميل السورة والتفسير العربي...</p>
-    </div>
-  `;
-
   try {
-    const [chaptersRes, versesRes] = await Promise.all([
-      fetch("https://api.quran.com/api/v4/chapters?language=ar"),
+    // جلب البيانات: السورة + النص العثماني
+    const [chapRes, versRes] = await Promise.all([
+      fetch(`https://api.quran.com/api/v4/chapters/${chapterId}?language=ar`),
       fetch(`https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${chapterId}`)
     ]);
 
-    const chaptersData = await chaptersRes.json();
-    const versesData = await versesRes.json();
+    const chapData = await chapRes.json();
+    const versData = await versRes.json();
 
-    const chapters = chaptersData.chapters;
-    const chapter = chapters.find(c => c.id === chapterId);
-    const verses = versesData.verses || [];
+    const chapter = chapData.chapter;
+    const verses = versData.verses;
 
+    // بناء النص القرآني بالخط العثماني مع أرقام الآيات
     const versesHtml = verses.map(v => {
-      const verseNumber = v.verse_key.split(":")[1];
-      return `
-        <span class="ayah-container" id="ayah-${verseNumber}" style="display: inline;">
-          <span class="ayah-text" onclick="showTafsir(${chapterId}, ${verseNumber}, '${chapter.name_arabic}')" title="اضغط للتفسير وحفظ العلامة">
-            ${v.text_uthmani}
-          </span>
-          <span class="ayah-number-circle">${verseNumber}</span>
-        </span>
-      `;
+      const num = v.verse_key.split(":")[1];
+      return `<span class="ayah" onclick="showTafsir(${chapterId}, ${num}, '${chapter.name_arabic}')" style="cursor:pointer">
+                ${v.text_uthmani} <span class="ayah-num">${num}</span>
+              </span>`;
     }).join(" ");
 
-    let bismillahHtml = (chapterId !== 1 && chapterId !== 9) ? `<p class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>` : "";
-    const nextChapterId = chapterId < 114 ? chapterId + 1 : null;
+    const bismillah = (chapterId != 1 && chapterId != 9) ? '<p style="font-family:Amiri; font-size:30px; margin:20px 0;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>' : '';
 
     detailsCard.innerHTML = `
-      <div class="surah-title-header">
-        <h1>سُورَةُ ${chapter.name_arabic.replace('سورة ', '')}</h1>
-        ${bismillahHtml}
+      <div class="surah-header" style="text-align:center; margin-bottom:30px;">
+        <h1 style="font-family:Amiri; font-size:45px; color:var(--primary); margin:0;">سُورَةُ ${chapter.name_arabic}</h1>
+        <p style="opacity:0.7;">${chapter.revelation_place === 'makkah' ? 'مكية' : 'مدنية'} | آياتها ${chapter.verses_count}</p>
+        ${bismillah}
       </div>
 
-      <div class="quran-reader-text">${versesHtml}</div>
-
-      <div id="tafsirModal" class="tafsir-modal">
-        <div class="tafsir-content">
-          <span class="close-tafsir" onclick="closeTafsir()">&times;</span>
-          <h3 id="tafsirTitle">تفسير الآية</h3>
-          <div id="tafsirText">جاري تحميل التفسير الميسر...</div>
-          <p style="font-size:12px; color:#1f6f50; margin-top:15px; font-family:'Cairo'; text-align:center;">✅ تم حفظ موضع القراءة تلقائياً</p>
-        </div>
+      <div class="quran-container">
+        <div class="quran-text">${versesHtml}</div>
       </div>
 
-      <div class="audio-box">
-        <button id="playAudioBtn" class="hero-link-btn" style="background:#1f6f50; color:white; border:none; margin:0 auto;">
-          <i class="fa-solid fa-circle-play"></i> استمع للسورة
+      <div style="text-align:center; margin-top:30px; display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
+        <button onclick="loadAudio(${chapterId})" class="action-btn" id="playBtn">
+          <i class="fa-solid fa-play"></i> استمع للسورة
         </button>
-        <audio id="surahAudio" controls style="display:none; width:100%; margin-top:20px;"></audio>
+        <a href="quran.html" class="action-btn btn-outline"><i class="fa-solid fa-list"></i> الفهرس</a>
+        ${chapterId < 114 ? `<a href="details.html?id=${parseInt(chapterId)+1}" class="action-btn">السورة التالية <i class="fa-solid fa-arrow-left"></i></a>` : ''}
       </div>
-
-      <div class="navigation-box">
-        ${nextChapterId ? `<button onclick="window.location.href='details.html?id=${nextChapterId}'" class="next-surah-btn">السورة التالية <i class="fa-solid fa-arrow-left"></i></button>` : ''}
-        <button onclick="window.location.href='quran.html'" class="soft-btn">الفهرس</button>
-      </div>
+      <audio id="surahAudio" style="display:none; width:100%; margin-top:20px;" controls></audio>
     `;
 
-    document.getElementById("playAudioBtn").addEventListener("click", () => loadAudio(chapterId));
-
-    if (targetAyah) {
-      setTimeout(() => {
-        const ayahElement = document.getElementById(`ayah-${targetAyah}`);
-        if (ayahElement) {
-          ayahElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          ayahElement.style.backgroundColor = "rgba(245, 158, 11, 0.2)";
-          setTimeout(() => { ayahElement.style.backgroundColor = "transparent"; }, 3000);
-        }
-      }, 800);
-    }
-
-  } catch (error) { console.error(error); }
+  } catch (error) {
+    detailsCard.innerHTML = "<p>حدث خطأ أثناء تحميل السورة.</p>";
+  }
 }
 
-async function showTafsir(chapterId, verseNumber, surahName) {
+// دالة التفسير الميسر وحفظ العلامة
+async function showTafsir(cid, vnum, sname) {
   const modal = document.getElementById("tafsirModal");
-  const tafsirText = document.getElementById("tafsirText");
-  const tafsirTitle = document.getElementById("tafsirTitle");
+  const tText = document.getElementById("tafsirText");
+  const tTitle = document.getElementById("tafsirTitle");
 
-  tafsirTitle.textContent = `تفسير سورة ${surahName} - آية ${verseNumber}`;
-  tafsirText.innerHTML = '<p style="text-align:center;"><i class="fa-solid fa-spinner fa-spin"></i> جاري جلب التفسير العربي...</p>';
+  tTitle.textContent = `تفسير سورة ${sname} - آية ${vnum}`;
+  tText.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري جلب التفسير...';
   modal.style.display = "flex";
 
-  const bookmark = { id: chapterId, verse: verseNumber, name: surahName };
-  localStorage.setItem('nour_bookmark', JSON.stringify(bookmark));
+  // حفظ العلامة تلقائياً
+  localStorage.setItem('nour_bookmark', JSON.stringify({id: cid, verse: vnum, name: sname}));
 
   try {
-    // استعمال API Alquran.cloud للتفسير الميسر العربي الصرف
-    const res = await fetch(`https://api.alquran.cloud/v1/ayah/${chapterId}:${verseNumber}/ar.muyassar`);
+    const res = await fetch(`https://api.alquran.cloud/v1/ayah/${cid}:${vnum}/ar.muyassar`);
     const data = await res.json();
-    
-    if (data.status === "OK") {
-      tafsirText.innerHTML = `<p style="font-family:'Amiri'; font-size:22px; line-height:1.8; text-align:justify;">${data.data.text}</p>`;
-    } else {
-      tafsirText.textContent = "تعذر تحميل التفسير حالياً.";
-    }
-  } catch (error) {
-    tafsirText.textContent = "خطأ في الاتصال. جرب مرة أخرى.";
-  }
+    tText.innerHTML = `<p style="font-size:20px; line-height:1.8;">${data.data.text}</p>
+                       <p style="font-size:12px; color:var(--primary); border-top:1px solid #eee; pt-10;">✅ تم حفظ مكان القراءة</p>`;
+  } catch (e) { tText.textContent = "عذراً، فشل تحميل التفسير."; }
 }
 
 function closeTafsir() { document.getElementById("tafsirModal").style.display = "none"; }
 
-window.onclick = function(event) {
-  const modal = document.getElementById("tafsirModal");
-  if (event.target == modal) { modal.style.display = "none"; }
-}
-
-async function loadAudio(chapterId) {
+async function loadAudio(id) {
+  const audio = document.getElementById("surahAudio");
+  const btn = document.getElementById("playBtn");
   try {
-    const audio = document.getElementById("surahAudio");
-    const playBtn = document.getElementById("playAudioBtn");
-    const response = await fetch(`https://api.quran.com/api/v4/chapter_recitations/1/${chapterId}`);
-    const result = await response.json();
-    playBtn.style.display = "none";
-    audio.src = result.audio_file.audio_url;
+    const res = await fetch(`https://api.quran.com/api/v4/chapter_recitations/1/${id}`);
+    const data = await res.json();
+    audio.src = data.audio_file.audio_url;
     audio.style.display = "block";
+    btn.style.display = "none";
     audio.play();
-  } catch (error) { console.error(error); }
+  } catch (e) { alert("فشل تحميل الملف الصوتي"); }
 }
 
-function setupTheme() {
-  const themeToggle = document.getElementById("themeToggle");
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "dark") document.body.classList.add("dark");
-  if (themeToggle) {
-    themeToggle.addEventListener("click", () => {
-      document.body.classList.toggle("dark");
-      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
-    });
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => { loadDetails(); setupTheme(); });
+document.addEventListener("DOMContentLoaded", () => { 
+    loadDetails(); 
+    // setupTheme logic
+});
