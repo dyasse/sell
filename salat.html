@@ -4,47 +4,119 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>أوقات الصلاة - نور</title>
+  <meta name="description" content="أوقات الصلاة واتجاه القبلة في تطبيق نور" />
 
   <link rel="icon" href="assets/favicon.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="brand-mark">
+        <img src="assets/favicon.png" alt="نور" />
+      </div>
+      <div class="brand-text">
+        <span class="brand-title">نور</span>
+        <span class="brand-subtitle">Prayer Times</span>
+      </div>
+    </a>
+  </nav>
 
-<nav class="navbar">
-  <a href="index.html" class="logo">
-    <img src="assets/favicon.png">
-    نور
-  </a>
-</nav>
+  <main class="page-shell">
+    <section class="hero-panel prayer-hero">
+      <div class="hero-badge">
+        <i class="fa-solid fa-mosque"></i>
+        <span>مواقيت الصلاة والقبلة</span>
+      </div>
 
-<main class="container">
+      <h1>أوقات الصلاة</h1>
+      <p id="locationText">جاري تحديد الموقع...</p>
 
-  <div class="hero-card text-center">
-    <h1>أوقات الصلاة</h1>
-    <p id="locationText">جاري تحديد الموقع...</p>
-  </div>
+      <div class="prayer-top-meta">
+        <div class="meta-pill">
+          <i class="fa-solid fa-location-dot"></i>
+          <span id="cityName">...</span>
+        </div>
 
-  <div id="prayerTimes" class="prayer-grid">
-    <div class="status-box">جاري تحميل أوقات الصلاة...</div>
-  </div>
+        <div class="meta-pill next-pill">
+          <i class="fa-regular fa-clock"></i>
+          <span id="nextPrayerText">جاري حساب الصلاة القادمة...</span>
+        </div>
+      </div>
 
-  <div class="hero-card text-center" style="margin-top:20px;">
-    <h2>اتجاه القبلة</h2>
-    <p>اضغط على الزر لتحديد الاتجاه</p>
+      <div class="countdown-box" id="countdownBox">
+        <span class="countdown-label">الوقت المتبقي</span>
+        <strong id="countdownValue">--:--:--</strong>
+      </div>
 
-    <button class="nav-btn" onclick="getQibla()">
-      <i class="fa-solid fa-compass"></i>
-      تحديد القبلة
-    </button>
+      <div class="prayer-actions">
+        <button class="nav-btn" id="enableNotificationsBtn" type="button">
+          <i class="fa-regular fa-bell"></i>
+          تفعيل التنبيهات
+        </button>
 
-    <div id="qiblaResult" style="margin-top:10px;"></div>
-  </div>
+        <button class="secondary-btn" id="refreshLocationBtn" type="button">
+          <i class="fa-solid fa-rotate"></i>
+          تحديث الموقع
+        </button>
+      </div>
+    </section>
 
-</main>
+    <section id="prayerTimes" class="prayer-grid">
+      <div class="status-box">جاري تحميل أوقات الصلاة...</div>
+    </section>
 
-<script src="salat.js"></script>
+    <section class="qibla-panel">
+      <div class="qibla-header">
+        <h2>اتجاه القبلة</h2>
+        <p>فعّل البوصلة وحرك الهاتف باش يبان الاتجاه الحقيقي</p>
+      </div>
+
+      <div class="compass-card">
+        <div class="compass-shell">
+          <div class="compass-ring"></div>
+          <div class="compass-label north">N</div>
+          <div class="compass-label east">E</div>
+          <div class="compass-label south">S</div>
+          <div class="compass-label west">W</div>
+
+          <div class="qibla-marker" id="qiblaMarker">
+            <i class="fa-solid fa-kaaba"></i>
+          </div>
+
+          <div class="compass-needle" id="compassNeedle">
+            <span class="needle-head"></span>
+            <span class="needle-tail"></span>
+          </div>
+
+          <div class="compass-center-dot"></div>
+        </div>
+
+        <div class="qibla-meta">
+          <div class="meta-card">
+            <span>زاوية القبلة</span>
+            <strong id="qiblaAngle">--°</strong>
+          </div>
+          <div class="meta-card">
+            <span>اتجاه الهاتف</span>
+            <strong id="deviceHeading">--°</strong>
+          </div>
+        </div>
+
+        <div class="qibla-actions">
+          <button class="nav-btn" id="startCompassBtn" type="button">
+            <i class="fa-solid fa-compass"></i>
+            تشغيل البوصلة
+          </button>
+        </div>
+
+        <p id="qiblaStatus" class="qibla-status">اضغط على الزر لتشغيل البوصلة.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="salat.js"></script>
 </body>
 </html>
