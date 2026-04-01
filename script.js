@@ -16,13 +16,15 @@ function checkBookmark() {
       return;
     }
 
+    // عرض البلوك
     section.style.display = "block";
+
+    // النص
     title.textContent = `سورة ${bookmark.name} - آية ${bookmark.verse}`;
 
-    link.onclick = function (e) {
-      e.preventDefault();
-      window.location.href = `details.html?id=${bookmark.id}&ayah=${bookmark.verse}`;
-    };
+    // الرابط (أفضل من onclick)
+    link.href = `details.html?id=${bookmark.id}&ayah=${bookmark.verse}`;
+
   } catch (error) {
     console.error("Invalid bookmark data:", error);
     localStorage.removeItem("nour_bookmark");
