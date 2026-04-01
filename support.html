@@ -5,167 +5,112 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ادعم مشروع نور</title>
   <meta name="description" content="ساهم في دعم مشروع نور الإسلامي" />
-  <link rel="stylesheet" href="styles.css" />
   <link rel="icon" href="assets/favicon.png" />
-  <style>
-    .page-wrap {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 24px 16px 50px;
-    }
-
-    .topbar {
-      margin-bottom: 18px;
-    }
-
-    .back-link {
-      color: #0f766e;
-      text-decoration: none;
-      font-weight: 800;
-    }
-
-    .hero-card,
-    .support-card {
-      background: #fff;
-      border-radius: 22px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-      border: 1px solid #eef2f7;
-    }
-
-    .hero-card {
-      padding: 24px;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .hero-card h1 {
-      margin-bottom: 10px;
-      color: #0f172a;
-    }
-
-    .hero-card p {
-      color: #475569;
-      line-height: 1.9;
-    }
-
-    .verse-box {
-      margin-top: 16px;
-      background: #f8fafc;
-      border-radius: 18px;
-      padding: 16px;
-      color: #0f172a;
-      font-weight: 700;
-    }
-
-    .support-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-    }
-
-    .support-card {
-      padding: 18px;
-    }
-
-    .support-card h3 {
-      margin-bottom: 10px;
-      color: #0f172a;
-    }
-
-    .support-card p {
-      color: #64748b;
-      margin-bottom: 14px;
-      min-height: 72px;
-    }
-
-    .support-link,
-    .copy-btn {
-      display: inline-block;
-      border: none;
-      border-radius: 12px;
-      padding: 11px 15px;
-      text-decoration: none;
-      cursor: pointer;
-      font-weight: 800;
-      font-family: inherit;
-    }
-
-    .support-link {
-      background: #0f766e;
-      color: #fff;
-    }
-
-    .copy-btn {
-      background: #f1f5f9;
-      color: #0f172a;
-    }
-
-    .wallet-box {
-      margin-top: 10px;
-      word-break: break-all;
-      background: #f8fafc;
-      padding: 12px;
-      border-radius: 12px;
-      font-size: 14px;
-      color: #334155;
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="page-wrap">
-    <div class="topbar">
-      <a href="index.html" class="back-link">← الرئيسية</a>
-    </div>
 
-    <div class="hero-card">
+  <nav class="navbar">
+    <a href="index.html" class="logo">
+      <i class="fa-solid fa-arrow-right"></i>
+      <span>الرجوع للرئيسية</span>
+    </a>
+  </nav>
+
+  <main class="container">
+    <section class="hero-card text-center" style="margin-bottom: 20px;">
       <h1>ادعم مشروع نور</h1>
       <p>
-        تطبيق نور مشروع تقني إسلامي هدفه توفير القرآن والأذكار والأدعية في تجربة نظيفة،
-        هادئة، وبدون تشتيت. مساهمتك كتعاون فالتطوير والاستضافة وتحسين الخدمة.
+        تطبيق نور مشروع تقني إسلامي هدفه توفير القرآن والأذكار والأدعية
+        في تجربة نظيفة، هادئة، وبدون تشتيت. مساهمتك كتعاون في التطوير
+        والاستضافة وتحسين الخدمة.
       </p>
+
       <div class="verse-box">
         "وَمَا تُقَدِّمُوا لِأَنفُسِكُم مِّنْ خَيْرٍ تَجِدُوهُ عِندَ اللَّهِ"
       </div>
-    </div>
+    </section>
 
-    <div class="support-grid">
+    <section class="support-grid">
       <div class="support-card">
-        <h3>بطاقة / Apple Pay</h3>
+        <h3><i class="fa-solid fa-credit-card"></i> بطاقة / Apple Pay</h3>
         <p>أسرع وسيلة للدعم عبر رابط دفع مباشر وآمن.</p>
-        <a class="support-link" href="#" target="_blank" rel="noopener">ادعم الآن</a>
+        <a class="support-link" href="#" target="_blank" rel="noopener">
+          ادعم الآن
+        </a>
       </div>
 
       <div class="support-card">
-        <h3>PayPal</h3>
+        <h3><i class="fa-brands fa-paypal"></i> PayPal</h3>
         <p>دعم آمن وسريع للمستخدمين من مختلف الدول.</p>
-        <a class="support-link" href="#" target="_blank" rel="noopener">تبرع عبر بايبال</a>
+        <a class="support-link" href="#" target="_blank" rel="noopener">
+          تبرع عبر بايبال
+        </a>
       </div>
 
       <div class="support-card">
-        <h3>Buy Me a Coffee</h3>
-        <p>دعم بسيط ولطيف يساعد في تغطية تكاليف التطوير والاستضافة.</p>
-        <a class="support-link" href="#" target="_blank" rel="noopener">ادعم المشروع</a>
+        <h3><i class="fa-solid fa-mug-hot"></i> Buy Me a Coffee</h3>
+        <p>دعم بسيط يساعد في تغطية تكاليف التطوير والاستضافة.</p>
+        <a class="support-link" href="#" target="_blank" rel="noopener">
+          ادعم المشروع
+        </a>
       </div>
 
       <div class="support-card">
-        <h3>عملات رقمية</h3>
+        <h3><i class="fa-brands fa-bitcoin"></i> عملات رقمية</h3>
         <p>للداعمين اللي كيبغيو يحولو عبر المحافظ الرقمية.</p>
         <div class="wallet-box" id="walletAddress">0x123...abc</div>
-        <button class="copy-btn" onclick="copyWallet()">نسخ العنوان</button>
+        <button class="copy-btn" id="copyWalletBtn" type="button">
+          نسخ العنوان
+        </button>
       </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <script>
     async function copyWallet() {
-      const text = document.getElementById("walletAddress")?.textContent || "";
+      const walletBox = document.getElementById("walletAddress");
+      const copyBtn = document.getElementById("copyWalletBtn");
+      const text = walletBox ? walletBox.textContent.trim() : "";
+
+      if (!text) {
+        alert("ما كاينش عنوان للمحفظة.");
+        return;
+      }
+
       try {
-        await navigator.clipboard.writeText(text);
-        alert("تم نسخ عنوان المحفظة.");
-      } catch (e) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const tempInput = document.createElement("textarea");
+          tempInput.value = text;
+          document.body.appendChild(tempInput);
+          tempInput.select();
+          document.execCommand("copy");
+          document.body.removeChild(tempInput);
+        }
+
+        if (copyBtn) {
+          const originalText = copyBtn.textContent;
+          copyBtn.textContent = "تم النسخ";
+          setTimeout(() => {
+            copyBtn.textContent = originalText;
+          }, 1500);
+        }
+      } catch (error) {
+        console.error("Copy failed:", error);
         alert("تعذر النسخ حالياً.");
       }
     }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const copyBtn = document.getElementById("copyWalletBtn");
+      if (copyBtn) {
+        copyBtn.addEventListener("click", copyWallet);
+      }
+    });
   </script>
 </body>
 </html>
