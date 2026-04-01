@@ -4,66 +4,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>أوقات الصلاة - نور</title>
-  <meta name="description" content="أوقات الصلاة واتجاه القبلة في تطبيق نور" />
 
-  <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="assets/favicon.png" />
-  <link rel="apple-touch-icon" href="assets/favicon.png" />
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
 
-  <nav class="navbar">
-    <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
-      <i class="fa-solid fa-book-quran"></i>
-      <span>نور</span>
-    </div>
+<nav class="navbar">
+  <a href="index.html" class="logo">
+    <img src="assets/favicon.png">
+    نور
+  </a>
+</nav>
 
-    <div class="nav-actions">
-      <a href="index.html" class="nav-btn">
-        <i class="fa-solid fa-house"></i> الرئيسية
-      </a>
-    </div>
-  </nav>
+<main class="container">
 
-  <header class="hero-card text-center" style="margin-bottom: 20px; padding: 30px;">
-    <h1 style="margin-bottom: 8px;">أوقات الصلاة</h1>
-    <p id="nextSalatText" style="color:#64748b;">جاري تحديد الموقع...</p>
+  <div class="hero-card text-center">
+    <h1>أوقات الصلاة</h1>
+    <p id="locationText">جاري تحديد الموقع...</p>
+  </div>
 
-    <div class="location-box" id="locationBox">
-      <i class="fa-solid fa-location-dot"></i>
-      <span id="cityName">تحديد الموقع...</span>
-    </div>
-  </header>
+  <div id="prayerTimes" class="prayer-grid">
+    <div class="status-box">جاري تحميل أوقات الصلاة...</div>
+  </div>
 
-  <main class="container">
-    <div class="salat-grid" id="salatTimesContainer">
-      <div class="status-box">جاري تحميل أوقات الصلاة...</div>
-    </div>
+  <div class="hero-card text-center" style="margin-top:20px;">
+    <h2>اتجاه القبلة</h2>
+    <p>اضغط على الزر لتحديد الاتجاه</p>
 
-    <section class="qibla-section">
-      <h2 class="text-center">اتجاه القبلة</h2>
-      <p class="text-center" style="color:#64748b;">اضغط على الزر وقم بتدوير هاتفك</p>
+    <button class="nav-btn" onclick="getQibla()">
+      <i class="fa-solid fa-compass"></i>
+      تحديد القبلة
+    </button>
 
-      <div class="compass-container">
-        <i class="fa-solid fa-kaaba kaaba-icon"></i>
-        <div class="compass-needle" id="compassNeedle"></div>
-      </div>
+    <div id="qiblaResult" style="margin-top:10px;"></div>
+  </div>
 
-      <div class="text-center">
-        <button class="primary-btn" onclick="startCompass()">
-          <i class="fa-solid fa-compass"></i> تحديد القبلة
-        </button>
-      </div>
+</main>
 
-      <p id="qiblaStatus" class="text-center" style="color:#ef4444; margin-top:10px;"></p>
-    </section>
-  </main>
-
-  <script src="salat.js"></script>
+<script src="salat.js"></script>
 </body>
 </html>
