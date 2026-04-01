@@ -213,3 +213,45 @@ body {
     cursor: pointer;
     color: #94a3b8;
 }
+/* بوطون السورة التالية */
+.navigation-footer {
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+.next-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 15px;
+    font-family: 'Cairo';
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.next-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
+
+/* كارت واصل القراءة */
+.resume-card {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    cursor: pointer;
+    border: 1px solid rgba(31, 111, 80, 0.1);
+}
+
+.icon-circle {
+    background: rgba(31, 111, 80, 0.1);
+    color: var(--primary);
+    width: 45px; height: 45px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+}
