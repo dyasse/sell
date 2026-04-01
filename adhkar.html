@@ -5,188 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>الأذكار - نور</title>
   <meta name="description" content="أذكار المسلم اليومية في تطبيق نور" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" href="assets/favicon.png" />
-  <style>
-    .page-wrap {
-      max-width: 950px;
-      margin: 0 auto;
-      padding: 24px 16px 50px;
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 18px;
-    }
-
-    .back-link {
-      color: #0f766e;
-      text-decoration: none;
-      font-weight: 800;
-    }
-
-    .hero-card,
-    .status-box,
-    .zekr-card {
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-      border: 1px solid #eef2f7;
-    }
-
-    .hero-card {
-      padding: 22px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .hero-card h1 {
-      margin-bottom: 8px;
-      color: #0f172a;
-    }
-
-    .hero-card p {
-      color: #64748b;
-    }
-
-    .categories {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 12px;
-      margin-bottom: 22px;
-    }
-
-    .cat-btn {
-      display: block;
-      text-decoration: none;
-      text-align: center;
-      padding: 14px 12px;
-      border-radius: 16px;
-      background: #fff;
-      color: #0f172a;
-      font-weight: 800;
-      box-shadow: 0 8px 22px rgba(0,0,0,0.05);
-      border: 1px solid #e5e7eb;
-      transition: 0.2s ease;
-    }
-
-    .cat-btn:hover,
-    .cat-btn.active {
-      background: #0f766e;
-      color: #fff;
-      transform: translateY(-2px);
-    }
-
-    .status-box {
-      padding: 20px;
-      text-align: center;
-      color: #64748b;
-    }
-
-    .adhkar-list {
-      display: grid;
-      gap: 14px;
-    }
-
-    .zekr-card {
-      padding: 18px;
-    }
-
-    .zekr-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .zekr-title {
-      font-weight: 800;
-      color: #0f172a;
-    }
-
-    .count-badge {
-      min-width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: #ecfeff;
-      color: #0f766e;
-      font-weight: 800;
-      font-size: 16px;
-    }
-
-    .zekr-text {
-      font-size: 24px;
-      line-height: 2;
-      color: #111827;
-      margin-bottom: 12px;
-      font-family: "Amiri", serif;
-    }
-
-    .zekr-desc {
-      color: #64748b;
-      margin-bottom: 14px;
-      font-size: 14px;
-    }
-
-    .zekr-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .zekr-btn {
-      border: none;
-      border-radius: 12px;
-      padding: 11px 16px;
-      cursor: pointer;
-      font-weight: 800;
-      font-family: inherit;
-    }
-
-    .zekr-btn.primary {
-      background: #0f766e;
-      color: #fff;
-    }
-
-    .zekr-btn.secondary {
-      background: #f1f5f9;
-      color: #0f172a;
-    }
-
-    .done {
-      opacity: 0.65;
-      border: 2px solid #0f766e;
-    }
-  </style>
 </head>
 <body>
-  <div class="page-wrap">
-    <div class="topbar">
-      <a href="index.html" class="back-link">← الرئيسية</a>
-      <a href="favorites.html" class="back-link">المفضلة</a>
+
+  <nav class="navbar">
+    <a href="index.html" class="logo">
+      <i class="fa-solid fa-arrow-right"></i>
+      <span>الرجوع للرئيسية</span>
+    </a>
+  </nav>
+
+  <main class="container" style="margin-top: 20px;">
+    <div class="hero-card text-center" style="margin-bottom: 20px; padding: 20px;">
+      <h1 id="adhkarTitle">الأذكار</h1>
+      <p style="color: #64748b; margin-top: 8px;">أذكار يومية للمسلم مع واجهة بسيطة ومريحة</p>
     </div>
 
-    <div class="hero-card">
-      <h1 id="adhkarTitle">أذكار المسلم</h1>
-      <p>حصّن يومك بذكر الله، مع عداد بسيط ومريح</p>
+    <div class="categories" style="margin-bottom: 20px;">
+      <a class="cat-btn" href="adhkar.html?type=sabah">أذكار الصباح</a>
+      <a class="cat-btn" href="adhkar.html?type=masa">أذكار المساء</a>
+      <a class="cat-btn" href="adhkar.html?type=nawm">أذكار النوم</a>
+      <a class="cat-btn" href="adhkar.html?type=shita">أذكار المطر</a>
+      <a class="cat-btn" href="adhkar.html?type=khouroj">الخروج من المنزل</a>
+      <a class="cat-btn" href="adhkar.html?type=dokhol">الدخول إلى المنزل</a>
     </div>
 
-    <div class="categories">
-      <a class="cat-btn" data-type="sabah" href="adhkar.html?type=sabah">أذكار الصباح</a>
-      <a class="cat-btn" data-type="masa" href="adhkar.html?type=masa">أذكار المساء</a>
-      <a class="cat-btn" data-type="nawm" href="adhkar.html?type=nawm">أذكار النوم</a>
-      <a class="cat-btn" data-type="shita" href="adhkar.html?type=shita">أذكار المطر</a>
-      <a class="cat-btn" data-type="khouroj" href="adhkar.html?type=khouroj">الخروج من البيت</a>
-      <a class="cat-btn" data-type="dokhol" href="adhkar.html?type=dokhol">الدخول إلى البيت</a>
+    <div id="adhkarList" class="adhkar-list">
+      <div class="status-box">جاري تحميل الأذكار...</div>
     </div>
-
-    <div id="adhkarList" class="status-box">جاري تحميل الأذكار...</div>
-  </div>
+  </main>
 
   <script src="adhkar.js"></script>
 </body>
