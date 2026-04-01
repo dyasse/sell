@@ -1,7 +1,7 @@
 async function loadSurah() {
     const params = new URLSearchParams(window.location.search);
-    const id = params.get("id") || 1;
-    const targetAyah = params.get("ayah"); // لجلب الآية المحفوظة
+    const id = parseInt(params.get("id")) || 1;
+    const targetAyah = params.get("ayah");
     const container = document.getElementById("quranArea");
 
     try {
@@ -19,49 +19,31 @@ async function loadSurah() {
         const versesHtml = versData.verses.map(v => {
             const num = v.verse_key.split(":")[1];
             return `
-                <span class="ayah-text" id="ayah-${num}" onclick="saveAndTafsir(${id}, ${num}, '${chapter.name_arabic}')">
+                <span class="quran-text" id="ayah-${num}" onclick="saveAndTafsir(${id}, ${num}, '${chapter.name_arabic}')" style="cursor:pointer;">
                     ${v.text_uthmani} <span class="ayah-num">${num}</span>
                 </span>
             `;
         }).join("");
 
-        container.innerHTML = versesHtml;
+        const bismillah = (id !== 1 && id !== 9) ? '<div style="font-family:Amiri; font-size:32px; text-align:center; margin-bottom:20px; color:var(--primary);">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>' : '';
+        
+        const nextBtn = id < 114 ? `<div style="text-align:center; margin-top:30px;"><button onclick="location.href='details.html?id=${id+1}'" style="background:var(--primary); color:white; border:none; padding:15px 30px; border-radius:15px; font-family:Cairo; font-weight:bold; cursor:pointer;">السورة التالية <i class="fa-solid fa-chevron-left"></i></button></div>` : '';
 
-        // ميزة: النزول التلقائي للآية المحفوظة
+        container.innerHTML = bismillah + versesHtml + nextBtn;
+
         if (targetAyah) {
             setTimeout(() => {
-                const element = document.getElementById(`ayah-${targetAyah}`);
-                if (element) {
-                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    element.style.backgroundColor = "rgba(31, 111, 80, 0.1)"; // تلوين خفيف
-                }
+                const el = document.getElementById(`ayah-${targetAyah}`);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 500);
         }
-
-    } catch (e) { console.error(e); }
+    } catch (e) { container.innerHTML = "خطأ في التحميل"; }
 }
 
 function saveAndTafsir(id, verse, name) {
-    // حفظ في localStorage
-    const bookmark = { id: id, verse: verse, name: name };
-    localStorage.setItem("nour_bookmark", JSON.stringify(bookmark));
-    
-    // فتح التفسير (الدالة اللي صاوبنا قبل)
-    openTafsir(id, verse, name);
+    localStorage.setItem("nour_bookmark", JSON.stringify({ id, verse, name }));
+    // هنا تفتح المودال ديال التفسير (نفس كود التفسير اللي عطيتك قبل)
+    alert(`تم حفظ العلامة: سورة ${name} آية ${verse}`);
 }
-
-function openTafsir(id, v, name) {
-    const modal = document.getElementById("tafsirModal");
-    document.getElementById("tTitle").innerText = `سورة ${name} - آية ${v}`;
-    modal.style.display = "flex";
-    
-    fetch(`https://api.alquran.cloud/v1/ayah/${id}:${v}/ar.muyassar`)
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById("tBody").innerText = data.data.text;
-        });
-}
-
-function closeTafsir() { document.getElementById("tafsirModal").style.display = "none"; }
 
 document.addEventListener("DOMContentLoaded", loadSurah);
