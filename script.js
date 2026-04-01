@@ -253,3 +253,14 @@ function checkBookmark() {
 }
 
 document.addEventListener("DOMContentLoaded", checkBookmark);
+function checkBookmark() {
+    const mark = JSON.parse(localStorage.getItem("nour_bookmark"));
+    if (mark) {
+        document.getElementById("bookmarkContainer").style.display = "block";
+        document.getElementById("lastSurah").innerText = `سورة ${mark.name} - آية ${mark.verse}`;
+        document.getElementById("resumeBtn").onclick = () => {
+            location.href = `details.html?id=${mark.id}&ayah=${mark.verse}`;
+        };
+    }
+}
+document.addEventListener("DOMContentLoaded", checkBookmark);
