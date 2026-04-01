@@ -1,82 +1,91 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>نور - الرئيسية</title>
-  <meta name="description" content="تطبيق نور للقرآن الكريم والأذكار والأدعية" />
+  <title>نور</title>
+
   <link rel="icon" href="assets/favicon.png" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Amiri&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
-  <nav class="navbar">
-    <a href="index.html" class="logo">
-      <img src="assets/favicon.png" alt="شعار نور" />
-      <span>نور</span>
-    </a>
-  </nav>
+<nav class="navbar">
+  <div class="logo">
+    <img src="assets/favicon.png">
+    نور
+  </div>
+</nav>
 
-  <main class="container">
-    <section class="hero-card text-center home-hero-fixed">
-      <h1>نُور</h1>
-      <p>رفيقك للتقرب من الله</p>
-    </section>
+<main class="container">
 
-    <section id="bookmarkSection" class="bookmark-card">
-      <a href="#" id="resumeLink" class="bookmark-link">
-        <div class="bookmark-content">
-          <i class="fa-solid fa-bookmark bookmark-icon"></i>
-          <div>
-            <small>واصل القراءة من:</small>
-            <strong id="bookmarkTitle"></strong>
-          </div>
+  <div class="hero-card">
+    <h1>نُور</h1>
+    <p>رفيقك للتقرب من الله</p>
+  </div>
+
+  <div id="bookmarkSection" class="bookmark-card">
+    <a id="resumeLink" class="bookmark-link">
+      <div class="bookmark-content">
+        <i class="fa-solid fa-bookmark bookmark-icon"></i>
+        <div>
+          <small>واصل القراءة من</small>
+          <strong id="bookmarkTitle"></strong>
         </div>
-        <i class="fa-solid fa-chevron-left"></i>
-      </a>
-    </section>
+      </div>
+      ←
+    </a>
+  </div>
 
-    <section class="home-grid home-grid-fixed">
-      <a class="home-card" href="quran.html">
-        <i class="fa-solid fa-book-quran"></i>
-        <h3>القرآن الكريم</h3>
-        <p>قراءة وتفسير</p>
-      </a>
+  <div class="home-grid">
 
-      <a class="home-card" href="adhkar.html">
-        <i class="fa-solid fa-rosary"></i>
-        <h3>الأذكار</h3>
-        <p>حصن المسلم</p>
-      </a>
+```
+<a class="home-card" href="quran.html">
+  <i class="fa-solid fa-book-quran"></i>
+  <h3>القرآن</h3>
+  <p>قراءة وتفسير</p>
+</a>
 
-      <a class="home-card" href="duas.html">
-        <i class="fa-solid fa-hands-praying"></i>
-        <h3>الأدعية</h3>
-        <p>أدعية جامعة</p>
-      </a>
+<a class="home-card" href="adhkar.html">
+  <i class="fa-solid fa-rosary"></i>
+  <h3>الأذكار</h3>
+  <p>حصن المسلم</p>
+</a>
 
-      <a class="home-card" href="favorites.html">
-        <i class="fa-solid fa-heart"></i>
-        <h3>المفضلة</h3>
-        <p>العناصر المحفوظة</p>
-      </a>
+<a class="home-card" href="duas.html">
+  <i class="fa-solid fa-hands-praying"></i>
+  <h3>الأدعية</h3>
+  <p>أدعية مختارة</p>
+</a>
 
-      <a class="home-card" href="support.html">
-        <i class="fa-solid fa-hand-holding-heart"></i>
-        <h3>ادعمنا</h3>
-        <p>ساهم في الخير</p>
-      </a>
+<a class="home-card" href="favorites.html">
+  <i class="fa-solid fa-heart"></i>
+  <h3>المفضلة</h3>
+  <p>المحفوظات</p>
+</a>
 
-      <a class="home-card" href="salat.html">
-        <i class="fa-solid fa-mosque"></i>
-        <h3>أوقات الصلاة</h3>
-        <p>المواقيت والقبلة</p>
-      </a>
-    </section>
-  </main>
+<a class="home-card" href="salat.html">
+  <i class="fa-solid fa-mosque"></i>
+  <h3>الصلاة</h3>
+  <p>المواقيت</p>
+</a>
 
-  <script src="script.js"></script>
+<a class="home-card" href="support.html">
+  <i class="fa-solid fa-hand-holding-heart"></i>
+  <h3>ادعمنا</h3>
+  <p>ساهم في الخير</p>
+</a>
+```
+
+  </div>
+
+</main>
+
+<script src="script.js"></script>
+
 </body>
 </html>
