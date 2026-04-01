@@ -20,18 +20,27 @@
 
     <main class="container">
         <div id="quranArea" class="quran-card">
-            <div style="text-align: center; padding: 50px;">
-                <i class="fa-solid fa-spinner fa-spin fa-2x" style="color: var(--primary);"></i>
-                <p style="margin-top: 15px; font-family: Cairo;">جاري تحميل كلام الله...</p>
+            <div class="loading-state">
+                <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                <p>جاري تحميل كلام الله...</p>
             </div>
         </div>
+        
+        <div id="nextSurahContainer"></div>
     </main>
 
-    <div id="tafsirModal" class="modal" style="display: none;">
+    <div id="tafsirModal" class="modal-overlay">
         <div class="modal-content">
-            <span onclick="closeTafsir()" style="position:absolute; left:20px; top:15px; cursor:pointer; font-size:25px;">&times;</span>
-            <h3 id="tTitle" style="color: var(--primary); margin-bottom: 15px; font-family: Cairo;"></h3>
-            <div id="tBody" style="font-family: Amiri; font-size: 22px; line-height: 1.8; text-align: justify;"></div>
+            <div class="modal-header">
+                <h3 id="tTitle">التفسير</h3>
+                <span class="close-modal" onclick="closeTafsir()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="tBody">جاري جلب التفسير...</p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeTafsir()" class="btn-close">إغلاق</button>
+            </div>
         </div>
     </div>
 
