@@ -13,65 +13,67 @@
 <body>
 
   <nav class="navbar">
-    <div class="logo">
+    <a href="index.html" class="logo">
       <img src="assets/favicon.png" alt="شعار نور" />
       <span>نور</span>
-    </div>
+    </a>
   </nav>
 
   <main class="container">
-    <section class="hero-card text-center" style="margin-bottom: 20px; padding: 28px 20px;">
-      <h1 style="font-size: 36px; margin-bottom: 8px;">نُور</h1>
-      <p style="color: #64748b;">رفيقك للتقرب من الله</p>
+    <section class="hero-card text-center home-hero-fixed">
+      <h1>نُور</h1>
+      <p>رفيقك للتقرب من الله</p>
     </section>
 
-    <section id="bookmarkSection" class="bookmark-card" style="display: none; margin-bottom: 20px;">
-      <a
-        href="#"
-        id="resumeLink"
-        style="display: flex; align-items: center; justify-content: space-between; gap: 12px;"
-      >
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <i class="fa-solid fa-bookmark" style="color: #f59e0b; font-size: 20px;"></i>
+    <section id="bookmarkSection" class="bookmark-card">
+      <a href="#" id="resumeLink" class="bookmark-link">
+        <div class="bookmark-content">
+          <i class="fa-solid fa-bookmark bookmark-icon"></i>
           <div>
-            <small style="display: block; opacity: 0.8; font-size: 12px;">واصل القراءة من:</small>
-            <strong id="bookmarkTitle" style="font-size: 16px;"></strong>
+            <small>واصل القراءة من:</small>
+            <strong id="bookmarkTitle"></strong>
           </div>
         </div>
         <i class="fa-solid fa-chevron-left"></i>
       </a>
     </section>
 
-    <section class="home-grid">
-      <div class="home-card" onclick="window.location.href='quran.html'">
+    <section class="home-grid home-grid-fixed">
+      <a class="home-card" href="quran.html">
         <i class="fa-solid fa-book-quran"></i>
         <h3>القرآن الكريم</h3>
         <p>قراءة وتفسير</p>
-      </div>
+      </a>
 
-      <div class="home-card" onclick="window.location.href='adhkar.html'">
+      <a class="home-card" href="adhkar.html">
         <i class="fa-solid fa-rosary"></i>
         <h3>الأذكار</h3>
         <p>حصن المسلم</p>
-      </div>
+      </a>
 
-      <div class="home-card" onclick="window.location.href='duas.html'">
+      <a class="home-card" href="duas.html">
         <i class="fa-solid fa-hands-praying"></i>
         <h3>الأدعية</h3>
         <p>أدعية جامعة</p>
-      </div>
+      </a>
 
-      <div class="home-card" onclick="window.location.href='favorites.html'">
+      <a class="home-card" href="favorites.html">
         <i class="fa-solid fa-heart"></i>
         <h3>المفضلة</h3>
         <p>العناصر المحفوظة</p>
-      </div>
+      </a>
 
-      <div class="home-card" onclick="window.location.href='support.html'">
+      <a class="home-card" href="support.html">
         <i class="fa-solid fa-hand-holding-heart"></i>
         <h3>ادعمنا</h3>
         <p>ساهم في الخير</p>
-      </div>
+      </a>
+
+      <a class="home-card" href="salat.html">
+        <i class="fa-solid fa-mosque"></i>
+        <h3>أوقات الصلاة</h3>
+        <p>المواقيت والقبلة</p>
+      </a>
     </section>
   </main>
 
