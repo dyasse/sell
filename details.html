@@ -1,49 +1,52 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قراءة القرآن - نور</title>
-    <link rel="icon" href="assets/favicon.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>قراءة القرآن - نور</title>
+  <meta name="description" content="قراءة سور القرآن الكريم مع التفسير وحفظ موضع القراءة في تطبيق نور" />
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-    <nav class="navbar">
-        <a href="index.html" class="logo" style="text-decoration: none;">
-            <i class="fa-solid fa-arrow-right"></i>
-            <span id="surahTitle">جاري التحميل...</span>
-        </a>
-    </nav>
+  <nav class="navbar">
+    <a href="quran.html" class="logo">
+      <i class="fa-solid fa-arrow-right"></i>
+      <span>الرجوع إلى فهرس السور</span>
+    </a>
+  </nav>
 
-    <main class="container">
-        <div id="quranArea" class="quran-card">
-            <div class="loading-state">
-                <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
-                <p>جاري تحميل كلام الله...</p>
-            </div>
-        </div>
-        
-        <div id="nextSurahContainer"></div>
-    </main>
-
-    <div id="tafsirModal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="tTitle">التفسير</h3>
-                <span class="close-modal" onclick="closeTafsir()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <p id="tBody">جاري جلب التفسير...</p>
-            </div>
-            <div class="modal-footer">
-                <button onclick="closeTafsir()" class="btn-close">إغلاق</button>
-            </div>
-        </div>
+  <main class="container">
+    <div class="hero-card text-center" style="margin-bottom: 20px; padding: 18px;">
+      <h1 id="surahTitle">جاري تحميل السورة...</h1>
+      <p style="color: #64748b; margin-top: 8px;">
+        اضغط على الآية لحفظ موضع القراءة وقراءة التفسير
+      </p>
     </div>
 
-    <script src="details.js"></script>
+    <div id="quranArea" class="quran-card">
+      <div class="status-box">
+        <i class="fa-solid fa-spinner fa-spin fa-2x" style="color: #1f6f50; margin-bottom: 12px;"></i>
+        <p>جاري تحميل كلام الله...</p>
+      </div>
+    </div>
+  </main>
+
+  <div id="tafsirModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeTafsir()" aria-label="إغلاق">&times;</button>
+
+      <h3 id="tTitle" class="modal-title">التفسير</h3>
+
+      <div class="modal-body">
+        <p id="tBody">جاري جلب التفسير...</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="details.js"></script>
 </body>
 </html>
