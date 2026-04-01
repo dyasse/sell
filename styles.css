@@ -813,3 +813,76 @@ input:focus {
 .quran-text span {
   transition: background 0.2s ease;
 }
+.home-hero-fixed {
+  max-width: 760px;
+  margin: 24px auto 20px;
+}
+
+.home-grid-fixed {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  align-items: stretch;
+}
+
+.home-card {
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.home-card h3 {
+  margin-top: 6px;
+}
+
+.bookmark-card {
+  display: none;
+  max-width: 760px;
+  margin: 0 auto 20px;
+}
+
+.bookmark-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+}
+
+.bookmark-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bookmark-content small {
+  display: block;
+  opacity: 0.8;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.bookmark-icon {
+  color: #f59e0b;
+  font-size: 20px;
+}
+
+.navbar {
+  padding: 14px 24px;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .home-grid-fixed {
+    grid-template-columns: 1fr;
+  }
+
+  .home-card {
+    min-height: 130px;
+  }
+}
