@@ -4,28 +4,43 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>المفضلة - نور</title>
-  <link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3208/3208035.png" />
-  
-  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3208/3208035.png" />
-  
+  <meta name="description" content="العناصر المحفوظة في المفضلة داخل تطبيق نور" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="hero">
-    <h1>المفضلة</h1>
-    <p>السور والأذكار المحفوظة</p>
-    <button id="themeToggle" class="theme-btn">🌙 الوضع الليلي</button>
-  </header>
 
-  <main>
-    <section>
-      <div id="favoritesList" class="cards"></div>
-      <p id="emptyMessage" style="text-align:center; display:none;">ما كاين حتى عنصر فالمفضلة</p>
-    </section>
+  <nav class="navbar">
+    <a href="index.html" class="logo">
+      <i class="fa-solid fa-arrow-right"></i>
+      <span>الرجوع للرئيسية</span>
+    </a>
+  </nav>
 
-    <div style="text-align:center; margin-top:20px;">
-      <a href="index.html" class="back-btn">رجوع للرئيسية</a>
+  <main class="container">
+    <div class="hero-card text-center" style="margin-bottom: 20px;">
+      <h1>المفضلة</h1>
+      <p>السور والأذكار والأدعية المحفوظة</p>
+    </div>
+
+    <div id="favoritesList" class="favorites-list">
+      <div class="status-box">جاري تحميل المفضلة...</div>
+    </div>
+
+    <p
+      id="emptyMessage"
+      class="status-box"
+      style="display: none; margin-top: 14px;"
+    >
+      ما كاين حتى عنصر فالمفضلة
+    </p>
+
+    <div class="text-center" style="margin-top: 20px;">
+      <a href="index.html" class="nav-btn">رجوع للرئيسية</a>
     </div>
   </main>
 
