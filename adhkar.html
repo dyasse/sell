@@ -1,26 +1,60 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8"><title>الأذكار - نور</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الأذكار - نور</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <nav class="navbar"><a href="index.html" class="logo"><img src="assets/favicon.png"> <span>نور</span></a></nav>
-    <header class="hero-section"><h1>الأذكار</h1></header>
-    <main class="main-content" id="adhkarContent"></main>
-    <script>
-        async function load() {
-            const res = await fetch('https://raw.githubusercontent.com/nawafalqari/azkar-api/master/azkar.json');
-            const data = await res.json();
-            const type = new URLSearchParams(window.location.search).get('type') === 'sabah' ? 'أذكار الصباح' : 'أذكار المساء';
-            document.getElementById('adhkarContent').innerHTML = data[type].map(z => `
-                <div class="quran-container" style="margin-bottom:15px; padding:20px;">
-                    <p style="font-family:Amiri; font-size:22px;">${z.content}</p>
-                    <div style="text-align:left; margin-top:10px; color:var(--primary);">التكرار: ${z.count}</div>
-                </div>
-            `).join('');
-        }
-        load();
-    </script>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo" style="text-decoration: none;">
+            <i class="fa-solid fa-arrow-right"></i>
+            <span>الرئيسية</span>
+        </a>
+    </nav>
+
+    <header class="hero" style="padding: 40px 20px 80px;">
+        <h1 style="font-size: 35px;">أذكار المسلم</h1>
+        <p>حصن نفسك بذكر الله</p>
+    </header>
+
+    <main class="container">
+        <div class="services-grid">
+            <div class="card" onclick="location.href='adhkar-details.html?type=sabah'">
+                <i class="fa-solid fa-sun" style="color: #f59e0b;"></i>
+                <h3>أذكار الصباح</h3>
+            </div>
+
+            <div class="card" onclick="location.href='adhkar-details.html?type=masa'">
+                <i class="fa-solid fa-moon" style="color: #1e3a8a;"></i>
+                <h3>أذكار المساء</h3>
+            </div>
+
+            <div class="card" onclick="location.href='adhkar-details.html?type=nawm'">
+                <i class="fa-solid fa-bed" style="color: #6366f1;"></i>
+                <h3>أذكار النوم</h3>
+            </div>
+
+            <div class="card" onclick="location.href='adhkar-details.html?type=shita'">
+                <i class="fa-solid fa-cloud-showers-heavy" style="color: #0ea5e9;"></i>
+                <h3>أذكار الشتاء</h3>
+            </div>
+
+            <div class="card" onclick="location.href='adhkar-details.html?type=khouroj'">
+                <i class="fa-solid fa-door-open" style="color: #ef4444;"></i>
+                <h3>الخروج من البيت</h3>
+            </div>
+
+            <div class="card" onclick="location.href='adhkar-details.html?type=dokhol'">
+                <i class="fa-solid fa-house-user" style="color: #10b981;"></i>
+                <h3>الدخول إلى البيت</h3>
+            </div>
+        </div>
+    </main>
+
 </body>
 </html>
