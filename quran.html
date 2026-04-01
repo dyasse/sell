@@ -5,133 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>فهرس السور - نور</title>
   <meta name="description" content="تصفح فهرس سور القرآن الكريم في تطبيق نور" />
-  <link rel="stylesheet" href="styles.css" />
   <link rel="icon" href="assets/favicon.png" />
-  <style>
-    body {
-      background: #f7f7f7;
-    }
-
-    .page-wrap {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 24px 16px 40px;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .back-link {
-      text-decoration: none;
-      color: #0f766e;
-      font-weight: 700;
-    }
-
-    .page-title {
-      text-align: center;
-      margin: 0 0 18px;
-      color: #0f172a;
-    }
-
-    .search-box {
-      margin-bottom: 18px;
-    }
-
-    .search-box input {
-      width: 100%;
-      padding: 14px 16px;
-      border-radius: 14px;
-      border: 1px solid #d1d5db;
-      font-size: 16px;
-      outline: none;
-      box-sizing: border-box;
-    }
-
-    .search-box input:focus {
-      border-color: #0f766e;
-      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
-    }
-
-    .surah-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .surah-card {
-      background: #fff;
-      border-radius: 18px;
-      padding: 16px;
-      text-decoration: none;
-      color: inherit;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-      border: 1px solid #eef2f7;
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-    }
-
-    .surah-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    }
-
-    .surah-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .surah-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .surah-name {
-      font-size: 22px;
-      font-weight: 800;
-      color: #111827;
-    }
-
-    .surah-sub {
-      color: #6b7280;
-      font-size: 14px;
-    }
-
-    .surah-id {
-      min-width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: #ecfeff;
-      color: #0f766e;
-      font-weight: 800;
-      font-size: 18px;
-    }
-
-    .status-box {
-      background: #fff;
-      border-radius: 18px;
-      padding: 18px;
-      text-align: center;
-      color: #475569;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="page-wrap">
-    <div class="topbar">
-      <a class="back-link" href="index.html">← الرئيسية</a>
-      <span></span>
-    </div>
 
-    <h1 class="page-title">فهرس السور</h1>
+  <nav class="navbar">
+    <a href="index.html" class="logo">
+      <i class="fa-solid fa-arrow-right"></i>
+      <span>الرجوع للرئيسية</span>
+    </a>
+  </nav>
+
+  <main class="container">
+    <div class="hero-card text-center" style="margin-bottom: 20px;">
+      <h1 class="page-title">فهرس السور</h1>
+      <p style="color: #64748b;">تصفح سور القرآن الكريم وابحث باسم السورة أو رقمها</p>
+    </div>
 
     <div class="search-box">
       <input
@@ -142,8 +34,10 @@
       />
     </div>
 
-    <div id="quranContainer" class="status-box">جاري تحميل فهرس السور...</div>
-  </div>
+    <div id="quranContainer" class="status-box">
+      جاري تحميل فهرس السور...
+    </div>
+  </main>
 
   <script src="quran.js"></script>
 </body>
