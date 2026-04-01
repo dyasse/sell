@@ -236,3 +236,20 @@ document.addEventListener("DOMContentLoaded", () => {
   // Existing: fetchDailyAyah(), checkBookmark()...
   handleSupportPopup();
 });
+function checkBookmark() {
+    const bookmark = JSON.parse(localStorage.getItem("nour_bookmark"));
+    const section = document.getElementById("resumeSection");
+    const text = document.getElementById("resumeText");
+    const btn = document.getElementById("resumeBtn");
+
+    if (bookmark && section) {
+        section.style.display = "block";
+        text.innerText = `سورة ${bookmark.name} - الآية ${bookmark.verse}`;
+        
+        btn.onclick = () => {
+            window.location.href = `details.html?id=${bookmark.id}&ayah=${bookmark.verse}`;
+        };
+    }
+}
+
+document.addEventListener("DOMContentLoaded", checkBookmark);
