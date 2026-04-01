@@ -111,3 +111,22 @@ body {
     padding: 15px 40px; border-radius: 15px; cursor: pointer;
     font-family: 'Cairo'; font-weight: bold; margin-top: 30px;
 }
+.nav-btn {
+  display: inline-block;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: #0f766e;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  transition: 0.2s ease;
+}
+
+.nav-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+#bookmarkSection {
+  display: none;
+}
