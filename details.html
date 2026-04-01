@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>قراءة القرآن - نور</title>
+    <link rel="icon" href="assets/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -11,27 +12,26 @@
 <body>
 
     <nav class="navbar">
-        <a href="quran.html" class="logo" style="text-decoration: none;">
+        <a href="index.html" class="logo" style="text-decoration: none;">
             <i class="fa-solid fa-arrow-right"></i>
-            <span id="surahName">السورة</span>
+            <span id="surahTitle">جاري التحميل...</span>
         </a>
     </nav>
 
     <main class="container">
-        <div id="quranDetails" class="quran-reader-card">
+        <div id="quranArea" class="quran-card">
             <div style="text-align: center; padding: 50px;">
                 <i class="fa-solid fa-spinner fa-spin fa-2x" style="color: var(--primary);"></i>
+                <p style="margin-top: 15px; font-family: Cairo;">جاري تحميل كلام الله...</p>
             </div>
         </div>
     </main>
 
-    <div id="tafsirModal" class="modal">
+    <div id="tafsirModal" class="modal" style="display: none;">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeTafsir()">&times;</span>
-            <h3 id="tafsirTitle" style="color: var(--primary); margin-bottom: 15px;"></h3>
-            <div id="tafsirBody" style="font-size: 18px; line-height: 1.8; text-align: justify;">
-                جاري تحميل التفسير...
-            </div>
+            <span onclick="closeTafsir()" style="position:absolute; left:20px; top:15px; cursor:pointer; font-size:25px;">&times;</span>
+            <h3 id="tTitle" style="color: var(--primary); margin-bottom: 15px; font-family: Cairo;"></h3>
+            <div id="tBody" style="font-family: Amiri; font-size: 22px; line-height: 1.8; text-align: justify;"></div>
         </div>
     </div>
 
