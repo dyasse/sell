@@ -1,31 +1,48 @@
 let allChapters = [];
 
+function escapeHtml(text) {
+  if (typeof text !== "string") return "";
+
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function renderChapters(chapters) {
   const container = document.getElementById("quranContainer");
   if (!container) return;
 
-  if (!chapters.length) {
-    container.innerHTML = `<div class="status-box">لم يتم العثور على نتائج.</div>`;
+  if (!Array.isArray(chapters) || chapters.length === 0) {
+    container.className = "status-box";
+    container.innerHTML = "لم يتم العثور على نتائج.";
     return;
   }
 
   container.className = "surah-list";
   container.innerHTML = chapters
-    .map(
-      (s) => `
-        <a class="surah-card" href="details.html?id=${s.id}">
+    .map((surah) => {
+      const id = surah.id || "";
+      const nameArabic = escapeHtml(surah.name_arabic || "سورة غير معروفة");
+      const nameSimple = escapeHtml(surah.name_simple || "");
+      const versesCount = surah.verses_count || 0;
+
+      return `
+        <a class="surah-card" href="details.html?id=${id}">
           <div class="surah-row">
             <div class="surah-meta">
-              <div class="surah-name">${s.name_arabic}</div>
+              <div class="surah-name">${nameArabic}</div>
               <div class="surah-sub">
-                ${s.name_simple} • عدد الآيات: ${s.verses_count}
+                ${nameSimple} • عدد الآيات: ${versesCount}
               </div>
             </div>
-            <div class="surah-id">${s.id}</div>
+            <div class="surah-id">${id}</div>
           </div>
         </a>
-      `
-    )
+      `;
+    })
     .join("");
 }
 
@@ -34,18 +51,22 @@ function setupSearch() {
   if (!input) return;
 
   input.addEventListener("input", function () {
-    const value = this.value.trim();
+    const value = this.value.trim().toLowerCase();
 
     if (!value) {
       renderChapters(allChapters);
       return;
     }
 
-    const filtered = allChapters.filter((s) => {
+    const filtered = allChapters.filter((surah) => {
+      const arabicName = (surah.name_arabic || "").toLowerCase();
+      const simpleName = (surah.name_simple || "").toLowerCase();
+      const id = String(surah.id || "");
+
       return (
-        s.name_arabic.includes(value) ||
-        s.name_simple.toLowerCase().includes(value.toLowerCase()) ||
-        String(s.id).includes(value)
+        arabicName.includes(value) ||
+        simpleName.includes(value) ||
+        id.includes(value)
       );
     });
 
@@ -57,15 +78,18 @@ async function loadQuran() {
   const container = document.getElementById("quranContainer");
   if (!container) return;
 
-  try {
-    const res = await fetch("https://api.quran.com/api/v4/chapters?language=ar");
+  container.className = "status-box";
+  container.innerHTML = "جاري تحميل فهرس السور...";
 
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
+  try {
+    const response = await fetch("https://api.quran.com/api/v4/chapters?language=ar");
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
     }
 
-    const data = await res.json();
-    allChapters = Array.isArray(data.chapters) ? data.chapters : [];
+    const data = await response.json();
+    allChapters = Array.isArray(data?.chapters) ? data.chapters : [];
 
     renderChapters(allChapters);
     setupSearch();
