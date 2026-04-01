@@ -1,95 +1,59 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>نور - رفيقك الروحاني</title>
-  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3208/3208035.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نور - الصفحة الرئيسية</title>
+    <link rel="icon" href="assets/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Amiri&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <nav class="navbar">
-    <div class="logo" onclick="window.location.reload()">
-      <i class="fa-solid fa-book-quran"></i>
-      <span>نور</span>
-    </div>
-    <div class="nav-actions">
-      <button onclick="shareApp()" class="theme-btn"><i class="fa-solid fa-share-nodes"></i></button>
-      <button onclick="openLoginModal()" class="theme-btn"><i class="fa-solid fa-user-circle"></i></button>
-      <button id="themeToggle" class="theme-btn"><i class="fa-solid fa-moon"></i></button>
-    </div>
-  </nav>
-
-  <header class="hero-section">
-    <div class="hero-content">
-      <div class="main-logo-container">
-        <div class="logo-icon-circle">
-          <img src="https://cdn-icons-png.flaticon.com/512/3208/3208035.png" alt="نور" />
+    <nav class="navbar">
+        <div class="logo">
+            <img src="assets/favicon.png" alt="كعبة">
+            <span>نور</span>
         </div>
-        <h1 class="main-logo-text">نور</h1>
-      </div>
-      
-      <div class="daily-ayah-card small-ayah">
-        <p id="dailyAyahText" class="quran-text">جاري التحميل...</p>
-        <span id="dailyAyahRef" class="ayah-ref"></span>
-      </div>
+        <div class="login-actions">
+            <button class="login-btn google"><i class="fa-brands fa-google"></i></button>
+            <button class="login-btn facebook"><i class="fa-brands fa-facebook"></i></button>
+        </div>
+    </nav>
 
-      <div id="bookmarkCard" class="daily-ayah-card bookmark-mini" style="display:none;">
-        <button id="resumeBtn" class="hero-link-btn">
-          <i class="fa-solid fa-bookmark"></i> إكمال من: <span id="bookmarkText"></span>
-        </button>
-      </div>
-    </div>
-  </header>
+    <header class="hero">
+        <h1>نُور</h1>
+        <p>رفيقك للتقرب من الله</p>
+    </header>
 
-  <main class="main-content">
-    <div class="services-grid">
-      <div class="service-card mini" onclick="window.location.href='quran.html'">
-        <i class="fa-solid fa-book-open-reader icon-green"></i>
-        <h4>القرآن</h4>
-      </div>
+    <main class="container">
+        <div class="services-grid">
+            <div class="card" onclick="location.href='quran.html'">
+                <i class="fa-solid fa-book-quran"></i>
+                <h3>القرآن الكريم</h3>
+                <p>قراءة وتفسير</p>
+            </div>
 
-      <div class="service-card mini" onclick="window.location.href='duas.html'">
-        <i class="fa-solid fa-hands-praying icon-red"></i>
-        <h4>الأدعية</h4>
-      </div>
+            <div class="card" onclick="location.href='adhkar.html'">
+                <i class="fa-solid fa-rosary"></i>
+                <h3>الأذكار</h3>
+                <p>حصن المسلم</p>
+            </div>
 
-      <div class="service-card mini" onclick="window.location.href='salat.html'">
-        <i class="fa-solid fa-mosque icon-blue"></i>
-        <h4>الصلاة</h4>
-      </div>
+            <div class="card" onclick="location.href='duas.html'">
+                <i class="fa-solid fa-hands-praying"></i>
+                <h3>الأدعية</h3>
+                <p>أدعية جامعة</p>
+            </div>
 
-      <div class="service-card mini" onclick="window.location.href='adhkar.html?type=sabah'">
-        <i class="fa-solid fa-sun icon-orange"></i>
-        <h4>الصباح</h4>
-      </div>
+            <div class="card support" onclick="location.href='support.html'">
+                <i class="fa-solid fa-heart"></i>
+                <h3>ادعمنا</h3>
+                <p>ساهم في الخير</p>
+            </div>
+        </div>
+    </main>
 
-      <div class="service-card mini" onclick="window.location.href='adhkar.html?type=masa'">
-        <i class="fa-solid fa-moon icon-blue-dark"></i>
-        <h4>المساء</h4>
-      </div>
-
-      <div class="service-card mini support-accent" onclick="window.location.href='support.html'">
-        <i class="fa-solid fa-heart pulse"></i>
-        <h4>ادعمنا</h4>
-      </div>
-    </div>
-  </main>
-
-  <div id="supportPopup" class="support-popup">
-    <div class="popup-content">
-      <span class="close-popup" onclick="closeSupportPopup()">&times;</span>
-      <div class="popup-icon"><i class="fa-solid fa-heart"></i></div>
-      <h3>ساهم في أجر "نور"</h3>
-      <p>تطبيقنا بدون إعلانات بفضل دعمكم. تبرعك البسيط يضمن استمرار هذا العمل كصدقة جارية.</p>
-      <button onclick="window.location.href='support.html'" class="pay-now-btn">كيفية الدعم</button>
-      <div id="popupTimer" class="popup-timer"></div>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
 </body>
 </html>
