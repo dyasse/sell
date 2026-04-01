@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>قراءة القرآن - نور</title>
-    <link rel="icon" href="assets/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -12,30 +11,27 @@
 <body>
 
     <nav class="navbar">
-        <a href="index.html" class="logo">
-            <img src="assets/favicon.png" alt="Logo">
-            <span>نور</span>
+        <a href="quran.html" class="logo" style="text-decoration: none;">
+            <i class="fa-solid fa-arrow-right"></i>
+            <span id="surahName">السورة</span>
         </a>
-        <div class="nav-actions">
-            <button onclick="location.href='quran.html'" class="theme-btn" style="font-size:14px; width:auto; padding:5px 15px;">الفهرس</button>
-            <button id="themeToggle" class="theme-btn">🌙</button>
-        </div>
     </nav>
 
-    <main class="main-content">
-        <div id="detailsCard">
-            <div style="text-align: center; padding: 100px;">
-                <i class="fa-solid fa-spinner fa-spin fa-3x" style="color: var(--primary);"></i>
-                <p style="margin-top:20px;">جاري تحميل كلام الله...</p>
+    <main class="container">
+        <div id="quranDetails" class="quran-reader-card">
+            <div style="text-align: center; padding: 50px;">
+                <i class="fa-solid fa-spinner fa-spin fa-2x" style="color: var(--primary);"></i>
             </div>
         </div>
     </main>
 
-    <div id="tafsirModal" class="tafsir-modal">
-        <div class="tafsir-content">
-            <span class="close-tafsir" onclick="closeTafsir()">&times;</span>
-            <h3 id="tafsirTitle" style="color:var(--primary); margin-bottom:15px; font-family:'Cairo';"></h3>
-            <div id="tafsirText" style="font-family:'Amiri'; font-size:20px; line-height:1.8; text-align:justify;"></div>
+    <div id="tafsirModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeTafsir()">&times;</span>
+            <h3 id="tafsirTitle" style="color: var(--primary); margin-bottom: 15px;"></h3>
+            <div id="tafsirBody" style="font-size: 18px; line-height: 1.8; text-align: justify;">
+                جاري تحميل التفسير...
+            </div>
         </div>
     </div>
 
