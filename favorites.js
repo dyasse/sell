@@ -1,76 +1,129 @@
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(reg => console.log('Service Worker خدام بنجاح!'))
-      .catch(err => console.log('وقع مشكل في الـ Service Worker', err));
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then(() => console.log("Service Worker خدام بنجاح!"))
+      .catch((err) => console.log("وقع مشكل في Service Worker", err));
   });
 }
-async function loadFavorites() {
-  const response = await fetch("products.json");
-  const data = await response.json();
 
-  const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+function getFavorites() {
+  try {
+    const stored = localStorage.getItem("nour_favorites");
+    return stored ? JSON.parse(stored) : [];
+  } catch (error) {
+    console.error("Favorites parse error:", error);
+    return [];
+  }
+}
+
+function saveFavorites(items) {
+  localStorage.setItem("nour_favorites", JSON.stringify(items));
+}
+
+function escapeHtml(text) {
+  if (typeof text !== "string") return "";
+
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function getTypeLabel(type) {
+  switch (type) {
+    case "dua":
+      return "دعاء";
+    case "zekr":
+      return "ذِكر";
+    case "ayah":
+      return "آية";
+    default:
+      return "عنصر محفوظ";
+  }
+}
+
+function getOpenLink(item) {
+  if (item.type === "ayah" && item.id) {
+    if (item.verse) {
+      return `details.html?id=${item.id}&ayah=${item.verse}`;
+    }
+    return `details.html?id=${item.id}`;
+  }
+
+  return null;
+}
+
+function removeFavorite(index) {
+  const favorites = getFavorites();
+  if (index < 0 || index >= favorites.length) return;
+
+  favorites.splice(index, 1);
+  saveFavorites(favorites);
+  loadFavorites();
+}
+
+function loadFavorites() {
+  const favorites = getFavorites();
   const favoritesList = document.getElementById("favoritesList");
   const emptyMessage = document.getElementById("emptyMessage");
 
-  const favoriteItems = data.filter(item => favorites.includes(item.id));
+  if (!favoritesList || !emptyMessage) return;
 
-  if (favoriteItems.length === 0) {
-    emptyMessage.style.display = "block";
+  if (!favorites.length) {
     favoritesList.innerHTML = "";
+    emptyMessage.style.display = "block";
     return;
   }
 
   emptyMessage.style.display = "none";
-  favoritesList.innerHTML = "";
 
-  favoriteItems.forEach(item => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <h3>${item.title}</h3>
-      <p>${item.subtitle}</p>
-      <div class="card-actions">
-        <button onclick="goToDetails(${item.id})">فتح</button>
-        <button onclick="removeFavorite(${item.id})">حذف</button>
-      </div>
-    `;
-    favoritesList.appendChild(card);
-  });
+  favoritesList.innerHTML = favorites
+    .map((item, index) => {
+      const typeLabel = getTypeLabel(item.type);
+      const openLink = getOpenLink(item);
+
+      return `
+        <div class="favorite-card">
+          <div class="favorite-type">${escapeHtml(typeLabel)}</div>
+
+          ${
+            item.title
+              ? `<div class="favorite-title">${escapeHtml(item.title)}</div>`
+              : ""
+          }
+
+          <div class="favorite-text">${escapeHtml(item.text || "")}</div>
+
+          ${
+            item.description
+              ? `<div class="zekr-desc">${escapeHtml(item.description)}</div>`
+              : ""
+          }
+
+          ${
+            item.repeat
+              ? `<div class="dua-source">عدد التكرار: ${escapeHtml(String(item.repeat))}</div>`
+              : ""
+          }
+
+          <div class="favorite-actions">
+            ${
+              openLink
+                ? `<a href="${openLink}" class="nav-btn">فتح</a>`
+                : ""
+            }
+
+            <button class="secondary-btn" onclick="removeFavorite(${index})">
+              حذف من المفضلة
+            </button>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
 }
 
-function goToDetails(id) {
-  window.location.href = `details.html?id=${id}`;
-}
-
-function removeFavorite(id) {
-  let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-  favorites = favorites.filter(itemId => itemId !== id);
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-  loadFavorites();
-}
-
-function setupTheme() {
-  const themeToggle = document.getElementById("themeToggle");
-  const savedTheme = localStorage.getItem("theme");
-
-  if (savedTheme === "dark") {
-    document.body.classList.add("dark");
-    themeToggle.textContent = "☀️ الوضع النهاري";
-  }
-
-  themeToggle.addEventListener("click", () => {
-    document.body.classList.toggle("dark");
-
-    if (document.body.classList.contains("dark")) {
-      localStorage.setItem("theme", "dark");
-      themeToggle.textContent = "☀️ الوضع النهاري";
-    } else {
-      localStorage.setItem("theme", "light");
-      themeToggle.textContent = "🌙 الوضع الليلي";
-    }
-  });
-}
-
-loadFavorites();
-setupTheme();
+document.addEventListener("DOMContentLoaded", loadFavorites);
