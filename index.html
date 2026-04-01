@@ -1,91 +1,107 @@
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>نور</title>
-
+  <meta name="description" content="تطبيق نور للقرآن الكريم والأذكار والأدعية" />
   <link rel="icon" href="assets/favicon.png" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
-
-<nav class="navbar">
-  <div class="logo">
-    <img src="assets/favicon.png">
-    نور
-  </div>
-</nav>
-
-<main class="container">
-
-  <div class="hero-card">
-    <h1>نُور</h1>
-    <p>رفيقك للتقرب من الله</p>
-  </div>
-
-  <div id="bookmarkSection" class="bookmark-card">
-    <a id="resumeLink" class="bookmark-link">
-      <div class="bookmark-content">
-        <i class="fa-solid fa-bookmark bookmark-icon"></i>
-        <div>
-          <small>واصل القراءة من</small>
-          <strong id="bookmarkTitle"></strong>
-        </div>
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="brand-mark">
+        <img src="assets/favicon.png" alt="نور" />
       </div>
-      ←
+      <div class="brand-text">
+        <span class="brand-title">نور</span>
+        <span class="brand-subtitle">Quran & Azkar</span>
+      </div>
     </a>
-  </div>
+  </nav>
 
-  <div class="home-grid">
+  <main class="page-shell">
+    <section class="hero-panel">
+      <div class="hero-badge">
+        <i class="fa-solid fa-sparkles"></i>
+        <span>تطبيق إسلامي بسيط ومريح</span>
+      </div>
 
-```
-<a class="home-card" href="quran.html">
-  <i class="fa-solid fa-book-quran"></i>
-  <h3>القرآن</h3>
-  <p>قراءة وتفسير</p>
-</a>
+      <h1>نُور</h1>
+      <p>رفيقك اليومي للقرآن والأذكار والأدعية ومواقيت الصلاة</p>
+    </section>
 
-<a class="home-card" href="adhkar.html">
-  <i class="fa-solid fa-rosary"></i>
-  <h3>الأذكار</h3>
-  <p>حصن المسلم</p>
-</a>
+    <section id="bookmarkSection" class="continue-card">
+      <a id="resumeLink" href="#" class="continue-link">
+        <div class="continue-left">
+          <div class="continue-icon">
+            <i class="fa-solid fa-bookmark"></i>
+          </div>
+          <div class="continue-text">
+            <span class="continue-label">واصل القراءة من</span>
+            <strong id="bookmarkTitle">سورة الفاتحة - آية 1</strong>
+          </div>
+        </div>
+        <div class="continue-arrow">
+          <i class="fa-solid fa-arrow-left"></i>
+        </div>
+      </a>
+    </section>
 
-<a class="home-card" href="duas.html">
-  <i class="fa-solid fa-hands-praying"></i>
-  <h3>الأدعية</h3>
-  <p>أدعية مختارة</p>
-</a>
+    <section class="apps-grid">
+      <a class="app-card quran-card-home" href="quran.html">
+        <div class="app-icon-wrap">
+          <i class="fa-solid fa-book-quran"></i>
+        </div>
+        <h3>القرآن الكريم</h3>
+        <p>قراءة وتفسير السور</p>
+      </a>
 
-<a class="home-card" href="favorites.html">
-  <i class="fa-solid fa-heart"></i>
-  <h3>المفضلة</h3>
-  <p>المحفوظات</p>
-</a>
+      <a class="app-card" href="adhkar.html">
+        <div class="app-icon-wrap">
+          <i class="fa-solid fa-rosary"></i>
+        </div>
+        <h3>الأذكار</h3>
+        <p>حصن المسلم اليومي</p>
+      </a>
 
-<a class="home-card" href="salat.html">
-  <i class="fa-solid fa-mosque"></i>
-  <h3>الصلاة</h3>
-  <p>المواقيت</p>
-</a>
+      <a class="app-card" href="duas.html">
+        <div class="app-icon-wrap">
+          <i class="fa-solid fa-hands-praying"></i>
+        </div>
+        <h3>الأدعية</h3>
+        <p>أدعية مختارة جامعة</p>
+      </a>
 
-<a class="home-card" href="support.html">
-  <i class="fa-solid fa-hand-holding-heart"></i>
-  <h3>ادعمنا</h3>
-  <p>ساهم في الخير</p>
-</a>
-```
+      <a class="app-card" href="favorites.html">
+        <div class="app-icon-wrap">
+          <i class="fa-solid fa-heart"></i>
+        </div>
+        <h3>المفضلة</h3>
+        <p>العناصر المحفوظة</p>
+      </a>
 
-  </div>
+      <a class="app-card" href="salat.html">
+        <div class="app-icon-wrap">
+          <i class="fa-solid fa-mosque"></i>
+        </div>
+        <h3>الصلاة</h3>
+        <p>المواقيت والقبلة</p>
+      </a>
 
-</main>
+      <a class="app-card" href="support.html">
+        <div class="app-icon-wrap">
+          <i class="fa-solid fa-hand-holding-heart"></i>
+        </div>
+        <h3>ادعمنا</h3>
+        <p>ساهم في استمرار المشروع</p>
+      </a>
+    </section>
+  </main>
 
-<script src="script.js"></script>
-
+  <script src="script.js"></script>
 </body>
 </html>
