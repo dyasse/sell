@@ -1,31 +1,79 @@
-async function loadQuran() {
-    const container = document.getElementById("quranContainer");
-    if (!container) return;
+let allChapters = [];
 
-    try {
-        const res = await fetch("https://api.quran.com/api/v4/chapters?language=ar");
-        const data = await res.json();
-        
-        let html = `
-            <div style="background:var(--card); border-radius:20px; overflow:hidden; box-shadow:var(--shadow);">
-                <table style="width:100%; border-collapse:collapse; text-align:center;">
-                    <thead style="background:#f1f5f9; color:var(--primary);">
-                        <tr><th style="padding:15px;">#</th><th style="padding:15px;">السورة</th><th style="padding:15px;">الآيات</th></tr>
-                    </thead>
-                    <tbody>
-        `;
+function renderChapters(chapters) {
+  const container = document.getElementById("quranContainer");
+  if (!container) return;
 
-        data.chapters.forEach(s => {
-            html += `
-                <tr onclick="location.href='details.html?id=${s.id}'" style="border-bottom:1px solid #eee; cursor:pointer;">
-                    <td style="padding:15px;">${s.id}</td>
-                    <td style="padding:15px; font-family:Amiri; font-size:20px; font-weight:bold; color:var(--primary);">${s.name_arabic}</td>
-                    <td style="padding:15px;">${s.verses_count}</td>
-                </tr>
-            `;
-        });
+  if (!chapters.length) {
+    container.innerHTML = `<div class="status-box">لم يتم العثور على نتائج.</div>`;
+    return;
+  }
 
-        container.innerHTML = html + "</tbody></table></div>";
-    } catch (e) { container.innerHTML = "<p>فشل التحميل.</p>"; }
+  container.className = "surah-list";
+  container.innerHTML = chapters
+    .map(
+      (s) => `
+        <a class="surah-card" href="details.html?id=${s.id}">
+          <div class="surah-row">
+            <div class="surah-meta">
+              <div class="surah-name">${s.name_arabic}</div>
+              <div class="surah-sub">
+                ${s.name_simple} • عدد الآيات: ${s.verses_count}
+              </div>
+            </div>
+            <div class="surah-id">${s.id}</div>
+          </div>
+        </a>
+      `
+    )
+    .join("");
 }
+
+function setupSearch() {
+  const input = document.getElementById("surahSearch");
+  if (!input) return;
+
+  input.addEventListener("input", function () {
+    const value = this.value.trim();
+
+    if (!value) {
+      renderChapters(allChapters);
+      return;
+    }
+
+    const filtered = allChapters.filter((s) => {
+      return (
+        s.name_arabic.includes(value) ||
+        s.name_simple.toLowerCase().includes(value.toLowerCase()) ||
+        String(s.id).includes(value)
+      );
+    });
+
+    renderChapters(filtered);
+  });
+}
+
+async function loadQuran() {
+  const container = document.getElementById("quranContainer");
+  if (!container) return;
+
+  try {
+    const res = await fetch("https://api.quran.com/api/v4/chapters?language=ar");
+
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+    allChapters = Array.isArray(data.chapters) ? data.chapters : [];
+
+    renderChapters(allChapters);
+    setupSearch();
+  } catch (error) {
+    console.error("Failed to load chapters:", error);
+    container.className = "status-box";
+    container.innerHTML = "تعذر تحميل فهرس السور حالياً. حاول مرة أخرى.";
+  }
+}
+
 document.addEventListener("DOMContentLoaded", loadQuran);
