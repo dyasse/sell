@@ -35,8 +35,10 @@ const quranDuas = [
 
 function getFavorites() {
   try {
-    return JSON.parse(localStorage.getItem("nour_favorites")) || [];
-  } catch {
+    const stored = localStorage.getItem("nour_favorites");
+    return stored ? JSON.parse(stored) : [];
+  } catch (error) {
+    console.error("Favorites parse error:", error);
     return [];
   }
 }
@@ -49,58 +51,91 @@ function isFavorite(text) {
   return getFavorites().some((item) => item.text === text);
 }
 
-function toggleFavorite(dua) {
+function toggleFavoriteByIndex(index) {
+  const dua = quranDuas[index];
+  if (!dua) return;
+
   const favorites = getFavorites();
   const exists = favorites.some((item) => item.text === dua.text);
 
   const updated = exists
     ? favorites.filter((item) => item.text !== dua.text)
-    : [...favorites, { type: "dua", title: dua.source, text: dua.text }];
+    : [
+        ...favorites,
+        {
+          type: "dua",
+          title: dua.source,
+          text: dua.text,
+        },
+      ];
 
   saveFavorites(updated);
   renderDuas();
 }
 
-async function shareDua(text) {
+async function shareDuaByIndex(index) {
+  const dua = quranDuas[index];
+  if (!dua) return;
+
   try {
     if (navigator.share) {
       await navigator.share({
         title: "دعاء من تطبيق نور",
-        text,
+        text: dua.text,
       });
-    } else {
-      await navigator.clipboard.writeText(text);
+    } else if (navigator.clipboard) {
+      await navigator.clipboard.writeText(dua.text);
       alert("تم نسخ الدعاء.");
+    } else {
+      alert("المشاركة غير متوفرة في هذا الجهاز.");
     }
   } catch (error) {
     console.error("Share error:", error);
   }
 }
 
+function escapeHtml(text) {
+  if (typeof text !== "string") return "";
+
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function renderDuas() {
   const container = document.getElementById("duasContainer");
   if (!container) return;
 
+  if (!quranDuas.length) {
+    container.className = "status-box";
+    container.innerHTML = "لا توجد أدعية متاحة حالياً.";
+    return;
+  }
+
+  container.className = "duas-list";
   container.innerHTML = quranDuas
-    .map((dua) => {
+    .map((dua, index) => {
       const fav = isFavorite(dua.text);
 
       return `
         <div class="dua-card">
-          <div class="dua-text">${dua.text}</div>
-          <div class="dua-source">${dua.source}</div>
+          <div class="dua-text">${escapeHtml(dua.text)}</div>
+          <div class="dua-source">${escapeHtml(dua.source)}</div>
 
           <div class="dua-actions">
             <button
               class="dua-btn primary"
-              onclick='toggleFavorite(${JSON.stringify(dua).replace(/'/g, "&apos;")})'
+              onclick="toggleFavoriteByIndex(${index})"
             >
               ${fav ? "إزالة من المفضلة" : "حفظ في المفضلة"}
             </button>
 
             <button
               class="dua-btn secondary"
-              onclick='shareDua(${JSON.stringify(dua.text).replace(/'/g, "&apos;")})'
+              onclick="shareDuaByIndex(${index})"
             >
               مشاركة / نسخ
             </button>
