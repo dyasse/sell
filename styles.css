@@ -130,3 +130,22 @@ body {
 #bookmarkSection {
   display: none;
 }
+a {
+  transition: 0.2s ease;
+}
+
+a:hover {
+  opacity: 0.95;
+}
+
+button {
+  transition: 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
