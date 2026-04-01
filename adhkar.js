@@ -1,45 +1,27 @@
-const TYPE_CONFIG = {
-  sabah: {
-    title: "أذكار الصباح",
-    apiCategory: "أذكار الصباح",
-  },
-  masa: {
-    title: "أذكار المساء",
-    apiCategory: "أذكار المساء",
-  },
-  nawm: {
-    title: "أذكار النوم",
-    apiCategory: "أذكار النوم",
-  },
-  shita: {
-    title: "أذكار المطر",
-    apiCategory: "أذكار المطر",
-  },
-  khouroj: {
-    title: "أذكار الخروج من المنزل",
-    apiCategory: "أذكار الخروج من المنزل",
-  },
-  dokhol: {
-    title: "أذكار الدخول إلى المنزل",
-    apiCategory: "أذكار الدخول إلى المنزل",
-  },
-};
-
 function getType() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("type") || "sabah";
+  const type = params.get("type") || "sabah";
+  return ["sabah", "masa"].includes(type) ? type : "sabah";
 }
 
 function setActiveCategory(type) {
-  document.querySelectorAll(".cat-btn").forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.type === type);
+  const buttons = document.querySelectorAll(".cat-btn");
+
+  buttons.forEach((btn) => {
+    const btnType =
+      btn.dataset.type ||
+      new URL(btn.href, window.location.origin).searchParams.get("type");
+
+    btn.classList.toggle("active", btnType === type);
   });
 }
 
 function getFavorites() {
   try {
-    return JSON.parse(localStorage.getItem("nour_favorites")) || [];
-  } catch {
+    const stored = localStorage.getItem("nour_favorites");
+    return stored ? JSON.parse(stored) : [];
+  } catch (error) {
+    console.error("Favorites parse error:", error);
     return [];
   }
 }
@@ -49,15 +31,20 @@ function saveFavorites(items) {
 }
 
 function isFavorite(text) {
-  const favorites = getFavorites();
-  return favorites.some((item) => item.text === text);
+  return getFavorites().some((item) => item.text === text);
 }
 
-function toggleFavorite(item) {
+function toggleFavoriteByIndex(index) {
+  const currentType = getType();
+  const section = window.currentAdhkarSection;
+  if (!section || !section.items || !section.items[index]) return;
+
+  const item = section.items[index];
   const favorites = getFavorites();
   const exists = favorites.some((fav) => fav.text === item.text);
 
-  let updated;
+  let updated = [];
+
   if (exists) {
     updated = favorites.filter((fav) => fav.text !== item.text);
   } else {
@@ -65,60 +52,86 @@ function toggleFavorite(item) {
       ...favorites,
       {
         type: "zekr",
-        title: item.categoryTitle,
-        text: item.content,
-        description: item.description || "",
-      },
+        title: section.title,
+        text: item.text,
+        repeat: item.repeat || 1
+      }
     ];
   }
 
   saveFavorites(updated);
-  loadAdhkar();
+  renderAdhkar(section);
 }
 
-function renderAdhkar(items, categoryTitle) {
+function countDown(index) {
+  const badge = document.getElementById(`count-${index}`);
+  const card = document.getElementById(`zekr-${index}`);
+
+  if (!badge || !card) return;
+
+  let current = parseInt(badge.dataset.count || badge.textContent, 10) || 0;
+
+  if (current > 0) {
+    current -= 1;
+    badge.dataset.count = current;
+
+    if (current === 0) {
+      badge.textContent = "✓";
+      card.classList.add("done");
+      if (navigator.vibrate) navigator.vibrate(50);
+    } else {
+      badge.textContent = current;
+    }
+  }
+}
+
+function escapeHtml(text) {
+  if (typeof text !== "string") return "";
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function renderAdhkar(section) {
   const container = document.getElementById("adhkarList");
   if (!container) return;
 
-  if (!items.length) {
+  if (!section || !Array.isArray(section.items) || !section.items.length) {
     container.className = "status-box";
     container.innerHTML = "لا توجد أذكار متاحة في هذا القسم حالياً.";
     return;
   }
 
+  window.currentAdhkarSection = section;
+
+  const titleEl = document.getElementById("adhkarTitle");
+  if (titleEl) {
+    titleEl.textContent = section.title;
+  }
+
   container.className = "adhkar-list";
-  container.innerHTML = items
+  container.innerHTML = section.items
     .map((item, index) => {
-      const count = parseInt(item.count, 10) || 1;
-      const fav = isFavorite(item.content);
+      const count = parseInt(item.repeat, 10) || 1;
+      const fav = isFavorite(item.text);
 
       return `
         <div class="zekr-card" id="zekr-${index}">
           <div class="zekr-header">
-            <div class="zekr-title">${categoryTitle}</div>
-            <div class="count-badge" id="count-${index}">${count}</div>
+            <div class="zekr-title">${escapeHtml(section.title)}</div>
+            <div class="count-badge" id="count-${index}" data-count="${count}">${count}</div>
           </div>
 
-          <div class="zekr-text">${item.content}</div>
-
-          ${
-            item.description
-              ? `<div class="zekr-desc">${item.description}</div>`
-              : ""
-          }
+          <div class="zekr-text">${escapeHtml(item.text)}</div>
 
           <div class="zekr-actions">
             <button class="zekr-btn primary" onclick="countDown(${index})">
               تسبيحة مكتملة
             </button>
-            <button
-              class="zekr-btn secondary"
-              onclick='toggleFavorite(${JSON.stringify({
-                content: item.content,
-                description: item.description || "",
-                categoryTitle,
-              }).replace(/'/g, "&apos;")})'
-            >
+            <button class="zekr-btn secondary" onclick="toggleFavoriteByIndex(${index})">
               ${fav ? "إزالة من المفضلة" : "حفظ في المفضلة"}
             </button>
           </div>
@@ -128,51 +141,31 @@ function renderAdhkar(items, categoryTitle) {
     .join("");
 }
 
-function countDown(index) {
-  const badge = document.getElementById(`count-${index}`);
-  const card = document.getElementById(`zekr-${index}`);
-  if (!badge || !card) return;
-
-  let current = parseInt(badge.textContent, 10) || 0;
-
-  if (current > 0) {
-    current -= 1;
-    badge.textContent = current;
-
-    if (current === 0) {
-      card.classList.add("done");
-      badge.textContent = "✓";
-      if (navigator.vibrate) navigator.vibrate(50);
-    }
-  }
-}
-
 async function loadAdhkar() {
   const type = getType();
-  const titleEl = document.getElementById("adhkarTitle");
   const listEl = document.getElementById("adhkarList");
 
-  const config = TYPE_CONFIG[type] || TYPE_CONFIG.sabah;
-  if (titleEl) titleEl.textContent = config.title;
   setActiveCategory(type);
 
+  if (listEl) {
+    listEl.className = "status-box";
+    listEl.innerHTML = "جاري تحميل الأذكار...";
+  }
+
   try {
-    const response = await fetch(
-      "https://raw.githubusercontent.com/nawafalqari/azkar-api/master/azkar.json"
-    );
+    const response = await fetch("adhkar.json");
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
 
     const data = await response.json();
-    const list = Array.isArray(data[config.apiCategory])
-      ? data[config.apiCategory]
-      : [];
+    const section = data[type];
 
-    renderAdhkar(list, config.title);
-  } catch (e) {
-    console.error("Adhkar load error:", e);
+    renderAdhkar(section);
+  } catch (error) {
+    console.error("Adhkar load error:", error);
+
     if (listEl) {
       listEl.className = "status-box";
       listEl.innerHTML = "وقع خطأ أثناء تحميل الأذكار. حاول مرة أخرى.";
