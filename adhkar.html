@@ -5,38 +5,297 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>الأذكار - نور</title>
   <meta name="description" content="أذكار المسلم اليومية في تطبيق نور" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
   <link rel="icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    .adhkar-shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 28px auto 48px;
+    }
+
+    .adhkar-hero {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(31, 111, 80, 0.04) 0%, rgba(31, 111, 80, 0.09) 100%),
+        #fff;
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 34px 28px 30px;
+      box-shadow: var(--shadow-md);
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .adhkar-hero::before,
+    .adhkar-hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      background: rgba(31, 111, 80, 0.06);
+      pointer-events: none;
+    }
+
+    .adhkar-hero::before {
+      width: 180px;
+      height: 180px;
+      top: -70px;
+      right: -50px;
+    }
+
+    .adhkar-hero::after {
+      width: 120px;
+      height: 120px;
+      left: -20px;
+      bottom: -45px;
+    }
+
+    .adhkar-badge {
+      width: fit-content;
+      margin: 0 auto 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .adhkar-hero h1 {
+      font-size: clamp(34px, 5vw, 52px);
+      line-height: 1.1;
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .adhkar-hero p {
+      color: var(--muted);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .adhkar-cats {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .adhkar-cats .cat-btn {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      min-height: 68px;
+      padding: 12px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      color: var(--text);
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .adhkar-cats .cat-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(31, 111, 80, 0.22);
+    }
+
+    .adhkar-cats .cat-btn.active {
+      background: linear-gradient(135deg, var(--primary) 0%, #2a845f 100%);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 18px 40px rgba(31, 111, 80, 0.16);
+    }
+
+    .adhkar-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .zekr-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      box-shadow: var(--shadow-sm);
+      padding: 22px 20px;
+      transition: 0.2s ease;
+    }
+
+    .zekr-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .zekr-card.done {
+      border-color: rgba(31, 111, 80, 0.28);
+      background: linear-gradient(135deg, rgba(31, 111, 80, 0.03), rgba(31, 111, 80, 0.08));
+    }
+
+    .zekr-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .zekr-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .count-badge {
+      min-width: 48px;
+      height: 48px;
+      padding: 0 12px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .zekr-text {
+      font-family: "Amiri", serif;
+      font-size: 32px;
+      line-height: 2.2;
+      color: var(--text);
+      margin-bottom: 18px;
+      text-align: right;
+    }
+
+    .zekr-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .zekr-btn {
+      border: none;
+      border-radius: 14px;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: 700;
+      font-family: inherit;
+      transition: 0.2s ease;
+    }
+
+    .zekr-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .zekr-btn.primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .zekr-btn.secondary {
+      background: #eef3f1;
+      color: var(--text);
+    }
+
+    @media (max-width: 1100px) {
+      .adhkar-cats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .adhkar-shell {
+        width: min(100% - 20px, 1120px);
+        margin-top: 18px;
+      }
+
+      .adhkar-hero {
+        padding: 24px 18px;
+        border-radius: 24px;
+      }
+
+      .adhkar-hero h1 {
+        font-size: 38px;
+      }
+
+      .adhkar-cats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .adhkar-cats .cat-btn {
+        min-height: 60px;
+        font-size: 14px;
+      }
+
+      .zekr-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .zekr-text {
+        font-size: 26px;
+        line-height: 2;
+      }
+
+      .zekr-actions {
+        flex-direction: column;
+      }
+
+      .zekr-btn {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
-
   <nav class="navbar">
-    <a href="index.html" class="logo">
-      <i class="fa-solid fa-arrow-right"></i>
-      <span>الرجوع للرئيسية</span>
+    <a href="index.html" class="brand">
+      <div class="brand-mark">
+        <img src="assets/favicon.png" alt="نور" />
+      </div>
+      <div class="brand-text">
+        <span class="brand-title">نور</span>
+        <span class="brand-subtitle">Azkar</span>
+      </div>
     </a>
   </nav>
 
-  <main class="container" style="margin-top: 20px;">
-    <div class="hero-card text-center" style="margin-bottom: 20px; padding: 20px;">
-      <h1 id="adhkarTitle">الأذكار</h1>
-      <p style="color: #64748b; margin-top: 8px;">أذكار يومية للمسلم مع واجهة بسيطة ومريحة</p>
-    </div>
+  <main class="adhkar-shell">
+    <section class="adhkar-hero">
+      <div class="adhkar-badge">
+        <i class="fa-solid fa-rosary"></i>
+        <span>حصن المسلم اليومي</span>
+      </div>
 
-    <div class="categories" style="margin-bottom: 20px;">
+      <h1 id="adhkarTitle">الأذكار</h1>
+      <p>أذكار يومية للمسلم بواجهة مرتبة ومريحة للقراءة</p>
+    </section>
+
+    <section class="adhkar-cats">
       <a class="cat-btn" href="adhkar.html?type=sabah">أذكار الصباح</a>
       <a class="cat-btn" href="adhkar.html?type=masa">أذكار المساء</a>
       <a class="cat-btn" href="adhkar.html?type=nawm">أذكار النوم</a>
       <a class="cat-btn" href="adhkar.html?type=shita">أذكار المطر</a>
       <a class="cat-btn" href="adhkar.html?type=khouroj">الخروج من المنزل</a>
       <a class="cat-btn" href="adhkar.html?type=dokhol">الدخول إلى المنزل</a>
-    </div>
+    </section>
 
-    <div id="adhkarList" class="adhkar-list">
+    <section id="adhkarList" class="adhkar-list">
       <div class="status-box">جاري تحميل الأذكار...</div>
-    </div>
+    </section>
   </main>
 
   <script src="adhkar.js"></script>
