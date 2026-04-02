@@ -8,10 +8,7 @@ function setActiveCategory(type) {
   const buttons = document.querySelectorAll(".cat-btn");
 
   buttons.forEach((btn) => {
-    const btnType =
-      btn.dataset.type ||
-      new URL(btn.href, window.location.origin).searchParams.get("type");
-
+    const btnType = new URL(btn.href, window.location.origin).searchParams.get("type");
     btn.classList.toggle("active", btnType === type);
   });
 }
@@ -35,7 +32,6 @@ function isFavorite(text) {
 }
 
 function toggleFavoriteByIndex(index) {
-  const currentType = getType();
   const section = window.currentAdhkarSection;
   if (!section || !section.items || !section.items[index]) return;
 
@@ -97,6 +93,8 @@ function escapeHtml(text) {
 
 function renderAdhkar(section) {
   const container = document.getElementById("adhkarList");
+  const titleEl = document.getElementById("adhkarTitle");
+
   if (!container) return;
 
   if (!section || !Array.isArray(section.items) || !section.items.length) {
@@ -107,7 +105,6 @@ function renderAdhkar(section) {
 
   window.currentAdhkarSection = section;
 
-  const titleEl = document.getElementById("adhkarTitle");
   if (titleEl) {
     titleEl.textContent = section.title;
   }
@@ -119,7 +116,7 @@ function renderAdhkar(section) {
       const fav = isFavorite(item.text);
 
       return `
-        <div class="zekr-card" id="zekr-${index}">
+        <article class="zekr-card" id="zekr-${index}">
           <div class="zekr-header">
             <div class="zekr-title">${escapeHtml(section.title)}</div>
             <div class="count-badge" id="count-${index}" data-count="${count}">${count}</div>
@@ -135,7 +132,7 @@ function renderAdhkar(section) {
               ${fav ? "إزالة من المفضلة" : "حفظ في المفضلة"}
             </button>
           </div>
-        </div>
+        </article>
       `;
     })
     .join("");
@@ -154,14 +151,12 @@ async function loadAdhkar() {
 
   try {
     const response = await fetch("adhkar.json");
-
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
 
     const data = await response.json();
     const section = data[type];
-
     renderAdhkar(section);
   } catch (error) {
     console.error("Adhkar load error:", error);
