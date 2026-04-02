@@ -222,6 +222,12 @@
       width: 100%;
     }
 
+    .kofi-widget-wrap {
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+    }
+
     @media (max-width: 780px) {
       .support-shell {
         width: min(100% - 20px, 1120px);
@@ -253,6 +259,10 @@
 
       .support-verse {
         font-size: 22px;
+      }
+
+      .kofi-widget-wrap {
+        justify-content: stretch;
       }
     }
   </style>
@@ -300,28 +310,6 @@
         <div class="support-card-head">
           <div class="support-card-title">
             <div class="support-card-icon">
-              <i class="fa-solid fa-credit-card"></i>
-            </div>
-            <span>بطاقة / Apple Pay</span>
-          </div>
-        </div>
-
-        <p class="support-card-desc">
-          أسهل وأسرع وسيلة للدعم عبر صفحة دفع آمنة. بدّل الرابط ديال Stripe بالرابط ديالك الحقيقي.
-        </p>
-
-        <div class="support-actions">
-          <a class="support-btn primary" id="stripeSupportBtn" href="#" target="_blank" rel="noopener">
-            <i class="fa-solid fa-lock"></i>
-            ادعم الآن
-          </a>
-        </div>
-      </article>
-
-      <article class="support-card-pro">
-        <div class="support-card-head">
-          <div class="support-card-title">
-            <div class="support-card-icon">
               <i class="fa-brands fa-paypal"></i>
             </div>
             <span>PayPal</span>
@@ -343,19 +331,16 @@
             <div class="support-card-icon">
               <i class="fa-solid fa-mug-hot"></i>
             </div>
-            <span>Buy Me a Coffee</span>
+            <span>Ko-fi</span>
           </div>
         </div>
 
         <p class="support-card-desc">
-          دعم خفيف وسريع، مناسب للناس اللي بغاو يساهمو مرة وحدة أو بشكل متكرر.
+          دعم سريع وسهل عبر Ko-fi، تقدر تساهم بأي مبلغ بطريقة بسيطة وآمنة.
         </p>
 
         <div class="support-actions">
-          <a class="support-btn primary" id="bmcSupportBtn" href="#" target="_blank" rel="noopener">
-            <i class="fa-solid fa-heart"></i>
-            ادعم المشروع
-          </a>
+          <div class="kofi-widget-wrap" id="kofiWidgetWrap"></div>
         </div>
       </article>
 
@@ -382,10 +367,33 @@
           </button>
         </div>
       </article>
+
+      <article class="support-card-pro">
+        <div class="support-card-head">
+          <div class="support-card-title">
+            <div class="support-card-icon">
+              <i class="fa-solid fa-shield-heart"></i>
+            </div>
+            <span>رسالة للمساهمين</span>
+          </div>
+        </div>
+
+        <p class="support-card-desc">
+          كل مساهمة كتعاون باش التطبيق يبقى خدام، سريع، ومتاح للناس بلا تعقيد.
+          شكراً بزاف على الدعم والثقة.
+        </p>
+
+        <div class="support-actions">
+          <a class="support-btn secondary" href="index.html">
+            <i class="fa-solid fa-house"></i>
+            الرجوع للرئيسية
+          </a>
+        </div>
+      </article>
     </section>
 
     <p class="support-note">
-      ملاحظة: خاصك تبدل الروابط الوهمية بالروابط الحقيقية ديال Stripe / Buy Me a Coffee وعنوان المحفظة الحقيقي.
+      ملاحظة: بدّل عنوان المحفظة بعنوانك الحقيقي إلا بغيتي تعتمد العملات الرقمية.
     </p>
   </main>
 
@@ -395,6 +403,16 @@
     paypal.HostedButtons({
       hostedButtonId: "UTDA8HSA6Q2E6",
     }).render("#paypal-container-UTDA8HSA6Q2E6");
+  </script>
+
+  <script type="text/javascript" src="https://storage.ko-fi.com/cdn/widget/Widget_2.js"></script>
+  <script type="text/javascript">
+    const kofiWrap = document.getElementById("kofiWidgetWrap");
+    if (kofiWrap) {
+      kofiWrap.innerHTML = "";
+      kofiwidget2.init("دعمك استمرارية مشروعنا", "#72a4f2", "D1D6YOQQF");
+      kofiwidget2.draw();
+    }
   </script>
 </body>
 </html>
