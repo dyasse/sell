@@ -7,110 +7,383 @@
   <meta name="description" content="ساهم في دعم مشروع نور الإسلامي" />
   <link rel="icon" href="assets/favicon.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    .support-shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 28px auto 48px;
+    }
+
+    .support-hero {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(31, 111, 80, 0.04) 0%, rgba(31, 111, 80, 0.09) 100%),
+        #fff;
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 34px 28px 30px;
+      box-shadow: var(--shadow-md);
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .support-hero::before,
+    .support-hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      background: rgba(31, 111, 80, 0.06);
+      pointer-events: none;
+    }
+
+    .support-hero::before {
+      width: 180px;
+      height: 180px;
+      top: -70px;
+      right: -50px;
+    }
+
+    .support-hero::after {
+      width: 120px;
+      height: 120px;
+      left: -20px;
+      bottom: -45px;
+    }
+
+    .support-badge {
+      width: fit-content;
+      margin: 0 auto 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .support-hero h1 {
+      font-size: clamp(34px, 5vw, 52px);
+      line-height: 1.1;
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .support-hero p {
+      color: var(--muted);
+      font-size: 16px;
+      font-weight: 600;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .support-verse {
+      margin-top: 18px;
+      background: #f7faf9;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      font-family: "Amiri", serif;
+      font-size: 26px;
+      color: var(--text);
+      line-height: 1.8;
+    }
+
+    .support-user {
+      margin-top: 18px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      background: #eef8f3;
+      border: 1px solid #dcefe5;
+      color: var(--primary-dark);
+      border-radius: 16px;
+      padding: 12px 14px;
+      font-weight: 700;
+    }
+
+    .support-user.show {
+      display: inline-flex;
+    }
+
+    .support-grid-pro {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .support-card-pro {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 22px 20px;
+      box-shadow: var(--shadow-sm);
+      transition: 0.2s ease;
+    }
+
+    .support-card-pro:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .support-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .support-card-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .support-card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .support-card-desc {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.9;
+      margin-bottom: 16px;
+    }
+
+    .support-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .support-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: inherit;
+    }
+
+    .support-btn.primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .support-btn.secondary {
+      background: #eef3f1;
+      color: var(--text);
+    }
+
+    .wallet-box {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 14px;
+      background: var(--surface-2);
+      color: #334155;
+      word-break: break-word;
+      font-size: 14px;
+    }
+
+    .support-note {
+      margin-top: 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 780px) {
+      .support-shell {
+        width: min(100% - 20px, 1120px);
+        margin-top: 18px;
+      }
+
+      .support-hero {
+        padding: 24px 18px;
+        border-radius: 24px;
+      }
+
+      .support-grid-pro {
+        grid-template-columns: 1fr;
+      }
+
+      .support-card-head {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .support-actions {
+        flex-direction: column;
+      }
+
+      .support-btn {
+        width: 100%;
+      }
+
+      .support-verse {
+        font-size: 22px;
+      }
+    }
+  </style>
 </head>
 <body>
-
   <nav class="navbar">
-    <a href="index.html" class="logo">
-      <i class="fa-solid fa-arrow-right"></i>
-      <span>الرجوع للرئيسية</span>
+    <a href="index.html" class="brand">
+      <div class="brand-mark">
+        <img src="assets/favicon.png" alt="نور" />
+      </div>
+      <div class="brand-text">
+        <span class="brand-title">نور</span>
+        <span class="brand-subtitle">Support</span>
+      </div>
     </a>
   </nav>
 
-  <main class="container">
-    <section class="hero-card text-center" style="margin-bottom: 20px;">
+  <main class="support-shell">
+    <section class="support-hero">
+      <div class="support-badge">
+        <i class="fa-solid fa-hand-holding-heart"></i>
+        <span>ساهم في استمرار المشروع</span>
+      </div>
+
       <h1>ادعم مشروع نور</h1>
       <p>
-        تطبيق نور مشروع تقني إسلامي هدفه توفير القرآن والأذكار والأدعية
-        في تجربة نظيفة، هادئة، وبدون تشتيت. مساهمتك كتعاون في التطوير
-        والاستضافة وتحسين الخدمة.
+        تطبيق نور مشروع تقني إسلامي هدفه توفير القرآن والأذكار والأدعية ومواقيت الصلاة
+        في تجربة نظيفة وهادئة. مساهمتك كتساعد في التطوير والاستضافة وتحسين الجودة.
       </p>
 
-      <div class="verse-box">
+      <div class="support-verse">
         "وَمَا تُقَدِّمُوا لِأَنفُسِكُم مِّنْ خَيْرٍ تَجِدُوهُ عِندَ اللَّهِ"
       </div>
+
+      <div id="supportUserBar" class="support-user">
+        <i class="fa-solid fa-user-check"></i>
+        <span id="supportUserText">أنت مسجل الدخول</span>
+      </div>
     </section>
 
-    <section class="support-grid">
-      <div class="support-card">
-        <h3><i class="fa-solid fa-credit-card"></i> بطاقة / Apple Pay</h3>
-        <p>أسرع وسيلة للدعم عبر رابط دفع مباشر وآمن.</p>
-        <a class="support-link" href="#" target="_blank" rel="noopener">
-          ادعم الآن
-        </a>
-      </div>
+    <section class="support-grid-pro">
+      <article class="support-card-pro">
+        <div class="support-card-head">
+          <div class="support-card-title">
+            <div class="support-card-icon">
+              <i class="fa-solid fa-credit-card"></i>
+            </div>
+            <span>بطاقة / Apple Pay</span>
+          </div>
+        </div>
 
-      <div class="support-card">
-        <h3><i class="fa-brands fa-paypal"></i> PayPal</h3>
-        <p>دعم آمن وسريع للمستخدمين من مختلف الدول.</p>
-        <a class="support-link" href="#" target="_blank" rel="noopener">
-          تبرع عبر بايبال
-        </a>
-      </div>
+        <p class="support-card-desc">
+          أسهل وأسرع وسيلة للدعم عبر صفحة دفع آمنة. بدّل الرابط ديال Stripe بالرابط ديالك الحقيقي.
+        </p>
 
-      <div class="support-card">
-        <h3><i class="fa-solid fa-mug-hot"></i> Buy Me a Coffee</h3>
-        <p>دعم بسيط يساعد في تغطية تكاليف التطوير والاستضافة.</p>
-        <a class="support-link" href="#" target="_blank" rel="noopener">
-          ادعم المشروع
-        </a>
-      </div>
+        <div class="support-actions">
+          <a class="support-btn primary" id="stripeSupportBtn" href="#" target="_blank" rel="noopener">
+            <i class="fa-solid fa-lock"></i>
+            ادعم الآن
+          </a>
+        </div>
+      </article>
 
-      <div class="support-card">
-        <h3><i class="fa-brands fa-bitcoin"></i> عملات رقمية</h3>
-        <p>للداعمين اللي كيبغيو يحولو عبر المحافظ الرقمية.</p>
+      <article class="support-card-pro">
+        <div class="support-card-head">
+          <div class="support-card-title">
+            <div class="support-card-icon">
+              <i class="fa-brands fa-paypal"></i>
+            </div>
+            <span>PayPal</span>
+          </div>
+        </div>
+
+        <p class="support-card-desc">
+          دعم سريع وآمن من مختلف الدول عبر رابط التبرع أو زر التبرع ديال PayPal.
+        </p>
+
+        <div class="support-actions">
+          <a class="support-btn primary" id="paypalSupportBtn" href="#" target="_blank" rel="noopener">
+            <i class="fa-solid fa-paper-plane"></i>
+            تبرع عبر بايبال
+          </a>
+        </div>
+      </article>
+
+      <article class="support-card-pro">
+        <div class="support-card-head">
+          <div class="support-card-title">
+            <div class="support-card-icon">
+              <i class="fa-solid fa-mug-hot"></i>
+            </div>
+            <span>Buy Me a Coffee</span>
+          </div>
+        </div>
+
+        <p class="support-card-desc">
+          دعم خفيف وسريع، مناسب للناس اللي بغاو يساهمو مرة وحدة أو بشكل متكرر.
+        </p>
+
+        <div class="support-actions">
+          <a class="support-btn primary" id="bmcSupportBtn" href="#" target="_blank" rel="noopener">
+            <i class="fa-solid fa-heart"></i>
+            ادعم المشروع
+          </a>
+        </div>
+      </article>
+
+      <article class="support-card-pro">
+        <div class="support-card-head">
+          <div class="support-card-title">
+            <div class="support-card-icon">
+              <i class="fa-brands fa-bitcoin"></i>
+            </div>
+            <span>عملات رقمية</span>
+          </div>
+        </div>
+
+        <p class="support-card-desc">
+          إلى كنت كتستعمل المحافظ الرقمية، حط العنوان الحقيقي ديالك هنا وخلي النسخ سهل.
+        </p>
+
         <div class="wallet-box" id="walletAddress">0x123...abc</div>
-        <button class="copy-btn" id="copyWalletBtn" type="button">
-          نسخ العنوان
-        </button>
-      </div>
+
+        <div class="support-actions">
+          <button class="support-btn secondary" id="copyWalletBtn" type="button">
+            <i class="fa-solid fa-copy"></i>
+            نسخ العنوان
+          </button>
+        </div>
+      </article>
     </section>
+
+    <p class="support-note">
+      ملاحظة: خاصك تبدل الروابط الوهمية بالروابط الحقيقية ديال Stripe / PayPal / Buy Me a Coffee.
+    </p>
   </main>
 
-  <script>
-    async function copyWallet() {
-      const walletBox = document.getElementById("walletAddress");
-      const copyBtn = document.getElementById("copyWalletBtn");
-      const text = walletBox ? walletBox.textContent.trim() : "";
-
-      if (!text) {
-        alert("ما كاينش عنوان للمحفظة.");
-        return;
-      }
-
-      try {
-        if (navigator.clipboard && window.isSecureContext) {
-          await navigator.clipboard.writeText(text);
-        } else {
-          const tempInput = document.createElement("textarea");
-          tempInput.value = text;
-          document.body.appendChild(tempInput);
-          tempInput.select();
-          document.execCommand("copy");
-          document.body.removeChild(tempInput);
-        }
-
-        if (copyBtn) {
-          const originalText = copyBtn.textContent;
-          copyBtn.textContent = "تم النسخ";
-          setTimeout(() => {
-            copyBtn.textContent = originalText;
-          }, 1500);
-        }
-      } catch (error) {
-        console.error("Copy failed:", error);
-        alert("تعذر النسخ حالياً.");
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const copyBtn = document.getElementById("copyWalletBtn");
-      if (copyBtn) {
-        copyBtn.addEventListener("click", copyWallet);
-      }
-    });
-  </script>
+  <script type="module" src="support.js"></script>
 </body>
 </html>
