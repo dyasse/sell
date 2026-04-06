@@ -149,18 +149,27 @@
       font-size: 24px;
       font-weight: 800;
       color: var(--text);
+      line-height: 1.2;
     }
 
     .support-card-icon {
       width: 52px;
       height: 52px;
       border-radius: 18px;
-      display: grid;
-      place-items: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: var(--primary-soft);
       color: var(--primary);
       font-size: 22px;
       flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .support-card-icon i {
+      display: block;
+      line-height: 1;
+      transform: translateY(-1px);
     }
 
     .support-card-desc {
@@ -209,6 +218,17 @@
       color: #334155;
       word-break: break-word;
       font-size: 14px;
+      direction: ltr;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .wallet-network-note {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
     }
 
     .support-note {
@@ -220,12 +240,6 @@
 
     #paypal-container-UTDA8HSA6Q2E6 {
       width: 100%;
-    }
-
-    .kofi-widget-wrap {
-      width: 100%;
-      display: flex;
-      justify-content: flex-start;
     }
 
     @media (max-width: 780px) {
@@ -259,10 +273,6 @@
 
       .support-verse {
         font-size: 22px;
-      }
-
-      .kofi-widget-wrap {
-        justify-content: stretch;
       }
     }
   </style>
@@ -340,7 +350,15 @@
         </p>
 
         <div class="support-actions">
-          <div class="kofi-widget-wrap" id="kofiWidgetWrap"></div>
+          <a
+            class="support-btn primary"
+            href="https://ko-fi.com/D1D6YOQQF"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <i class="fa-solid fa-mug-hot"></i>
+            ادعم عبر Ko-fi
+          </a>
         </div>
       </article>
 
@@ -350,15 +368,16 @@
             <div class="support-card-icon">
               <i class="fa-brands fa-bitcoin"></i>
             </div>
-            <span>عملات رقمية</span>
+            <span>USDT (TRC20)</span>
           </div>
         </div>
 
         <p class="support-card-desc">
-          إلى كنت كتستعمل المحافظ الرقمية، حط العنوان الحقيقي ديالك هنا وخلي النسخ سهل.
+          إلى بغيتي تدعم المشروع بالعملات الرقمية، استعمل هاد العنوان عبر شبكة TRC20 فقط.
         </p>
 
-        <div class="wallet-box" id="walletAddress">0x123...abc</div>
+        <div class="wallet-box" id="walletAddress">TR2ETUksG6RtTEF5o2THQWk2YNaudmjcZ8</div>
+        <span class="wallet-network-note">الشبكة: TRC20 (Tron)</span>
 
         <div class="support-actions">
           <button class="support-btn secondary" id="copyWalletBtn" type="button">
@@ -393,7 +412,7 @@
     </section>
 
     <p class="support-note">
-      ملاحظة: بدّل عنوان المحفظة بعنوانك الحقيقي إلا بغيتي تعتمد العملات الرقمية.
+      ملاحظة: بالنسبة للعملات الرقمية، المرجو الإرسال فقط عبر شبكة TRC20 لنفس العنوان أعلاه.
     </p>
   </main>
 
@@ -403,16 +422,6 @@
     paypal.HostedButtons({
       hostedButtonId: "UTDA8HSA6Q2E6",
     }).render("#paypal-container-UTDA8HSA6Q2E6");
-  </script>
-
-  <script type="text/javascript" src="https://storage.ko-fi.com/cdn/widget/Widget_2.js"></script>
-  <script type="text/javascript">
-    const kofiWrap = document.getElementById("kofiWidgetWrap");
-    if (kofiWrap) {
-      kofiWrap.innerHTML = "";
-      kofiwidget2.init("دعمك استمرارية مشروعنا", "#72a4f2", "D1D6YOQQF");
-      kofiwidget2.draw();
-    }
   </script>
 </body>
 </html>
