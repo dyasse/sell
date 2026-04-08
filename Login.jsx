@@ -210,7 +210,33 @@ const Login = () => {
           border: "1px solid #e5e7eb"
         }}
       >
-        <h2 style={{ marginBottom: "10px", color: "#14532d" }}>تسجيل الدخول - نور</h2>
+        <h2
+          style={{
+            marginBottom: "10px",
+            color: "#14532d",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px"
+          }}
+        >
+          <span
+            aria-hidden="true"
+            style={{
+              width: "38px",
+              height: "38px",
+              borderRadius: "50%",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "#e8f5ee",
+              border: "1px solid #cce9db",
+              fontSize: "20px"
+            }}
+          >
+            🔐
+          </span>
+          تسجيل الدخول - نور
+        </h2>
 
         <p style={{ color: "#64748b", lineHeight: "1.8", marginBottom: "18px" }}>
           سجل الدخول بالإيميل أو عبر Google و Facebook.

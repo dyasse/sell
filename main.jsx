@@ -16,12 +16,13 @@ import {
 import "./index.css";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAVixG188LWr0s-y3bhQsBerXK4YK-Al2E",
-  authDomain: "nour-3f6d4.firebaseapp.com",
-  projectId: "nour-3f6d4",
-  storageBucket: "nour-3f6d4.firebasestorage.app",
-  messagingSenderId: "301905677274",
-  appId: "1:301905677274:web:1427326a07085430b0cee3"
+  apiKey: "AIzaSyDTYiaVkb_PL5pG73v0nhKgwR5TAif_xnc",
+  authDomain: "nour-30704.firebaseapp.com",
+  projectId: "nour-30704",
+  storageBucket: "nour-30704.firebasestorage.app",
+  messagingSenderId: "387739904110",
+  appId: "1:387739904110:web:33600e65dfb0ed72f91e7f",
+  measurementId: "G-8K72MGRLFG"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -130,7 +131,25 @@ function Login() {
 
   return (
     <div style={{ padding: "24px", maxWidth: "500px", margin: "40px auto", direction: "rtl" }}>
-      <h1>Login - Nour</h1>
+      <h1 style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <span
+          aria-hidden="true"
+          style={{
+            width: "36px",
+            height: "36px",
+            borderRadius: "50%",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "#e8f5ee",
+            border: "1px solid #cce9db",
+            fontSize: "20px"
+          }}
+        >
+          🔐
+        </span>
+        Login - Nour
+      </h1>
 
       {currentUser && (
         <p>أنت مسجل: {currentUser.displayName || currentUser.email}</p>
