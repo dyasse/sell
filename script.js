@@ -31,4 +31,42 @@ function checkBookmark() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", checkBookmark);
+async function shareApp() {
+  const shareData = {
+    title: "نور",
+    text: "جرّب تطبيق نور للقرآن والأذكار والأدعية",
+    url: window.location.href
+  };
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+      return;
+    }
+
+    if (navigator.clipboard && shareData.url) {
+      await navigator.clipboard.writeText(shareData.url);
+      alert("تم نسخ رابط التطبيق.");
+      return;
+    }
+
+    alert("المشاركة غير متوفرة في هذا الجهاز.");
+  } catch (error) {
+    if (error?.name !== "AbortError") {
+      console.error("Share failed:", error);
+      alert("تعذر مشاركة التطبيق حاليا.");
+    }
+  }
+}
+
+function initShareButton() {
+  const shareBtn = document.getElementById("shareAppBtn");
+  if (!shareBtn) return;
+
+  shareBtn.addEventListener("click", shareApp);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  checkBookmark();
+  initShareButton();
+});
