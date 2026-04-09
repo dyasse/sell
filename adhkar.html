@@ -95,12 +95,21 @@
       min-height: 68px;
       padding: 12px 10px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 6px;
       text-align: center;
       box-shadow: var(--shadow-sm);
       color: var(--text);
       font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .adhkar-cats .cat-btn i {
+      font-size: 17px;
+      color: var(--primary);
+      opacity: 0.9;
       transition: 0.2s ease;
     }
 
@@ -115,6 +124,11 @@
       color: #fff;
       border-color: transparent;
       box-shadow: 0 18px 40px rgba(31, 111, 80, 0.16);
+    }
+
+    .adhkar-cats .cat-btn.active i {
+      color: #fff;
+      opacity: 1;
     }
 
     .adhkar-list {
@@ -285,12 +299,12 @@
     </section>
 
     <section class="adhkar-cats">
-      <a class="cat-btn" href="adhkar.html?type=sabah">أذكار الصباح</a>
-      <a class="cat-btn" href="adhkar.html?type=masa">أذكار المساء</a>
-      <a class="cat-btn" href="adhkar.html?type=nawm">أذكار النوم</a>
-      <a class="cat-btn" href="adhkar.html?type=shita">أذكار المطر</a>
-      <a class="cat-btn" href="adhkar.html?type=khouroj">الخروج من المنزل</a>
-      <a class="cat-btn" href="adhkar.html?type=dokhol">الدخول إلى المنزل</a>
+      <a class="cat-btn" href="adhkar.html?type=sabah"><i class="fa-solid fa-sun"></i><span>أذكار الصباح</span></a>
+      <a class="cat-btn" href="adhkar.html?type=masa"><i class="fa-solid fa-moon"></i><span>أذكار المساء</span></a>
+      <a class="cat-btn" href="adhkar.html?type=nawm"><i class="fa-solid fa-bed"></i><span>أذكار النوم</span></a>
+      <a class="cat-btn" href="adhkar.html?type=shita"><i class="fa-solid fa-cloud-rain"></i><span>أذكار المطر</span></a>
+      <a class="cat-btn" href="adhkar.html?type=khouroj"><i class="fa-solid fa-door-open"></i><span>الخروج من المنزل</span></a>
+      <a class="cat-btn" href="adhkar.html?type=dokhol"><i class="fa-solid fa-house"></i><span>الدخول إلى المنزل</span></a>
     </section>
 
     <section id="adhkarList" class="adhkar-list">
