@@ -1,4 +1,4 @@
-const CACHE_NAME = "nour-v3";
+const CACHE_NAME = "nour-v4";
 
 const ASSETS_TO_CACHE = [
   "/",
@@ -10,6 +10,8 @@ const ASSETS_TO_CACHE = [
   "/favorites.html",
   "/support.html",
   "/salat.html",
+  "/auth.js",
+  "/firebase-config.js",
   "/styles.css",
   "/script.js",
   "/quran.js",

@@ -70,6 +70,45 @@ async function shareApp() {
   }
 }
 
+function registerServiceWorker() {
+  if (!("serviceWorker" in navigator)) return;
+
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch((error) => {
+      console.error("Service Worker registration failed:", error);
+    });
+  });
+}
+
+function initInstallPrompt() {
+  const installBtn = document.getElementById("installAppBtn");
+  if (!installBtn) return;
+
+  let deferredPrompt = null;
+
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredPrompt = event;
+    installBtn.classList.remove("hidden");
+  });
+
+  installBtn.addEventListener("click", async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === "accepted") {
+      installBtn.classList.add("hidden");
+    }
+    deferredPrompt = null;
+  });
+
+  window.addEventListener("appinstalled", () => {
+    installBtn.classList.add("hidden");
+    deferredPrompt = null;
+  });
+}
+
 function initShareButton() {
   const shareBtn = document.getElementById("shareAppBtn");
   if (!shareBtn) return;
@@ -80,4 +119,6 @@ function initShareButton() {
 document.addEventListener("DOMContentLoaded", () => {
   checkBookmark();
   initShareButton();
+  initInstallPrompt();
+  registerServiceWorker();
 });
