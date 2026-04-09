@@ -46,6 +46,52 @@ const loginProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
 
 let isSignupMode = false;
+let isBusy = false;
+
+function mapAuthError(error) {
+  const code = error?.code || "";
+
+  switch (code) {
+    case "auth/invalid-email":
+      return "الإيميل غير صالح.";
+    case "auth/missing-password":
+      return "دخل كلمة السر.";
+    case "auth/user-not-found":
+    case "auth/invalid-credential":
+      return "الإيميل أو كلمة السر غير صحيحة.";
+    case "auth/wrong-password":
+      return "كلمة السر غير صحيحة.";
+    case "auth/email-already-in-use":
+      return "هاد الإيميل مستعمل من قبل.";
+    case "auth/weak-password":
+      return "كلمة السر ضعيفة. خاصها تكون 6 حروف أو أكثر.";
+    case "auth/too-many-requests":
+      return "كاين بزاف ديال المحاولات. جرب من بعد.";
+    case "auth/network-request-failed":
+      return "كاين مشكل فالإنترنت.";
+    default:
+      return error?.message || "وقع خطأ غير متوقع.";
+  }
+}
+
+function setBusy(busy) {
+  isBusy = busy;
+  const controls = [
+    loginBtn,
+    createAccountBtn,
+    resetPasswordBtn,
+    googleBtn,
+    facebookBtn,
+    loginTabBtn,
+    signupTabBtn,
+    closeAuthBtn
+  ];
+
+  controls.forEach((btn) => {
+    if (!btn) return;
+    btn.disabled = busy;
+  });
+}
 
 function setStatus(message, isError = false) {
   if (!authStatus) return;
@@ -97,33 +143,53 @@ authModal?.addEventListener("click", (event) => {
 });
 
 loginBtn?.addEventListener("click", async () => {
+  if (isBusy) return;
   const creds = getCredentials();
   if (!creds) return;
 
   try {
-    await signInWithEmailAndPassword(auth, creds.email, creds.password);
+    setBusy(true);
+    const userCredential = await signInWithEmailAndPassword(auth, creds.email, creds.password);
+    const { user } = userCredential;
+
+    if (!user.emailVerified) {
+      await sendEmailVerification(user);
+      await signOut(auth);
+      setStatus("خاصك تفعل الحساب من الإيميل أولاً. صيفطنا ليك رابط التفعيل من جديد.", true);
+      return;
+    }
+
     setStatus("تم تسجيل الدخول بنجاح.");
     closeAuthModal();
   } catch (error) {
-    setStatus(error.message, true);
+    setStatus(mapAuthError(error), true);
+  } finally {
+    setBusy(false);
   }
 });
 
 createAccountBtn?.addEventListener("click", async () => {
+  if (isBusy) return;
   const creds = getCredentials();
   if (!creds) return;
 
   try {
+    setBusy(true);
     const userCredential = await createUserWithEmailAndPassword(auth, creds.email, creds.password);
     await sendEmailVerification(userCredential.user);
-    setStatus("تم إنشاء الحساب. تفقد الإيميل ديالك.");
+    await signOut(auth);
+    setStatus("تم إنشاء الحساب. فعل الإيميل ومن بعد سجل الدخول.");
+    passwordInput.value = "";
     setMode(false);
   } catch (error) {
-    setStatus(error.message, true);
+    setStatus(mapAuthError(error), true);
+  } finally {
+    setBusy(false);
   }
 });
 
 resetPasswordBtn?.addEventListener("click", async () => {
+  if (isBusy) return;
   const email = emailInput?.value?.trim();
   if (!email) {
     setStatus("دخل الإيميل باش نصيفطو رابط الاسترجاع.", true);
@@ -131,39 +197,54 @@ resetPasswordBtn?.addEventListener("click", async () => {
   }
 
   try {
+    setBusy(true);
     await sendPasswordResetEmail(auth, email);
     setStatus("تصيفط ليك رابط استرجاع كلمة السر.");
   } catch (error) {
-    setStatus(error.message, true);
+    setStatus(mapAuthError(error), true);
+  } finally {
+    setBusy(false);
   }
 });
 
 googleBtn?.addEventListener("click", async () => {
+  if (isBusy) return;
   try {
+    setBusy(true);
     await signInWithPopup(auth, loginProvider);
     setStatus("تم تسجيل الدخول عبر Google.");
     closeAuthModal();
   } catch (error) {
-    setStatus(error.message, true);
+    setStatus(mapAuthError(error), true);
+  } finally {
+    setBusy(false);
   }
 });
 
 facebookBtn?.addEventListener("click", async () => {
+  if (isBusy) return;
   try {
+    setBusy(true);
     await signInWithPopup(auth, facebookProvider);
     setStatus("تم تسجيل الدخول عبر Facebook.");
     closeAuthModal();
   } catch (error) {
-    setStatus(error.message, true);
+    setStatus(mapAuthError(error), true);
+  } finally {
+    setBusy(false);
   }
 });
 
 logoutBtn?.addEventListener("click", async () => {
+  if (isBusy) return;
   try {
+    setBusy(true);
     await signOut(auth);
     setStatus("تم تسجيل الخروج.");
   } catch (error) {
-    setStatus(error.message, true);
+    setStatus(mapAuthError(error), true);
+  } finally {
+    setBusy(false);
   }
 });
 
