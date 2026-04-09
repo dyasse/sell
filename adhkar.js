@@ -1,7 +1,6 @@
 function getType() {
   const params = new URLSearchParams(window.location.search);
-  const type = params.get("type") || "sabah";
-  return ["sabah", "masa"].includes(type) ? type : "sabah";
+  return params.get("type") || "sabah";
 }
 
 function setActiveCategory(type) {
@@ -156,7 +155,7 @@ async function loadAdhkar() {
     }
 
     const data = await response.json();
-    const section = data[type];
+    const section = data[type] || data.sabah;
     renderAdhkar(section);
   } catch (error) {
     console.error("Adhkar load error:", error);
