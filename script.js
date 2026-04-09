@@ -116,9 +116,47 @@ function initShareButton() {
   shareBtn.addEventListener("click", shareApp);
 }
 
+function initSupportPopup() {
+  const popup = document.getElementById("supportPopup");
+  const closeBtn = document.getElementById("closeSupportPopupBtn");
+  const laterBtn = document.getElementById("supportPopupLaterBtn");
+  const donateBtn = document.getElementById("supportPopupDonateBtn");
+  if (!popup) return;
+
+  const DISMISS_KEY = "nour_support_popup_dismissed_at";
+  const DAY_MS = 24 * 60 * 60 * 1000;
+
+  const lastDismiss = Number(localStorage.getItem(DISMISS_KEY) || 0);
+  const shouldShow = !lastDismiss || Date.now() - lastDismiss > DAY_MS;
+
+  const closePopup = () => {
+    popup.classList.remove("show");
+    popup.setAttribute("aria-hidden", "true");
+    localStorage.setItem(DISMISS_KEY, String(Date.now()));
+  };
+
+  if (!shouldShow) return;
+
+  setTimeout(() => {
+    popup.classList.add("show");
+    popup.setAttribute("aria-hidden", "false");
+  }, 800);
+
+  closeBtn?.addEventListener("click", closePopup);
+  laterBtn?.addEventListener("click", closePopup);
+  donateBtn?.addEventListener("click", closePopup);
+
+  popup.addEventListener("click", (event) => {
+    if (event.target === popup) {
+      closePopup();
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   checkBookmark();
   initShareButton();
+  initSupportPopup();
   initInstallPrompt();
   registerServiceWorker();
 });

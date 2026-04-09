@@ -1198,6 +1198,123 @@ select {
   font-weight: 600;
 }
 
+.support-popup {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(15, 23, 42, 0.56);
+  z-index: 650;
+}
+
+.support-popup.show {
+  display: flex;
+}
+
+.support-popup-card {
+  width: min(520px, 100%);
+  background: #fff;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  padding: 22px;
+  position: relative;
+  display: grid;
+  gap: 12px;
+}
+
+.support-popup-close {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.support-popup-badge {
+  width: fit-content;
+  max-width: calc(100% - 42px);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.support-popup-card h2 {
+  font-size: clamp(24px, 4vw, 30px);
+  line-height: 1.35;
+  color: var(--text);
+  margin-top: 4px;
+}
+
+.support-popup-text {
+  color: var(--muted);
+  line-height: 1.95;
+}
+
+.support-popup-points {
+  list-style: none;
+  display: grid;
+  gap: 8px;
+  color: #0f5132;
+  background: #f7fcfa;
+  border-radius: 16px;
+  border: 1px solid #dcefe5;
+  padding: 12px;
+}
+
+.support-popup-points li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 600;
+}
+
+.support-popup-points i {
+  color: var(--primary);
+}
+
+.support-popup-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.support-popup-btn {
+  border: 0;
+  border-radius: 12px;
+  padding: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.support-popup-btn.primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.support-popup-btn.ghost {
+  background: #edf2f7;
+  color: #334155;
+}
+
 .hidden {
   display: none !important;
 }
@@ -1277,6 +1394,15 @@ select {
   }
 
   .qibla-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .support-popup-card {
+    border-radius: 20px;
+    padding: 18px;
+  }
+
+  .support-popup-actions {
     grid-template-columns: 1fr;
   }
 
