@@ -169,7 +169,9 @@
   <script src="script.js"></script>
   <script type="module" src="auth.js"></script>
   <script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
+    if (Array.isArray(window.adsbygoogle)) {
+      window.adsbygoogle.push({});
+    }
   </script>
 </body>
 </html>
