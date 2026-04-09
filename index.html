@@ -22,9 +22,14 @@
       </div>
     </a>
 
-    <button id="shareAppBtn" class="share-app-btn" type="button" aria-label="مشاركة التطبيق">
-      <i class="fa-solid fa-share-nodes"></i>
-    </button>
+    <div class="nav-actions">
+      <button id="shareAppBtn" class="share-app-btn" type="button" aria-label="مشاركة التطبيق">
+        <i class="fa-solid fa-share-nodes"></i>
+      </button>
+      <button id="openAuthBtn" class="share-app-btn auth-nav-btn" type="button" aria-label="تسجيل الدخول">
+        <i class="fa-solid fa-user"></i>
+      </button>
+    </div>
   </nav>
 
   <main class="page-shell">
@@ -105,6 +110,48 @@
       </a>
     </section>
   </main>
+
+  <div id="authModal" class="auth-modal" aria-hidden="true">
+    <div class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <button id="closeAuthBtn" class="auth-close-btn" type="button" aria-label="إغلاق">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <h2 id="authTitle">تسجيل الدخول</h2>
+      <p class="auth-subtitle">دخول سريع أو إنشاء حساب جديد.</p>
+
+      <div class="auth-tabs">
+        <button id="loginTabBtn" class="auth-tab-btn active" type="button">دخول</button>
+        <button id="signupTabBtn" class="auth-tab-btn" type="button">إنشاء حساب</button>
+      </div>
+
+      <label for="authEmailInput">البريد الإلكتروني</label>
+      <input id="authEmailInput" type="email" placeholder="example@email.com" />
+
+      <label for="authPasswordInput">كلمة السر</label>
+      <input id="authPasswordInput" type="password" placeholder="******" />
+
+      <button id="loginEmailBtn" class="auth-primary-btn" type="button">تسجيل الدخول بالإيميل</button>
+      <button id="createAccountBtn" class="auth-primary-btn auth-secondary-btn hidden" type="button">إنشاء حساب جديد</button>
+      <button id="resetPasswordBtn" class="auth-link-btn" type="button">نسيت كلمة السر؟</button>
+
+      <div class="auth-divider"><span>أو</span></div>
+
+      <div class="auth-socials">
+        <button id="loginGoogleBtn" class="auth-social-btn" type="button">
+          <i class="fa-brands fa-google"></i>
+          <span>Google</span>
+        </button>
+        <button id="loginFacebookBtn" class="auth-social-btn facebook" type="button">
+          <i class="fa-brands fa-facebook-f"></i>
+          <span>Facebook</span>
+        </button>
+      </div>
+
+      <button id="logoutBtn" class="auth-link-btn hidden" type="button">تسجيل الخروج</button>
+      <p id="authStatus" class="auth-status">مرحبا بك في نور</p>
+    </div>
+  </div>
 
   <script src="script.js"></script>
   <script type="module" src="auth.js"></script>
