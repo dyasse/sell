@@ -468,6 +468,15 @@ select {
   gap: 18px;
 }
 
+.ad-section {
+  margin-top: 18px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(230, 236, 232, 0.98);
+  border-radius: 20px;
+  padding: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
 .app-card {
   position: relative;
   background: rgba(255, 255, 255, 0.92);
