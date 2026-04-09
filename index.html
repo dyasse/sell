@@ -5,8 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>نور</title>
   <meta name="description" content="تطبيق نور للقرآن الكريم والأذكار والأدعية" />
+  <meta name="theme-color" content="#1f6f50" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="نور" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2350255696934759" crossorigin="anonymous"></script>
+  <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="assets/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/favicon.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
@@ -42,6 +48,12 @@
 
       <h1>نُور</h1>
       <p>رفيقك اليومي للقرآن والأذكار والأدعية ومواقيت الصلاة</p>
+      <div class="hero-cta">
+        <button id="installAppBtn" class="install-app-btn hidden" type="button">
+          <i class="fa-solid fa-mobile-screen-button"></i>
+          <span>تثبيت التطبيق على الهاتف</span>
+        </button>
+      </div>
     </section>
 
     <section id="bookmarkSection" class="continue-card">
@@ -63,7 +75,7 @@
 
     <section class="apps-grid">
       <a class="app-card quran-card-home" href="quran.html">
-        <div class="app-icon-wrap">
+        <div class="app-icon-wrap app-icon-quran">
           <i class="fa-solid fa-book-quran"></i>
         </div>
         <h3>القرآن الكريم</h3>
@@ -79,7 +91,7 @@
       </a>
 
       <a class="app-card" href="duas.html">
-        <div class="app-icon-wrap">
+        <div class="app-icon-wrap app-icon-dua">
           <i class="fa-solid fa-hands-praying"></i>
         </div>
         <h3>الأدعية</h3>
@@ -87,7 +99,7 @@
       </a>
 
       <a class="app-card" href="favorites.html">
-        <div class="app-icon-wrap">
+        <div class="app-icon-wrap app-icon-fav">
           <i class="fa-solid fa-heart"></i>
         </div>
         <h3>المفضلة</h3>
@@ -95,7 +107,7 @@
       </a>
 
       <a class="app-card" href="salat.html">
-        <div class="app-icon-wrap">
+        <div class="app-icon-wrap app-icon-salat">
           <i class="fa-solid fa-mosque"></i>
         </div>
         <h3>الصلاة</h3>
@@ -103,7 +115,7 @@
       </a>
 
       <a class="app-card" href="support.html">
-        <div class="app-icon-wrap">
+        <div class="app-icon-wrap app-icon-support">
           <i class="fa-solid fa-hand-holding-heart"></i>
         </div>
         <h3>ادعمنا</h3>

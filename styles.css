@@ -385,6 +385,31 @@ select {
   color: var(--muted);
 }
 
+.hero-cta {
+  margin-top: 18px;
+}
+
+.install-app-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  background: linear-gradient(135deg, var(--primary) 0%, #1d7b57 100%);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 14px 26px rgba(31, 111, 80, 0.22);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.install-app-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px rgba(31, 111, 80, 0.26);
+}
+
 .hero-card {
   padding: 26px;
 }
@@ -516,11 +541,41 @@ select {
   color: var(--primary);
   font-size: 26px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transition: transform 0.22s ease;
+}
+
+.app-card:hover .app-icon-wrap {
+  transform: scale(1.06);
 }
 
 .app-icon-adhkar {
   background: linear-gradient(135deg, #efe8ff 0%, #e1f0ff 100%);
   color: #5a3fa3;
+}
+
+.app-icon-quran {
+  background: linear-gradient(135deg, #dff4ea 0%, #cdebdc 100%);
+  color: #1f6f50;
+}
+
+.app-icon-dua {
+  background: linear-gradient(135deg, #fff2de 0%, #ffe6c2 100%);
+  color: #9a5e08;
+}
+
+.app-icon-fav {
+  background: linear-gradient(135deg, #ffe2ea 0%, #ffd2df 100%);
+  color: #c02658;
+}
+
+.app-icon-salat {
+  background: linear-gradient(135deg, #e2f0ff 0%, #d0e5ff 100%);
+  color: #1f4da3;
+}
+
+.app-icon-support {
+  background: linear-gradient(135deg, #efe8ff 0%, #e6dcff 100%);
+  color: #5b3faa;
 }
 
 .app-card h3 {
