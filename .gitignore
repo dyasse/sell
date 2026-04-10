@@ -1,0 +1,18 @@
+# Node
+node_modules/
+
+# Build output
+dist/
+
+# Capacitor / Android
+android/.gradle/
+android/.idea/
+android/local.properties
+android/captures/
+android/app/build/
+android/build/
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/

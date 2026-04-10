@@ -1,67 +1,113 @@
-# 🌙 تطبيق نور (Nour App)
+# Nour Quran
 
-**تطبيق إسلامي متكامل للقرآن الكريم، الأذكار، ومواقيت الصلاة.**
+Nour Quran is a production-oriented Islamic app project with:
 
-تطبيق "نور" هو رفيقك اليومي للتقرب من الله، مصمم بواجهة عصرية وسهلة الاستخدام، يدعم الوضع الليلي ويعمل بدون إنترنت (PWA).
+- A **stable web app** deployed on Vercel.
+- A **Capacitor-based Android project** prepared for Android Studio and Play Store release.
 
----
-
-## ✨ المميزات الرئيسية (Features)
-
-- **📖 القرآن الكريم:** تلاوة كاملة بخط عثماني واضح مع فهرس مرتب للسور.
-- **🔖 علامة القراءة (Bookmark):** حفظ تلقائي لمكان التوقف مع إمكانية الرجوع السريع.
-- **📜 التفسير الميسر:** عرض تفسير الآيات باللغة العربية.
-- **☀️ أذكار الصباح والمساء:** عداد ذكي للأذكار مع تذكير يومي.
-- **🕌 مواقيت الصلاة والقبلة:** تحديد دقيق لمواقيت الصلاة واتجاه القبلة.
-- **📢 الأذان:** تنبيهات صوتية وإشعارات عند دخول وقت الصلاة.
-- **🌙 الوضع الليلي (Dark Mode):** واجهة مريحة للعين.
-- **📶 يعمل بدون إنترنت (Offline):** بفضل تقنية PWA.
+The repository is structured so web deployment and Android workflows are isolated and do not interfere with each other.
 
 ---
 
-## 🚀 التقنيات المستخدمة (Tech Stack)
+## Project Structure
 
-- **HTML5 / CSS3**
-- **JavaScript (Vanilla)**
-- **Quran API**
-- **Aladhan API**
-- **Service Workers**
-- **LocalStorage**
+- Web source files remain in the repository root (`index.html`, `styles.css`, JS/JSON/assets files).
+- `scripts/build-web.mjs` builds a deployment-safe `dist/` directory for Vercel and Capacitor bundling.
+- `capacitor.config.json` defines Capacitor app identity and local web asset source.
+- `android/` contains the Android Studio project (Capacitor host app, package ID `com.dyasse.nourquran`).
 
 ---
 
-## 📸 معاينة التطبيق (Screenshots)
+## Local Web Development
 
-> يمكنك إضافة صور التطبيق هنا لاحقًا.
-
----
-
-## 🛠️ التشغيل المحلي (Local Development)
+You can run the site with any static server. Example:
 
 ```bash
-git clone https://github.com/dyasse/sell.git
-cd sell
+python3 -m http.server 5173
+```
+
+Then open `http://localhost:5173`.
+
+---
+
+## Web Build (for Vercel + Capacitor)
+
+```bash
 npm install
 npm run build:web
 ```
 
----
-
-## ▲ Vercel Web Deploy
-
-- Vercel deploys **web only** via `npm run build:web`.
-- The build script creates `dist/` and excludes `android-webview/` and any Capacitor-specific files.
-- No Android/Capacitor command runs during Vercel build.
+This creates `dist/` with only web deploy assets.
 
 ---
 
-## 🤖 Android (Local only)
+## Vercel Deployment
 
-Use these commands only on your local machine with Android Studio:
+Vercel uses:
+
+- `buildCommand`: `npm run build:web`
+- `outputDirectory`: `dist`
+
+No Android/Gradle/Capacitor sync command is executed in Vercel build.
+
+---
+
+## Capacitor Android Workflow
+
+Install dependencies first:
+
+```bash
+npm install
+```
+
+Sync the web build into Android and refresh Capacitor native config:
 
 ```bash
 npm run cap:sync
-npm run android:open
-# or
-npm run android
 ```
+
+Open Android Studio project:
+
+```bash
+npm run android:open
+```
+
+Optional direct run command:
+
+```bash
+npm run android:run
+```
+
+---
+
+## Android Release (Signed AAB)
+
+1. Open `android/` in Android Studio.
+2. Confirm app ID/version:
+   - `applicationId`: `com.dyasse.nourquran`
+   - `versionCode`: `1`
+   - `versionName`: `1.0.0`
+3. Create/choose release keystore (**do not commit keystore files**).
+4. Use **Build > Generate Signed Bundle / APK > Android App Bundle (AAB)**.
+5. Choose `release` variant and sign.
+6. Validate bundle locally and upload to Google Play Console.
+
+---
+
+## Google Play Console Checklist
+
+Before submission:
+
+- App name and metadata finalized.
+- Privacy policy URL ready.
+- Screenshots and feature graphic prepared.
+- Target SDK and Data Safety form completed.
+- Internal testing track upload completed and verified.
+
+---
+
+## Notes
+
+- Android uses local bundled assets from `dist/` in production (not remote website loading).
+- Keep running `npm run cap:sync` after web changes to update Android assets.
+- Do not add secrets, signing keys, or local properties files to git.
