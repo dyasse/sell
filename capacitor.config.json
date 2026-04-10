@@ -1,0 +1,9 @@
+{
+  "appId": "com.dyasse.nourquran",
+  "appName": "Nour Quran",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  }
+}

@@ -6,21 +6,26 @@ const outDir = join(rootDir, 'dist');
 
 const excluded = new Set([
   '.git',
-  'android-webview',
+  '.github',
+  '.idea',
+  '.vscode',
+  'android',
   'dist',
   'node_modules',
   'scripts',
+  'package.json',
   'package-lock.json',
-  'vercel.json'
+  'capacitor.config.json',
+  'vercel.json',
+  'README.md',
+  'SECURITY.md'
 ]);
 
 await rm(outDir, { recursive: true, force: true });
 await mkdir(outDir, { recursive: true });
 
 for (const entry of await readdir(rootDir)) {
-  if (excluded.has(entry)) {
-    continue;
-  }
+  if (excluded.has(entry)) continue;
 
   await cp(join(rootDir, entry), join(outDir, entry), {
     recursive: true,

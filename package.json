@@ -1,13 +1,20 @@
 {
-  "name": "sell-web",
+  "name": "nour-quran",
   "private": true,
   "version": "1.0.0",
-  "description": "Web deployment package for Vercel with separate Capacitor Android commands.",
+  "description": "Nour Quran web app with production-ready Capacitor Android project.",
   "scripts": {
     "build": "npm run build:web",
     "build:web": "node scripts/build-web.mjs",
-    "cap:sync": "npx cap sync android",
-    "android": "npx cap run android",
-    "android:open": "npx cap open android"
+    "cap:sync": "npm run build:web && npx cap sync android",
+    "android:open": "npx cap open android",
+    "android:run": "npx cap run android"
+  },
+  "dependencies": {
+    "@capacitor/core": "^7.4.3"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/cli": "^7.4.3"
   }
 }

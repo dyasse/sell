@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Nour Quran</string>
+    <string name="title_activity_main">Nour Quran</string>
+    <string name="package_name">com.dyasse.nourquran</string>
+    <string name="custom_url_scheme">com.dyasse.nourquran</string>
+</resources>
