@@ -80,6 +80,43 @@ npm run android:run
 
 ---
 
+
+## Capacitor + Android Studio Recovery Guide
+
+If Android Studio shows errors like:
+
+- `Configuring project 'capacitor-android' without an existing directory is not allowed`
+
+run this exact recovery flow from the repository root:
+
+```bash
+npm install
+npm run build:web
+npx cap add android
+npx cap sync android
+```
+
+Notes:
+
+- `capacitor.config.json` is expected to use `webDir: "dist"`; always build web assets before syncing.
+- `android/capacitor.settings.gradle` is committed and conditionally includes local `node_modules/@capacitor/android/capacitor` only when it exists.
+- `android/app/build.gradle` includes a safe fallback to Maven artifact `com.capacitorjs:capacitor-android:7.4.3` when local node modules are unavailable, so Android Studio can still sync.
+
+### Open Android project cleanly
+
+1. Open Android Studio.
+2. Choose **Open** and select the `android/` folder.
+3. Wait for Gradle Sync to complete.
+4. If prompted, run `npm run cap:sync` again after any web changes.
+
+### Build signed AAB for Play Store
+
+1. In Android Studio, go to **Build > Generate Signed Bundle / APK**.
+2. Select **Android App Bundle**.
+3. Select/create your release keystore (never commit keystores to git).
+4. Choose `release` build variant.
+5. Build and validate the generated `.aab` before uploading to Play Console.
+
 ## Android Release (Signed AAB)
 
 1. Open `android/` in Android Studio.
@@ -119,7 +156,7 @@ Before submission:
 
 Monetization is intentionally separated by platform:
 
-### Android (AdMob only)
+### Android (AdMob IDs configured in app)
 
 - AdMob App ID is configured in Android manifest metadata:
   - `android/app/src/main/AndroidManifest.xml`
@@ -127,9 +164,6 @@ Monetization is intentionally separated by platform:
 - Android banner loading is implemented in `monetization.js` and only executes inside Capacitor Android runtime.
 - Android banner ad unit ID used by the app:
   - `ca-app-pub-2350255696934759/8346363680`
-- Native Android project wiring for the Capacitor AdMob plugin is in:
-  - `android/settings.gradle`
-  - `android/app/build.gradle`
 
 ### Web (AdSense only)
 
