@@ -38,11 +38,30 @@
 
 ## 🛠️ التشغيل المحلي (Local Development)
 
-إذا كنت ترغب في تشغيل المشروع محليًا:
-
 ```bash
 git clone https://github.com/dyasse/sell.git
 cd sell
 npm install
-npm run dev
+npm run build:web
+```
+
+---
+
+## ▲ Vercel Web Deploy
+
+- Vercel deploys **web only** via `npm run build:web`.
+- The build script creates `dist/` and excludes `android-webview/` and any Capacitor-specific files.
+- No Android/Capacitor command runs during Vercel build.
+
+---
+
+## 🤖 Android (Local only)
+
+Use these commands only on your local machine with Android Studio:
+
+```bash
+npm run cap:sync
+npm run android:open
+# or
+npm run android
 ```
