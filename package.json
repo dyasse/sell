@@ -5,6 +5,7 @@
   "description": "Nour Quran web app with Capacitor Android build",
   "scripts": {
     "build": "node scripts/build-web.mjs",
+    "verify:webdir": "node scripts/verify-webdir.mjs",
     "cap:init": "cap init \"Nour Quran\" \"com.dyasse.nourquran\" --web-dir dist",
     "cap:sync:android": "npx cap sync android"
   }
