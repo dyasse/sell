@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "description": "Web deployment package for Vercel with separate Capacitor Android commands.",
   "scripts": {
-    "build": "node scripts/build-web.mjs",
+    "build": "npm run build:web",
+    "build:web": "node scripts/build-web.mjs",
     "cap:sync": "npx cap sync android",
     "android": "npx cap run android",
     "android:open": "npx cap open android"
