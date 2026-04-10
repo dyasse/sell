@@ -1,0 +1,11 @@
+{
+  "name": "nour-quran",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Nour Quran web app with Capacitor Android build",
+  "scripts": {
+    "build": "node scripts/build-web.mjs",
+    "cap:init": "cap init \"Nour Quran\" \"com.dyasse.nourquran\" --web-dir dist",
+    "cap:sync:android": "npx cap sync android"
+  }
+}

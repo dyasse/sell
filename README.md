@@ -38,3 +38,47 @@
 1. قم بتحميل المستودع (Clone):
    ```bash
    git clone [https://github.com/votre-username/nour-app.git](https://github.com/votre-username/nour-app.git)
+
+---
+
+## 📱 Android (Capacitor)
+
+باش تخرّج نسخة Android production بطريقة مستقرة، كنستعملو Capacitor مع web build محلي (ماشي URL خارجي).
+
+### 1) Build ديال الويب
+
+```bash
+npm run build
+```
+
+هاد الأمر كينتج مجلد `dist/` من ملفات المشروع الجاهزة للنسخ داخل Android app.
+
+### 2) تثبيت Capacitor
+
+```bash
+npm install @capacitor/core @capacitor/cli
+npm install @capacitor/android
+```
+
+### 3) تهيئة Capacitor
+
+```bash
+npx cap init "Nour Quran" "com.dyasse.nourquran" --web-dir dist
+```
+
+المشروع فيه إعداد جاهز فـ `capacitor.config.ts` بنفس القيم الأساسية (`appId`, `appName`, `webDir`).
+
+### 4) إضافة Android platform
+
+```bash
+npx cap add android
+```
+
+### 5) كل تحديث فالموقع
+
+```bash
+npm run build
+npx cap sync android
+```
+
+`cap sync` كيدير copy ديال web assets + update ديال native dependencies مرة وحدة.
