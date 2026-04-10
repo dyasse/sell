@@ -12,7 +12,7 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-// 🔥 CONFIG ديالك
+// إعدادات Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyDTYiaVkb_PL5pG73v0nhKgwR5TAif_xnc",
   authDomain: "nour-30704.firebaseapp.com",
@@ -55,20 +55,20 @@ function mapAuthError(error) {
     case "auth/invalid-email":
       return "الإيميل غير صالح.";
     case "auth/missing-password":
-      return "دخل كلمة السر.";
+      return "أدخل كلمة المرور.";
     case "auth/user-not-found":
     case "auth/invalid-credential":
       return "الإيميل أو كلمة السر غير صحيحة.";
     case "auth/wrong-password":
       return "كلمة السر غير صحيحة.";
     case "auth/email-already-in-use":
-      return "هاد الإيميل مستعمل من قبل.";
+      return "هذا البريد الإلكتروني مستخدم مسبقًا.";
     case "auth/weak-password":
-      return "كلمة السر ضعيفة. خاصها تكون 6 حروف أو أكثر.";
+      return "كلمة المرور ضعيفة. يجب أن تتكون من 6 أحرف على الأقل.";
     case "auth/too-many-requests":
-      return "كاين بزاف ديال المحاولات. جرب من بعد.";
+      return "هناك عدد كبير من المحاولات. حاول لاحقًا.";
     case "auth/network-request-failed":
-      return "كاين مشكل فالإنترنت.";
+      return "توجد مشكلة في الاتصال بالإنترنت.";
     default:
       return error?.message || "وقع خطأ غير متوقع.";
   }
@@ -117,7 +117,7 @@ function getCredentials() {
   const password = passwordInput?.value?.trim();
 
   if (!email || !password) {
-    setStatus("دخل الإيميل وكلمة السر.", true);
+    setStatus("أدخل البريد الإلكتروني وكلمة المرور.", true);
     return null;
   }
 
@@ -155,7 +155,7 @@ loginBtn?.addEventListener("click", async () => {
     if (!user.emailVerified) {
       await sendEmailVerification(user);
       await signOut(auth);
-      setStatus("خاصك تفعل الحساب من الإيميل أولاً. صيفطنا ليك رابط التفعيل من جديد.", true);
+      setStatus("يجب تفعيل الحساب عبر البريد الإلكتروني أولًا. أعدنا إرسال رابط التفعيل.", true);
       return;
     }
 
@@ -178,7 +178,7 @@ createAccountBtn?.addEventListener("click", async () => {
     const userCredential = await createUserWithEmailAndPassword(auth, creds.email, creds.password);
     await sendEmailVerification(userCredential.user);
     await signOut(auth);
-    setStatus("تم إنشاء الحساب. فعل الإيميل ومن بعد سجل الدخول.");
+    setStatus("تم إنشاء الحساب. فعّل البريد الإلكتروني ثم سجّل الدخول.");
     passwordInput.value = "";
     setMode(false);
   } catch (error) {
@@ -192,14 +192,14 @@ resetPasswordBtn?.addEventListener("click", async () => {
   if (isBusy) return;
   const email = emailInput?.value?.trim();
   if (!email) {
-    setStatus("دخل الإيميل باش نصيفطو رابط الاسترجاع.", true);
+    setStatus("أدخل البريد الإلكتروني لإرسال رابط الاستعادة.", true);
     return;
   }
 
   try {
     setBusy(true);
     await sendPasswordResetEmail(auth, email);
-    setStatus("تصيفط ليك رابط استرجاع كلمة السر.");
+    setStatus("تم إرسال رابط استعادة كلمة المرور.");
   } catch (error) {
     setStatus(mapAuthError(error), true);
   } finally {

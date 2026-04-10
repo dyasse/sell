@@ -4,7 +4,7 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-// 🔥 دير config ديالك هنا
+// ضع إعدادات Firebase هنا
 const firebaseConfig = {
   apiKey: "PUT_YOUR_API_KEY",
   authDomain: "PUT_YOUR_PROJECT.firebaseapp.com",
@@ -51,7 +51,7 @@ async function copyWallet() {
   const text = walletBox.textContent.trim();
 
   if (!text) {
-    alert("ما كاينش عنوان للمحفظة");
+    alert("لا يوجد عنوان للمحفظة");
     return;
   }
 

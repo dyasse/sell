@@ -2,8 +2,8 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("/sw.js")
-      .then(() => console.log("Service Worker خدام بنجاح!"))
-      .catch((err) => console.log("وقع مشكل في Service Worker", err));
+      .then(() => console.log("تم تشغيل Service Worker بنجاح!"))
+      .catch((err) => console.log("حدثت مشكلة في Service Worker", err));
   });
 }
 
