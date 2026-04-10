@@ -38,3 +38,27 @@
 1. قم بتحميل المستودع (Clone):
    ```bash
    git clone [https://github.com/votre-username/nour-app.git](https://github.com/votre-username/nour-app.git)
+
+---
+
+## 📱 Android WebView نسخة
+تمت إضافة مشروع Android جاهز داخل المسار:
+
+`android-webview/`
+
+هذا المشروع يفتح الموقع مباشرة داخل WebView:
+
+```kotlin
+webView.loadUrl("https://nour-quran.com")
+```
+
+### التشغيل السريع
+1. افتح Android Studio.
+2. اختر **Open** ثم افتح مجلد `android-webview`.
+3. دع Gradle يكمل المزامنة.
+4. شغّل التطبيق على Emulator أو جهاز حقيقي.
+
+### ملاحظات
+- JavaScript و DOM Storage مفعّلين.
+- زر الرجوع يرجّع داخل صفحات WebView قبل إغلاق التطبيق.
+- تم حفظ حالة الصفحة عند دوران الشاشة (state restore).
