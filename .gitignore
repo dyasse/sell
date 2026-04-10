@@ -1,0 +1,17 @@
+node_modules/
+dist/
+
+# Capacitor / Android build artifacts
+android/.gradle/
+android/local.properties
+android/app/build/
+android/build/
+android/capacitor-cordova-android-plugins/
+android/capacitor-cordova-android-plugins/build/
+*.keystore
+*.jks
+
+# IDE files
+.idea/
+*.iml
+.DS_Store
