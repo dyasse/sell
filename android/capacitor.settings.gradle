@@ -1,0 +1,9 @@
+// This file is intentionally committed so Android Studio can always sync.
+// If node_modules are present, use the local Capacitor Android module.
+// If not, app/build.gradle falls back to the Maven artifact.
+
+def capacitorAndroidDir = new File(rootDir, '../node_modules/@capacitor/android/capacitor')
+if (capacitorAndroidDir.exists()) {
+    include ':capacitor-android'
+    project(':capacitor-android').projectDir = capacitorAndroidDir
+}
