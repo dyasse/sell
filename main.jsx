@@ -94,7 +94,7 @@ function Login() {
       setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await sendEmailVerification(userCredential.user);
-      showStatus("تم إنشاء الحساب، تفقد الإيميل ديالك");
+      showStatus("تم إنشاء الحساب، يرجى التحقق من بريدك الإلكتروني");
     } catch (err) {
       console.error(err);
       showStatus(err.message);
@@ -107,7 +107,7 @@ function Login() {
     try {
       setLoading(true);
       await sendPasswordResetEmail(auth, email);
-      showStatus("تصيفط ليك رابط استرجاع كلمة السر");
+      showStatus("تم إرسال رابط استعادة كلمة المرور");
     } catch (err) {
       console.error(err);
       showStatus(err.message);

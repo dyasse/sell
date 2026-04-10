@@ -38,26 +38,26 @@ const Login = () => {
       case "auth/invalid-email":
         return "الإيميل غير صالح.";
       case "auth/missing-password":
-        return "دخل كلمة السر.";
+        return "أدخل كلمة المرور.";
       case "auth/user-not-found":
       case "auth/invalid-credential":
         return "الإيميل أو كلمة السر غير صحيحة.";
       case "auth/wrong-password":
         return "كلمة السر غير صحيحة.";
       case "auth/email-already-in-use":
-        return "هاد الإيميل مستعمل من قبل.";
+        return "هذا البريد الإلكتروني مستخدم مسبقًا.";
       case "auth/weak-password":
-        return "كلمة السر ضعيفة. خاصها تكون 6 حروف أو أكثر.";
+        return "كلمة المرور ضعيفة. يجب أن تتكون من 6 أحرف على الأقل.";
       case "auth/popup-closed-by-user":
-        return "تسدات نافذة تسجيل الدخول قبل الإكمال.";
+        return "أُغلقت نافذة تسجيل الدخول قبل الإكمال.";
       case "auth/popup-blocked":
-        return "النافذة تمنعات من المتصفح. فعل popups وجرب مرة أخرى.";
+        return "حظر المتصفح النافذة المنبثقة. فعّل النوافذ المنبثقة ثم حاول مرة أخرى.";
       case "auth/account-exists-with-different-credential":
-        return "هاد الإيميل مربوط بطريقة دخول أخرى.";
+        return "هذا البريد الإلكتروني مرتبط بطريقة تسجيل دخول أخرى.";
       case "auth/too-many-requests":
-        return "كاين بزاف ديال المحاولات. جرب من بعد.";
+        return "هناك عدد كبير من المحاولات. حاول لاحقًا.";
       case "auth/network-request-failed":
-        return "كاين مشكل فالإنترنت.";
+        return "توجد مشكلة في الاتصال بالإنترنت.";
       default:
         return err?.message || "وقع خطأ غير متوقع.";
     }
@@ -101,7 +101,7 @@ const Login = () => {
     e.preventDefault();
 
     if (!email || !password) {
-      showStatus("دخل الإيميل وكلمة السر.", "error");
+      showStatus("أدخل البريد الإلكتروني وكلمة المرور.", "error");
       return;
     }
 
@@ -123,7 +123,7 @@ const Login = () => {
 
   const handleSignup = async () => {
     if (!email || !password) {
-      showStatus("دخل الإيميل وكلمة السر.", "error");
+      showStatus("أدخل البريد الإلكتروني وكلمة المرور.", "error");
       return;
     }
 
@@ -131,7 +131,7 @@ const Login = () => {
       setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await sendEmailVerification(userCredential.user);
-      showStatus("تم إنشاء الحساب. تفقد الإيميل ديالك للتفعيل.", "success");
+      showStatus("تم إنشاء الحساب. يرجى التحقق من بريدك الإلكتروني للتفعيل.", "success");
     } catch (err) {
       showStatus(mapError(err), "error");
       console.error(err);
@@ -142,14 +142,14 @@ const Login = () => {
 
   const handleResetPassword = async () => {
     if (!email) {
-      showStatus("دخل الإيميل باش نصيفطو ليك رابط استرجاع كلمة السر.", "error");
+      showStatus("أدخل البريد الإلكتروني لإرسال رابط استعادة كلمة المرور.", "error");
       return;
     }
 
     try {
       setLoading(true);
       await sendPasswordResetEmail(auth, email);
-      showStatus("تصيفط ليك رابط استرجاع كلمة السر للإيميل.", "success");
+      showStatus("تم إرسال رابط استعادة كلمة المرور إلى البريد الإلكتروني.", "success");
     } catch (err) {
       showStatus(mapError(err), "error");
       console.error(err);
