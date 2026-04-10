@@ -1474,3 +1474,14 @@ select {
     display: none;
   }
 }
+
+body.android-banner-active {
+  padding-bottom: var(--android-banner-space, 56px);
+}
+
+
+.web-adsense-slot {
+  margin-top: 18px;
+  padding: 0 4px;
+}
+

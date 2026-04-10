@@ -11,6 +11,7 @@
     "android:run": "npx cap run android"
   },
   "dependencies": {
+    "@capacitor-community/admob": "^7.0.1",
     "@capacitor/core": "^7.4.3"
   },
   "devDependencies": {
