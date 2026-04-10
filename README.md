@@ -111,3 +111,44 @@ Before submission:
 - Android uses local bundled assets from `dist/` in production (not remote website loading).
 - Keep running `npm run cap:sync` after web changes to update Android assets.
 - Do not add secrets, signing keys, or local properties files to git.
+
+---
+
+
+## Monetization
+
+Monetization is intentionally separated by platform:
+
+### Android (AdMob only)
+
+- AdMob App ID is configured in Android manifest metadata:
+  - `android/app/src/main/AndroidManifest.xml`
+  - `com.google.android.gms.ads.APPLICATION_ID=ca-app-pub-2350255696934759~7026357823`
+- Android banner loading is implemented in `monetization.js` and only executes inside Capacitor Android runtime.
+- Android banner ad unit ID used by the app:
+  - `ca-app-pub-2350255696934759/8346363680`
+- Native Android project wiring for the Capacitor AdMob plugin is in:
+  - `android/settings.gradle`
+  - `android/app/build.gradle`
+
+### Web (AdSense only)
+
+- AdSense script and ad unit markup are added to the web home page in `index.html`.
+- The inserted web AdSense values are:
+  - Client: `ca-pub-2350255696934759`
+  - Slot: `3365499747`
+- No Android AdMob IDs are used in web HTML.
+
+### App Ads Authorization
+
+- `app-ads.txt` is present at the repository root and included in `dist/` by the web build pipeline.
+- File content:
+  - `google.com, pub-2350255696934759, DIRECT, f08c47fec0942fa0`
+
+### Separation Guarantee
+
+- Android app monetization uses **AdMob only**.
+- Website monetization uses **AdSense only**.
+- `app-ads.txt` is kept as a plain root-level authorization file.
+- The implementation avoids mixing identifiers or SDK responsibilities across Android and web.
+
