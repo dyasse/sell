@@ -1,4 +1,9 @@
+const SURAH_API_URL = "https://api.alquran.cloud/v1/surah";
+const RECITER_ID = "ar.fahadalkandari";
+const AUDIO_BASE_URL = `https://cdn.alquran.cloud/media/audio/surah/${RECITER_ID}`;
+
 let allChapters = [];
+let activeLoadingSurahId = null;
 
 function escapeHtml(text) {
   if (typeof text !== "string") return "";
@@ -7,8 +12,41 @@ function escapeHtml(text) {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
+    .replace(/\"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+function buildSurahAudioUrl(surahNumber) {
+  const id = Number(surahNumber);
+  if (!Number.isInteger(id) || id < 1 || id > 114) return "";
+  return `${AUDIO_BASE_URL}/${id}.mp3`;
+}
+
+function showSnackbar(message) {
+  const root = document.getElementById("snackbarRoot");
+  if (!root) return;
+
+  root.textContent = message;
+  root.classList.add("show");
+
+  window.clearTimeout(showSnackbar.timerId);
+  showSnackbar.timerId = window.setTimeout(() => {
+    root.classList.remove("show");
+  }, 2800);
+}
+
+function setListenButtonLoading(surahId, isLoading) {
+  const previousLoading = document.querySelector(".listen-btn.is-loading");
+  if (previousLoading && String(previousLoading.dataset.surahId) !== String(surahId)) {
+    previousLoading.classList.remove("is-loading");
+    previousLoading.disabled = false;
+  }
+
+  const target = document.querySelector(`.listen-btn[data-surah-id=\"${surahId}\"]`);
+  if (!target) return;
+
+  target.classList.toggle("is-loading", isLoading);
+  target.disabled = Boolean(isLoading);
 }
 
 function renderChapters(chapters) {
@@ -24,23 +62,29 @@ function renderChapters(chapters) {
   container.className = "surah-list";
   container.innerHTML = chapters
     .map((surah) => {
-      const id = surah.id || "";
-      const nameArabic = escapeHtml(surah.name_arabic || "سورة غير معروفة");
-      const nameSimple = escapeHtml(surah.name_simple || "");
-      const versesCount = surah.verses_count || 0;
+      const id = surah.number || "";
+      const nameArabic = escapeHtml(surah.name || "سورة غير معروفة");
+      const nameSimple = escapeHtml(surah.englishName || "");
+      const versesCount = surah.numberOfAyahs || 0;
 
       return `
-        <a class="surah-card" href="details.html?id=${id}">
+        <article class="surah-card">
           <div class="surah-row">
-            <div class="surah-meta">
+            <a class="surah-meta" href="details.html?id=${id}" aria-label="فتح تفاصيل سورة ${nameArabic}">
               <div class="surah-name">${nameArabic}</div>
               <div class="surah-sub">
                 ${nameSimple} • عدد الآيات: ${versesCount}
               </div>
+            </a>
+            <div class="surah-actions">
+              <button class="listen-btn" type="button" data-surah-id="${id}" data-surah-name="${nameArabic}" aria-label="الاستماع إلى ${nameArabic}">
+                <span class="listen-spinner" aria-hidden="true"></span>
+                <i class="fa-solid fa-headphones"></i>
+              </button>
+              <div class="surah-id">${id}</div>
             </div>
-            <div class="surah-id">${id}</div>
           </div>
-        </a>
+        </article>
       `;
     })
     .join("");
@@ -59,9 +103,9 @@ function setupSearch() {
     }
 
     const filtered = allChapters.filter((surah) => {
-      const arabicName = (surah.name_arabic || "").toLowerCase();
-      const simpleName = (surah.name_simple || "").toLowerCase();
-      const id = String(surah.id || "");
+      const arabicName = (surah.name || "").toLowerCase();
+      const simpleName = (surah.englishName || "").toLowerCase();
+      const id = String(surah.number || "");
 
       return (
         arabicName.includes(value) ||
@@ -74,6 +118,78 @@ function setupSearch() {
   });
 }
 
+function setupListenEvents() {
+  const container = document.getElementById("quranContainer");
+  if (!container) return;
+
+  container.addEventListener("click", (event) => {
+    const button = event.target.closest(".listen-btn");
+    if (!button) return;
+
+    event.preventDefault();
+    const surahId = Number(button.dataset.surahId);
+    const surahName = button.dataset.surahName || `سورة ${surahId}`;
+
+    if (!surahId) return;
+    if (!window.nourAudioPlayer?.setTrack) {
+      showSnackbar("مشغل الصوت غير متاح حالياً. أعد تحميل الصفحة.");
+      return;
+    }
+
+    const audioUrl = buildSurahAudioUrl(surahId);
+    if (!audioUrl) {
+      showSnackbar("تعذر إنشاء رابط الصوت لهذه السورة.");
+      return;
+    }
+
+    activeLoadingSurahId = surahId;
+    setListenButtonLoading(surahId, true);
+
+    const audioEl = document.getElementById("globalAudioElement");
+
+    const clearLoading = () => {
+      if (activeLoadingSurahId !== surahId) return;
+      setListenButtonLoading(surahId, false);
+      activeLoadingSurahId = null;
+      if (audioEl) {
+        audioEl.removeEventListener("canplay", onAudioReady);
+        audioEl.removeEventListener("playing", onAudioReady);
+        audioEl.removeEventListener("error", onAudioError);
+      }
+    };
+
+    const onAudioReady = () => {
+      clearLoading();
+    };
+
+    const onAudioError = () => {
+      clearLoading();
+      showSnackbar("تعذر تشغيل السورة. تأكد من اتصال الإنترنت.");
+    };
+
+    if (audioEl) {
+      audioEl.addEventListener("canplay", onAudioReady, { once: true });
+      audioEl.addEventListener("playing", onAudioReady, { once: true });
+      audioEl.addEventListener("error", onAudioError, { once: true });
+    } else {
+      // Fallback for rare cases where player is not initialized yet.
+      window.setTimeout(clearLoading, 800);
+    }
+
+    window.nourAudioPlayer.setTrack({
+      title: `${surahName} - فهد الكندري`,
+      url: audioUrl,
+      autoplay: true
+    });
+
+    window.setTimeout(() => {
+      if (activeLoadingSurahId === surahId) {
+        clearLoading();
+      }
+    }, 10000);
+  });
+}
+
 async function loadQuran() {
   const container = document.getElementById("quranContainer");
   if (!container) return;
@@ -82,17 +198,18 @@ async function loadQuran() {
   container.innerHTML = "جاري تحميل فهرس السور...";
 
   try {
-    const response = await fetch("https://api.quran.com/api/v4/chapters?language=ar");
+    const response = await fetch(SURAH_API_URL);
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
 
     const data = await response.json();
-    allChapters = Array.isArray(data?.chapters) ? data.chapters : [];
+    allChapters = Array.isArray(data?.data) ? data.data : [];
 
     renderChapters(allChapters);
     setupSearch();
+    setupListenEvents();
   } catch (error) {
     console.error("Failed to load chapters:", error);
     container.className = "status-box";
