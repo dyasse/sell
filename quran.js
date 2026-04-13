@@ -19,7 +19,14 @@ function escapeHtml(text) {
 function buildSurahAudioUrl(surahNumber) {
   const id = Number(surahNumber);
   if (!Number.isInteger(id) || id < 1 || id > 114) return "";
-  return `${AUDIO_BASE_URL}/${id}.mp3`;
+  const normalized = `${AUDIO_BASE_URL}/${id}.mp3`;
+  try {
+    const url = new URL(normalized);
+    if (url.protocol !== "https:") return "";
+    return url.toString();
+  } catch (_error) {
+    return "";
+  }
 }
 
 function showSnackbar(message) {
@@ -156,6 +163,7 @@ function setupListenEvents() {
         audioEl.removeEventListener("playing", onAudioReady);
         audioEl.removeEventListener("error", onAudioError);
       }
+      window.removeEventListener("nour:audio-error", onAudioErrorEvent);
     };
 
     const onAudioReady = () => {
@@ -164,13 +172,23 @@ function setupListenEvents() {
 
     const onAudioError = () => {
       clearLoading();
-      showSnackbar("تعذر تشغيل السورة. تأكد من اتصال الإنترنت.");
+      const errorInfo = window.nourAudioPlayer?.getLastError?.();
+      const message = errorInfo?.message || "Streaming Error: تعذر تشغيل السورة حالياً.";
+      showSnackbar(message);
+    };
+
+    const onAudioErrorEvent = (event) => {
+      if (activeLoadingSurahId !== surahId) return;
+      const message = event?.detail?.message || "Streaming Error: تعذر تشغيل السورة حالياً.";
+      clearLoading();
+      showSnackbar(message);
     };
 
     if (audioEl) {
       audioEl.addEventListener("canplay", onAudioReady, { once: true });
       audioEl.addEventListener("playing", onAudioReady, { once: true });
       audioEl.addEventListener("error", onAudioError, { once: true });
+      window.addEventListener("nour:audio-error", onAudioErrorEvent, { once: true });
     } else {
       // Fallback for rare cases where player is not initialized yet.
       window.setTimeout(clearLoading, 800);
@@ -185,6 +203,7 @@ function setupListenEvents() {
     window.setTimeout(() => {
       if (activeLoadingSurahId === surahId) {
         clearLoading();
+        showSnackbar("Streaming Error: انتهت مهلة انتظار البث الصوتي.");
       }
     }, 10000);
   });
