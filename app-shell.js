@@ -18,6 +18,7 @@
     volume: 0.8,
     isPlaying: false
   };
+  let latestPlaybackError = null;
 
   const canUseCapacitorPreferences =
     typeof window !== "undefined" &&
@@ -218,6 +219,51 @@
       updatePlayerVisibility();
     }
 
+    function describeMediaError() {
+      const code = audio.error?.code;
+      const maybeOffline =
+        typeof navigator !== "undefined" &&
+        typeof navigator.onLine === "boolean" &&
+        navigator.onLine === false;
+
+      if (code === MediaError.MEDIA_ERR_ABORTED) {
+        return {
+          type: "aborted",
+          message: "تم إيقاف التحميل قبل اكتماله."
+        };
+      }
+
+      if (code === MediaError.MEDIA_ERR_NETWORK) {
+        return {
+          type: maybeOffline ? "offline" : "streaming",
+          message: maybeOffline
+            ? "لا يوجد اتصال بالإنترنت حالياً."
+            : "Streaming Error: تعذر تنزيل الملف الصوتي من الخادم."
+        };
+      }
+
+      if (code === MediaError.MEDIA_ERR_DECODE) {
+        return {
+          type: "decode",
+          message: "Streaming Error: الملف الصوتي غير قابل للتشغيل حالياً."
+        };
+      }
+
+      if (code === MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED) {
+        return {
+          type: "src-not-supported",
+          message: "Streaming Error: رابط الصوت غير مدعوم أو غير متاح."
+        };
+      }
+
+      return {
+        type: maybeOffline ? "offline" : "streaming",
+        message: maybeOffline
+          ? "لا يوجد اتصال بالإنترنت حالياً."
+          : "Streaming Error: تعذر بدء تشغيل البث الصوتي."
+      };
+    }
+
     // External API for Surah/details pages:
     // window.nourAudioPlayer.setTrack({
     //   title: "سورة يس - القارئ فلان",
@@ -227,6 +273,7 @@
     window.nourAudioPlayer = {
       setTrack({ title: nextTitle, url, autoplay = false }) {
         if (!url) return;
+        latestPlaybackError = null;
         state.currentTime = 0;
         state.duration = 0;
         setSource(url, nextTitle);
@@ -239,6 +286,9 @@
             updatePlaybackIcon();
           });
         }
+      },
+      getLastError() {
+        return latestPlaybackError ? { ...latestPlaybackError } : null;
       },
       getState() {
         return { ...state };
@@ -291,6 +341,15 @@
       updateTimeLabel();
       updatePlayerVisibility();
       persistAudioState();
+    });
+
+    audio.addEventListener("error", () => {
+      latestPlaybackError = describeMediaError();
+      window.dispatchEvent(
+        new CustomEvent("nour:audio-error", {
+          detail: latestPlaybackError
+        })
+      );
     });
 
     seek?.addEventListener("input", (event) => {
