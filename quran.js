@@ -1,6 +1,5 @@
-const SURAH_API_URL = "https://api.alquran.cloud/v1/surah";
-const RECITER_ID = "ar.fahadalkandari";
-const AUDIO_BASE_URL = `https://cdn.alquran.cloud/media/audio/surah/${RECITER_ID}`;
+const SURAH_API_URL = "https://api.quran.com/api/v4/chapters?language=ar";
+const AUDIO_BASE_URL = "https://download.quranicaudio.com/quran/fahad_alkandari";
 
 let allChapters = [];
 let activeLoadingSurahId = null;
@@ -20,7 +19,7 @@ function buildSurahAudioUrl(surahNumber) {
   const id = Number(surahNumber);
   if (!Number.isInteger(id) || id < 1 || id > 114) return "";
   const paddedSurahId = id.toString().padStart(3, "0");
-  const normalized = `${AUDIO_BASE_URL}/${paddedSurahId}.mp3`;
+    const normalized = `${AUDIO_BASE_URL}/${paddedSurahId}.mp3`;
   try {
     const url = new URL(normalized);
     url.protocol = "https:";
@@ -240,7 +239,14 @@ async function loadQuran() {
     }
 
     const data = await response.json();
-    allChapters = Array.isArray(data?.data) ? data.data : [];
+    allChapters = Array.isArray(data?.chapters)
+      ? data.chapters.map((chapter) => ({
+          number: chapter?.id,
+          name: chapter?.name_arabic,
+          englishName: chapter?.name_simple,
+          numberOfAyahs: chapter?.verses_count
+        }))
+      : [];
 
     renderChapters(allChapters);
     setupSearch();
