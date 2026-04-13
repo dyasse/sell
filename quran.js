@@ -19,10 +19,11 @@ function escapeHtml(text) {
 function buildSurahAudioUrl(surahNumber) {
   const id = Number(surahNumber);
   if (!Number.isInteger(id) || id < 1 || id > 114) return "";
-  const normalized = `${AUDIO_BASE_URL}/${id}.mp3`;
+  const paddedSurahId = id.toString().padStart(3, "0");
+  const normalized = `${AUDIO_BASE_URL}/${paddedSurahId}.mp3`;
   try {
     const url = new URL(normalized);
-    if (url.protocol !== "https:") return "";
+    url.protocol = "https:";
     return url.toString();
   } catch (_error) {
     return "";
@@ -173,13 +174,28 @@ function setupListenEvents() {
     const onAudioError = () => {
       clearLoading();
       const errorInfo = window.nourAudioPlayer?.getLastError?.();
-      const message = errorInfo?.message || "Streaming Error: تعذر تشغيل السورة حالياً.";
+      const message = errorInfo?.message || "تعذر تشغيل السورة حالياً.";
+      if (errorInfo) {
+        console.error("Quran audio playback failed", {
+          surahId,
+          audioUrl,
+          ...errorInfo
+        });
+      }
       showSnackbar(message);
     };
 
     const onAudioErrorEvent = (event) => {
       if (activeLoadingSurahId !== surahId) return;
-      const message = event?.detail?.message || "Streaming Error: تعذر تشغيل السورة حالياً.";
+      const errorInfo = event?.detail || null;
+      const message = errorInfo?.message || "تعذر تشغيل السورة حالياً.";
+      if (errorInfo) {
+        console.error("Quran audio player event error", {
+          surahId,
+          audioUrl,
+          ...errorInfo
+        });
+      }
       clearLoading();
       showSnackbar(message);
     };
@@ -203,7 +219,7 @@ function setupListenEvents() {
     window.setTimeout(() => {
       if (activeLoadingSurahId === surahId) {
         clearLoading();
-        showSnackbar("Streaming Error: انتهت مهلة انتظار البث الصوتي.");
+        showSnackbar("انتهت مهلة تحميل البث الصوتي.");
       }
     }, 10000);
   });
