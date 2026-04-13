@@ -5,9 +5,10 @@
   const LIGHT_THEME = "light";
   const DEFAULT_THEME = LIGHT_THEME;
 
-  // Replace this with your production MP3 endpoint (Firebase Storage/CDN/API).
   const DEFAULT_TRACK_URL = "";
   const DEFAULT_TRACK_TITLE = "تلاوة مختارة";
+  const MAX_STREAM_RETRIES = 5;
+  const BASE_RETRY_DELAY_MS = 500;
 
   const state = {
     theme: DEFAULT_THEME,
@@ -18,11 +19,10 @@
     volume: 0.8,
     isPlaying: false
   };
+
   let latestPlaybackError = null;
-  const MAX_STREAM_RETRIES = 3;
-  const STREAM_RETRY_DELAY_MS = 1000;
-  let streamRetryCount = 0;
-  let streamRetryTimer = null;
+  let activeStreamController = null;
+  let streamRequestId = 0;
 
   const canUseCapacitorPreferences =
     typeof window !== "undefined" &&
@@ -140,7 +140,7 @@
 
     const audio = new Audio();
     audio.id = "globalAudioElement";
-    audio.preload = "metadata";
+    audio.preload = "auto";
     audio.crossOrigin = "anonymous";
     wrapper.appendChild(audio);
 
@@ -225,173 +225,160 @@
       }
     }
 
-    function setSource(url, trackTitle) {
-      const normalizedUrl = normalizeAudioUrl(url);
-      if (!normalizedUrl) return false;
-      audio.pause();
-      audio.removeAttribute("src");
-      audio.load();
-      state.audioUrl = normalizedUrl;
-      state.audioTitle = trackTitle || DEFAULT_TRACK_TITLE;
-      title.textContent = state.audioTitle;
-      audio.src = state.audioUrl;
-      audio.crossOrigin = "anonymous";
-      audio.load();
-      updatePlayerVisibility();
-      return true;
+    function withFreshQuery(url) {
+      try {
+        const parsed = new URL(url);
+        parsed.searchParams.set("cb", `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);
+        return parsed.toString();
+      } catch (_error) {
+        return url;
+      }
     }
 
-    function describeMediaError() {
-      const code = audio.error?.code;
-      const maybeOffline =
-        typeof navigator !== "undefined" &&
-        typeof navigator.onLine === "boolean" &&
-        navigator.onLine === false;
-
-      if (code === MediaError.MEDIA_ERR_ABORTED) {
-        return {
-          type: "aborted",
-          message: "تم إيقاف التحميل قبل اكتماله."
-        };
-      }
-
-      if (code === MediaError.MEDIA_ERR_NETWORK) {
-        return {
-          type: maybeOffline ? "offline" : "streaming",
-          message: maybeOffline
-            ? "لا يوجد اتصال بالإنترنت حالياً."
-            : "Streaming Error: تعذر تنزيل الملف الصوتي من الخادم."
-        };
-      }
-
-      if (code === MediaError.MEDIA_ERR_DECODE) {
-        return {
-          type: "decode",
-          message: "Streaming Error: الملف الصوتي غير قابل للتشغيل حالياً."
-        };
-      }
-
-      if (code === MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED) {
-        return {
-          type: "src-not-supported",
-          message: "Streaming Error: رابط الصوت غير مدعوم أو غير متاح."
-        };
-      }
-
-      return {
-        type: maybeOffline ? "offline" : "streaming",
-        message: maybeOffline
-          ? "لا يوجد اتصال بالإنترنت حالياً."
-          : "Streaming Error: تعذر بدء تشغيل البث الصوتي."
+    function createPlaybackError(base) {
+      latestPlaybackError = {
+        ...base,
+        timestamp: new Date().toISOString()
       };
+      window.dispatchEvent(
+        new CustomEvent("nour:audio-error", {
+          detail: latestPlaybackError
+        })
+      );
+      return latestPlaybackError;
     }
 
-    function createHttpPlaybackError(status, url) {
-      if (status === 404) {
-        return {
-          type: "http-404",
-          status,
-          url,
-          message: "تعذر تشغيل السورة: الملف الصوتي غير موجود (404)."
-        };
-      }
-
-      if (status === 403) {
-        return {
-          type: "http-403",
-          status,
-          url,
-          message: "تعذر تشغيل السورة: الوصول للملف الصوتي مرفوض (403)."
-        };
-      }
-
-      return {
-        type: "http-error",
-        status,
-        url,
-        message: `تعذر تشغيل السورة: خطأ في الخادم (${status}).`
-      };
-    }
-
-    async function probeAudioStream(url) {
-      console.log("Fetching: " + url);
-      const response = await fetch(url, {
-        method: "HEAD",
+    async function probeAudioStream(url, signal) {
+      const response = await fetch(withFreshQuery(url), {
+        method: "GET",
         mode: "cors",
+        cache: "no-store",
         headers: {
+          Range: "bytes=0-0",
           Accept: "audio/mpeg,audio/*;q=0.9,*/*;q=0.8",
-          "X-Client": "NourQuranWeb/1.0"
-        }
+          "X-Client": "NourQuranWeb/2.0"
+        },
+        signal
       });
 
-      if (!response.ok) {
-        throw createHttpPlaybackError(response.status, url);
+      if (!response.ok && response.status !== 206) {
+        throw new Error(`HTTP_${response.status}`);
       }
     }
 
-    // External API for Surah/details pages:
-    // window.nourAudioPlayer.setTrack({
-    //   title: "سورة يس - القارئ فلان",
-    //   url: "https://firebasestorage.googleapis.com/v0/b/<bucket>/o/yaseen.mp3?alt=media",
-    //   autoplay: true
-    // });
-    window.nourAudioPlayer = {
-      async setTrack({ title: nextTitle, url, autoplay = false }) {
-        if (!url) return;
-        latestPlaybackError = null;
-        const safeUrl = normalizeAudioUrl(url);
-        if (!safeUrl) {
-          latestPlaybackError = {
-            type: "invalid-url",
-            url,
-            message: "تعذر تشغيل السورة: رابط الصوت غير صالح."
-          };
-          window.dispatchEvent(
-            new CustomEvent("nour:audio-error", {
-              detail: latestPlaybackError
-            })
-          );
-          return;
+    function disposeActiveStream(keepSource = false) {
+      if (!activeStreamController) return;
+
+      activeStreamController.disposed = true;
+      if (activeStreamController.retryTimer) {
+        window.clearTimeout(activeStreamController.retryTimer);
+      }
+      if (activeStreamController.abortController) {
+        activeStreamController.abortController.abort();
+      }
+
+      if (!keepSource) {
+        audio.pause();
+        audio.removeAttribute("src");
+        audio.load();
+      }
+
+      activeStreamController = null;
+    }
+
+    async function startStream({ url, trackTitle, autoplay }) {
+      const safeUrl = normalizeAudioUrl(url);
+      if (!safeUrl) {
+        createPlaybackError({
+          type: "invalid-url",
+          message: "تعذر تشغيل السورة: رابط الصوت غير صالح.",
+          url
+        });
+        return;
+      }
+
+      disposeActiveStream();
+      streamRequestId += 1;
+      const requestId = streamRequestId;
+      const controller = {
+        id: requestId,
+        sourceUrl: safeUrl,
+        disposed: false,
+        retries: 0,
+        retryTimer: null,
+        abortController: null
+      };
+      activeStreamController = controller;
+
+      state.currentTime = 0;
+      state.duration = 0;
+      state.audioUrl = safeUrl;
+      state.audioTitle = trackTitle || DEFAULT_TRACK_TITLE;
+      title.textContent = state.audioTitle;
+      updateSeekValue();
+      updateTimeLabel();
+
+      const attemptLoad = async () => {
+        if (controller.disposed || activeStreamController?.id !== requestId) return;
+
+        if (controller.abortController) {
+          controller.abortController.abort();
         }
+        controller.abortController = new AbortController();
 
         try {
-          await probeAudioStream(safeUrl);
+          await probeAudioStream(controller.sourceUrl, controller.abortController.signal);
+
+          if (controller.disposed || activeStreamController?.id !== requestId) return;
+
+          audio.pause();
+          audio.removeAttribute("src");
+          audio.load();
+          audio.crossOrigin = "anonymous";
+          audio.src = withFreshQuery(controller.sourceUrl);
+          audio.load();
+
+          if (autoplay) {
+            await audio.play();
+          }
+
+          await persistAudioState();
         } catch (error) {
-          latestPlaybackError = error?.message
-            ? { ...error }
-            : {
-                type: "stream-unreachable",
-                url: safeUrl,
-                message: "تعذر التحقق من ملف الصوت قبل التشغيل."
-              };
+          if (controller.disposed || activeStreamController?.id !== requestId) return;
+          const aborted = error?.name === "AbortError";
+          if (aborted) return;
 
-          console.error("Audio stream probe failed", latestPlaybackError);
-          window.dispatchEvent(
-            new CustomEvent("nour:audio-error", {
-              detail: latestPlaybackError
-            })
-          );
-          return;
-        }
+          if (controller.retries >= MAX_STREAM_RETRIES) {
+            createPlaybackError({
+              type: "stream-failed",
+              message: "تعذر تشغيل السورة حالياً.",
+              url: controller.sourceUrl,
+              attempts: controller.retries + 1,
+              reason: String(error?.message || "unknown")
+            });
+            return;
+          }
 
-        state.currentTime = 0;
-        state.duration = 0;
-        streamRetryCount = 0;
-        if (streamRetryTimer) {
-          window.clearTimeout(streamRetryTimer);
-          streamRetryTimer = null;
+          const delay = BASE_RETRY_DELAY_MS * (2 ** controller.retries);
+          controller.retries += 1;
+          controller.retryTimer = window.setTimeout(() => {
+            attemptLoad();
+          }, delay);
         }
-        const didSet = setSource(safeUrl, nextTitle);
-        if (!didSet) return;
-        updateTimeLabel();
-        updateSeekValue();
-        persistAudioState();
-        if (autoplay) {
-          audio.play().catch(() => {
-            state.isPlaying = false;
-            updatePlaybackIcon();
-          });
-        }
+      };
+
+      await attemptLoad();
+    }
+
+    window.nourAudioPlayer = {
+      async setTrack({ title: nextTitle, url, autoplay = false }) {
+        latestPlaybackError = null;
+        if (!url) return;
+        await startStream({
+          trackTitle: nextTitle,
+          url,
+          autoplay: Boolean(autoplay)
+        });
       },
       getLastError() {
         return latestPlaybackError ? { ...latestPlaybackError } : null;
@@ -406,7 +393,11 @@
     title.textContent = state.audioTitle;
 
     if (state.audioUrl) {
-      setSource(state.audioUrl, state.audioTitle);
+      startStream({
+        url: state.audioUrl,
+        trackTitle: state.audioTitle,
+        autoplay: state.isPlaying
+      });
     }
 
     audio.addEventListener("loadedmetadata", () => {
@@ -426,11 +417,6 @@
     });
 
     audio.addEventListener("play", () => {
-      streamRetryCount = 0;
-      if (streamRetryTimer) {
-        window.clearTimeout(streamRetryTimer);
-        streamRetryTimer = null;
-      }
       state.isPlaying = true;
       updatePlaybackIcon();
       updatePlayerVisibility();
@@ -455,45 +441,32 @@
     });
 
     audio.addEventListener("error", () => {
-      const playbackTimeBeforeFailure = Number.isFinite(audio.currentTime) ? audio.currentTime : state.currentTime;
-      latestPlaybackError = {
-        ...describeMediaError(),
-        mediaErrorCode: audio.error?.code ?? null,
-        networkState: audio.networkState,
-        readyState: audio.readyState,
-        currentSrc: audio.currentSrc || state.audioUrl
-      };
-      console.error("Native audio element error", latestPlaybackError);
-      window.dispatchEvent(
-        new CustomEvent("nour:audio-error", {
-          detail: latestPlaybackError
-        })
-      );
-
-      if (state.audioUrl && streamRetryCount < MAX_STREAM_RETRIES) {
-        streamRetryCount += 1;
-        if (streamRetryTimer) {
-          window.clearTimeout(streamRetryTimer);
-        }
-        streamRetryTimer = window.setTimeout(async () => {
-          try {
-            await probeAudioStream(state.audioUrl);
-            audio.pause();
-            audio.removeAttribute("src");
-            audio.load();
-            audio.src = state.audioUrl;
-            audio.crossOrigin = "anonymous";
-            audio.load();
-            if (playbackTimeBeforeFailure > 0) {
-              audio.currentTime = playbackTimeBeforeFailure;
-              state.currentTime = playbackTimeBeforeFailure;
-            }
-            await audio.play();
-          } catch (retryError) {
-            console.warn("Stream retry failed", retryError);
-          }
-        }, STREAM_RETRY_DELAY_MS);
+      if (!activeStreamController) return;
+      if (activeStreamController.retries >= MAX_STREAM_RETRIES) {
+        createPlaybackError({
+          type: "media-error",
+          message: "تعذر تشغيل السورة حالياً.",
+          url: activeStreamController.sourceUrl,
+          mediaErrorCode: audio.error?.code ?? null
+        });
+        return;
       }
+
+      const delay = BASE_RETRY_DELAY_MS * (2 ** activeStreamController.retries);
+      activeStreamController.retries += 1;
+      if (activeStreamController.retryTimer) {
+        window.clearTimeout(activeStreamController.retryTimer);
+      }
+      activeStreamController.retryTimer = window.setTimeout(() => {
+        if (!activeStreamController) return;
+        audio.pause();
+        audio.removeAttribute("src");
+        audio.load();
+        audio.crossOrigin = "anonymous";
+        audio.src = withFreshQuery(activeStreamController.sourceUrl);
+        audio.load();
+        audio.play().catch(() => {});
+      }, delay);
     });
 
     seek?.addEventListener("input", (event) => {
@@ -514,7 +487,8 @@
 
     playPauseBtn?.addEventListener("click", async () => {
       if (!state.audioUrl && DEFAULT_TRACK_URL) {
-        setSource(DEFAULT_TRACK_URL, DEFAULT_TRACK_TITLE);
+        await startStream({ url: DEFAULT_TRACK_URL, trackTitle: DEFAULT_TRACK_TITLE, autoplay: true });
+        return;
       }
 
       if (!audio.src) return;
@@ -535,18 +509,11 @@
     updatePlaybackIcon();
     updatePlayerVisibility();
 
-    if (state.isPlaying && audio.src) {
-      audio.play().catch(() => {
-        state.isPlaying = false;
-        updatePlaybackIcon();
-        updatePlayerVisibility();
-      });
-    }
-
     window.addEventListener("beforeunload", () => {
       state.currentTime = audio.currentTime || state.currentTime;
       state.duration = Number.isFinite(audio.duration) ? audio.duration : state.duration;
       persistAudioState();
+      disposeActiveStream(true);
     });
   }
 

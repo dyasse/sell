@@ -1,5 +1,5 @@
 const SURAH_API_URL = "https://api.quran.com/api/v4/chapters?language=ar";
-const AUDIO_BASE_URL = "https://download.quranicaudio.com/quran/fahad_alkandari";
+const AUDIO_BASE_URL = "https://download.quranicaudio.com/quran/fahad_alkandari/";
 
 let allChapters = [];
 let activeLoadingSurahId = null;
@@ -18,8 +18,8 @@ function escapeHtml(text) {
 function buildSurahAudioUrl(surahNumber) {
   const id = Number(surahNumber);
   if (!Number.isInteger(id) || id < 1 || id > 114) return "";
-  const paddedSurahId = id.toString().padStart(3, "0");
-    const normalized = `${AUDIO_BASE_URL}/${paddedSurahId}.mp3`;
+  const filename = id.toString().padStart(3, "0") + ".mp3";
+  const normalized = `${AUDIO_BASE_URL}${filename}`;
   try {
     const url = new URL(normalized);
     url.protocol = "https:";
@@ -173,7 +173,6 @@ function setupListenEvents() {
     const onAudioError = () => {
       clearLoading();
       const errorInfo = window.nourAudioPlayer?.getLastError?.();
-      const message = errorInfo?.message || "تعذر تشغيل السورة حالياً.";
       if (errorInfo) {
         console.error("Quran audio playback failed", {
           surahId,
@@ -181,13 +180,11 @@ function setupListenEvents() {
           ...errorInfo
         });
       }
-      showSnackbar(message);
     };
 
     const onAudioErrorEvent = (event) => {
       if (activeLoadingSurahId !== surahId) return;
       const errorInfo = event?.detail || null;
-      const message = errorInfo?.message || "تعذر تشغيل السورة حالياً.";
       if (errorInfo) {
         console.error("Quran audio player event error", {
           surahId,
@@ -196,7 +193,6 @@ function setupListenEvents() {
         });
       }
       clearLoading();
-      showSnackbar(message);
     };
 
     if (audioEl) {
@@ -218,7 +214,6 @@ function setupListenEvents() {
     window.setTimeout(() => {
       if (activeLoadingSurahId === surahId) {
         clearLoading();
-        showSnackbar("انتهت مهلة تحميل البث الصوتي.");
       }
     }, 10000);
   });
