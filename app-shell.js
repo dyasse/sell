@@ -19,6 +19,10 @@
     isPlaying: false
   };
   let latestPlaybackError = null;
+  const MAX_STREAM_RETRIES = 3;
+  const STREAM_RETRY_DELAY_MS = 1000;
+  let streamRetryCount = 0;
+  let streamRetryTimer = null;
 
   const canUseCapacitorPreferences =
     typeof window !== "undefined" &&
@@ -134,9 +138,10 @@
       </div>
     `;
 
-    const audio = document.createElement("audio");
+    const audio = new Audio();
     audio.id = "globalAudioElement";
     audio.preload = "metadata";
+    audio.crossOrigin = "anonymous";
     wrapper.appendChild(audio);
 
     document.body.appendChild(wrapper);
@@ -223,6 +228,9 @@
     function setSource(url, trackTitle) {
       const normalizedUrl = normalizeAudioUrl(url);
       if (!normalizedUrl) return false;
+      audio.pause();
+      audio.removeAttribute("src");
+      audio.load();
       state.audioUrl = normalizedUrl;
       state.audioTitle = trackTitle || DEFAULT_TRACK_TITLE;
       title.textContent = state.audioTitle;
@@ -306,12 +314,12 @@
     }
 
     async function probeAudioStream(url) {
+      console.log("Fetching: " + url);
       const response = await fetch(url, {
-        method: "GET",
+        method: "HEAD",
         mode: "cors",
         headers: {
           Accept: "audio/mpeg,audio/*;q=0.9,*/*;q=0.8",
-          Range: "bytes=0-1",
           "X-Client": "NourQuranWeb/1.0"
         }
       });
@@ -368,6 +376,11 @@
 
         state.currentTime = 0;
         state.duration = 0;
+        streamRetryCount = 0;
+        if (streamRetryTimer) {
+          window.clearTimeout(streamRetryTimer);
+          streamRetryTimer = null;
+        }
         const didSet = setSource(safeUrl, nextTitle);
         if (!didSet) return;
         updateTimeLabel();
@@ -413,6 +426,11 @@
     });
 
     audio.addEventListener("play", () => {
+      streamRetryCount = 0;
+      if (streamRetryTimer) {
+        window.clearTimeout(streamRetryTimer);
+        streamRetryTimer = null;
+      }
       state.isPlaying = true;
       updatePlaybackIcon();
       updatePlayerVisibility();
@@ -437,6 +455,7 @@
     });
 
     audio.addEventListener("error", () => {
+      const playbackTimeBeforeFailure = Number.isFinite(audio.currentTime) ? audio.currentTime : state.currentTime;
       latestPlaybackError = {
         ...describeMediaError(),
         mediaErrorCode: audio.error?.code ?? null,
@@ -450,6 +469,31 @@
           detail: latestPlaybackError
         })
       );
+
+      if (state.audioUrl && streamRetryCount < MAX_STREAM_RETRIES) {
+        streamRetryCount += 1;
+        if (streamRetryTimer) {
+          window.clearTimeout(streamRetryTimer);
+        }
+        streamRetryTimer = window.setTimeout(async () => {
+          try {
+            await probeAudioStream(state.audioUrl);
+            audio.pause();
+            audio.removeAttribute("src");
+            audio.load();
+            audio.src = state.audioUrl;
+            audio.crossOrigin = "anonymous";
+            audio.load();
+            if (playbackTimeBeforeFailure > 0) {
+              audio.currentTime = playbackTimeBeforeFailure;
+              state.currentTime = playbackTimeBeforeFailure;
+            }
+            await audio.play();
+          } catch (retryError) {
+            console.warn("Stream retry failed", retryError);
+          }
+        }, STREAM_RETRY_DELAY_MS);
+      }
     });
 
     seek?.addEventListener("input", (event) => {
