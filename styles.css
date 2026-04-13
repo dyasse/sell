@@ -1589,6 +1589,10 @@ body.android-banner-active {
 
 body {
   background-color: var(--bg);
+  padding-bottom: 16px;
+}
+
+body.has-audio-player {
   padding-bottom: calc(var(--audio-player-height) + 16px);
 }
 

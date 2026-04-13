@@ -176,6 +176,7 @@
   function bindAudioPlayer(player) {
     if (!player) return;
 
+    const wrapper = player.wrapper;
     const audio = player.audio;
     const playPauseBtn = document.getElementById("audioPlayPauseBtn");
     const seek = document.getElementById("audioSeek");
@@ -194,6 +195,12 @@
       playPauseBtn.setAttribute("aria-label", state.isPlaying ? "إيقاف" : "تشغيل");
     }
 
+    function updatePlayerVisibility() {
+      const shouldShow = Boolean(state.audioUrl) && Boolean(state.isPlaying);
+      wrapper.hidden = !shouldShow;
+      document.body.classList.toggle("has-audio-player", shouldShow);
+    }
+
     function updateSeekValue() {
       if (!seek) return;
       const max = state.duration || 0;
@@ -208,6 +215,7 @@
       title.textContent = state.audioTitle;
       audio.src = state.audioUrl;
       audio.load();
+      updatePlayerVisibility();
     }
 
     // External API for Surah/details pages:
@@ -264,12 +272,14 @@
     audio.addEventListener("play", () => {
       state.isPlaying = true;
       updatePlaybackIcon();
+      updatePlayerVisibility();
       persistAudioState();
     });
 
     audio.addEventListener("pause", () => {
       state.isPlaying = false;
       updatePlaybackIcon();
+      updatePlayerVisibility();
       persistAudioState();
     });
 
@@ -279,6 +289,7 @@
       updatePlaybackIcon();
       updateSeekValue();
       updateTimeLabel();
+      updatePlayerVisibility();
       persistAudioState();
     });
 
@@ -319,11 +330,13 @@
     updateTimeLabel();
     updateSeekValue();
     updatePlaybackIcon();
+    updatePlayerVisibility();
 
     if (state.isPlaying && audio.src) {
       audio.play().catch(() => {
         state.isPlaying = false;
         updatePlaybackIcon();
+        updatePlayerVisibility();
       });
     }
 
