@@ -209,14 +209,28 @@
       seek.value = String(Math.min(state.currentTime, max || 0));
     }
 
+    function normalizeAudioUrl(url) {
+      if (!url) return "";
+      try {
+        const parsed = new URL(url, window.location.origin);
+        parsed.protocol = "https:";
+        return parsed.toString();
+      } catch (_error) {
+        return "";
+      }
+    }
+
     function setSource(url, trackTitle) {
-      if (!url) return;
-      state.audioUrl = url;
+      const normalizedUrl = normalizeAudioUrl(url);
+      if (!normalizedUrl) return false;
+      state.audioUrl = normalizedUrl;
       state.audioTitle = trackTitle || DEFAULT_TRACK_TITLE;
       title.textContent = state.audioTitle;
       audio.src = state.audioUrl;
+      audio.crossOrigin = "anonymous";
       audio.load();
       updatePlayerVisibility();
+      return true;
     }
 
     function describeMediaError() {
@@ -264,6 +278,49 @@
       };
     }
 
+    function createHttpPlaybackError(status, url) {
+      if (status === 404) {
+        return {
+          type: "http-404",
+          status,
+          url,
+          message: "تعذر تشغيل السورة: الملف الصوتي غير موجود (404)."
+        };
+      }
+
+      if (status === 403) {
+        return {
+          type: "http-403",
+          status,
+          url,
+          message: "تعذر تشغيل السورة: الوصول للملف الصوتي مرفوض (403)."
+        };
+      }
+
+      return {
+        type: "http-error",
+        status,
+        url,
+        message: `تعذر تشغيل السورة: خطأ في الخادم (${status}).`
+      };
+    }
+
+    async function probeAudioStream(url) {
+      const response = await fetch(url, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          Accept: "audio/mpeg,audio/*;q=0.9,*/*;q=0.8",
+          Range: "bytes=0-1",
+          "X-Client": "NourQuranWeb/1.0"
+        }
+      });
+
+      if (!response.ok) {
+        throw createHttpPlaybackError(response.status, url);
+      }
+    }
+
     // External API for Surah/details pages:
     // window.nourAudioPlayer.setTrack({
     //   title: "سورة يس - القارئ فلان",
@@ -271,12 +328,48 @@
     //   autoplay: true
     // });
     window.nourAudioPlayer = {
-      setTrack({ title: nextTitle, url, autoplay = false }) {
+      async setTrack({ title: nextTitle, url, autoplay = false }) {
         if (!url) return;
         latestPlaybackError = null;
+        const safeUrl = normalizeAudioUrl(url);
+        if (!safeUrl) {
+          latestPlaybackError = {
+            type: "invalid-url",
+            url,
+            message: "تعذر تشغيل السورة: رابط الصوت غير صالح."
+          };
+          window.dispatchEvent(
+            new CustomEvent("nour:audio-error", {
+              detail: latestPlaybackError
+            })
+          );
+          return;
+        }
+
+        try {
+          await probeAudioStream(safeUrl);
+        } catch (error) {
+          latestPlaybackError = error?.message
+            ? { ...error }
+            : {
+                type: "stream-unreachable",
+                url: safeUrl,
+                message: "تعذر التحقق من ملف الصوت قبل التشغيل."
+              };
+
+          console.error("Audio stream probe failed", latestPlaybackError);
+          window.dispatchEvent(
+            new CustomEvent("nour:audio-error", {
+              detail: latestPlaybackError
+            })
+          );
+          return;
+        }
+
         state.currentTime = 0;
         state.duration = 0;
-        setSource(url, nextTitle);
+        const didSet = setSource(safeUrl, nextTitle);
+        if (!didSet) return;
         updateTimeLabel();
         updateSeekValue();
         persistAudioState();
@@ -344,7 +437,14 @@
     });
 
     audio.addEventListener("error", () => {
-      latestPlaybackError = describeMediaError();
+      latestPlaybackError = {
+        ...describeMediaError(),
+        mediaErrorCode: audio.error?.code ?? null,
+        networkState: audio.networkState,
+        readyState: audio.readyState,
+        currentSrc: audio.currentSrc || state.audioUrl
+      };
+      console.error("Native audio element error", latestPlaybackError);
       window.dispatchEvent(
         new CustomEvent("nour:audio-error", {
           detail: latestPlaybackError
