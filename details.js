@@ -68,6 +68,11 @@ function setupSurahAudioButton({ id, surahName }) {
     }
 
     setPlayButtonLoading(true);
+    const onAudioErrorEvent = (event) => {
+      const errorInfo = event?.detail || null;
+      showSnackbar(errorInfo?.message || "تعذر تشغيل السورة حالياً. حاول مرة أخرى.");
+    };
+    window.addEventListener("nour:audio-error", onAudioErrorEvent);
 
     try {
       await window.nourAudioPlayer.setTrack({
@@ -77,7 +82,9 @@ function setupSurahAudioButton({ id, surahName }) {
       });
     } catch (error) {
       console.error("Audio playback failed", error);
+      showSnackbar("تعذر تشغيل السورة حالياً. حاول مرة أخرى.");
     } finally {
+      window.removeEventListener("nour:audio-error", onAudioErrorEvent);
       window.setTimeout(() => {
         setPlayButtonLoading(false);
       }, 1000);

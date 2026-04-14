@@ -173,6 +173,7 @@ function setupListenEvents() {
     const onAudioError = () => {
       clearLoading();
       const errorInfo = window.nourAudioPlayer?.getLastError?.();
+      showSnackbar(errorInfo?.message || "تعذر تشغيل السورة حالياً. جرّب سورة أخرى.");
       if (errorInfo) {
         console.error("Quran audio playback failed", {
           surahId,
@@ -185,6 +186,7 @@ function setupListenEvents() {
     const onAudioErrorEvent = (event) => {
       if (activeLoadingSurahId !== surahId) return;
       const errorInfo = event?.detail || null;
+      showSnackbar(errorInfo?.message || "تعذر تشغيل السورة حالياً. حاول من جديد.");
       if (errorInfo) {
         console.error("Quran audio player event error", {
           surahId,
@@ -205,10 +207,16 @@ function setupListenEvents() {
       window.setTimeout(clearLoading, 800);
     }
 
-    window.nourAudioPlayer.setTrack({
-      title: `${surahName} - فهد الكندري`,
-      url: audioUrl,
-      autoplay: true
+    Promise.resolve(
+      window.nourAudioPlayer.setTrack({
+        title: `${surahName} - فهد الكندري`,
+        url: audioUrl,
+        autoplay: true
+      })
+    ).catch((error) => {
+      console.error("Set track request failed", error);
+      clearLoading();
+      showSnackbar("تعذر بدء تشغيل السورة الآن. حاول مرة أخرى.");
     });
 
     window.setTimeout(() => {

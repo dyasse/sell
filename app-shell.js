@@ -11,6 +11,7 @@
   const PRIMARY_AUDIO_BASE_URL = "https://download.quranicaudio.com/quran/fahad_alkandari/";
   const FALLBACK_AUDIO_BASE_URL = "https://server11.mp3quran.net/fhd/";
   const SECONDARY_FALLBACK_AUDIO_BASE_URL = "https://everyayah.com/data/Alafasy_128kbps/";
+  const CDN_AUDIO_BASE_URL = "https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/";
 
   const state = {
     theme: DEFAULT_THEME,
@@ -296,8 +297,11 @@
       }
     }
 
-    function buildSurahUrl(base, surahId) {
-      const fileName = `${surahId.toString().padStart(3, "0")}.mp3`;
+    function buildSurahUrl(base, surahId, options = {}) {
+      const withPadding = options.withPadding !== false;
+      const fileName = withPadding
+        ? `${surahId.toString().padStart(3, "0")}.mp3`
+        : `${surahId}.mp3`;
       return `${base}${fileName}`;
     }
 
@@ -310,7 +314,8 @@
       return [
         buildSurahUrl(PRIMARY_AUDIO_BASE_URL, surahId),
         buildSurahUrl(FALLBACK_AUDIO_BASE_URL, surahId),
-        buildSurahUrl(SECONDARY_FALLBACK_AUDIO_BASE_URL, surahId)
+        buildSurahUrl(SECONDARY_FALLBACK_AUDIO_BASE_URL, surahId),
+        buildSurahUrl(CDN_AUDIO_BASE_URL, surahId, { withPadding: false })
       ];
     }
 
