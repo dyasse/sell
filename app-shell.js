@@ -8,8 +8,12 @@
   const DEFAULT_TRACK_URL = "";
   const DEFAULT_TRACK_TITLE = "تلاوة مختارة";
   const STREAM_START_TIMEOUT_MS = 3000;
-  const PRIMARY_AUDIO_BASE_URL = "https://download.quranicaudio.com/quran/fahad_alkandari/";
-  const FALLBACK_AUDIO_BASE_URL = "https://server11.mp3quran.net/fhd/";
+  const SURAH_AUDIO_BASE_URLS = [
+    "https://download.quranicaudio.com/quran/fahad_alkandari/",
+    "https://server11.mp3quran.net/fhd/",
+    "https://server8.mp3quran.net/afs/",
+    "https://everyayah.com/data/Alafasy_128kbps/"
+  ];
 
   const state = {
     theme: DEFAULT_THEME,
@@ -142,7 +146,6 @@
     const audio = new Audio();
     audio.id = "globalAudioElement";
     audio.preload = "auto";
-    audio.crossOrigin = "anonymous";
     wrapper.appendChild(audio);
 
     document.body.appendChild(wrapper);
@@ -306,10 +309,7 @@
       if (!surahId) {
         return safeInput ? [safeInput] : [];
       }
-      return [
-        buildSurahUrl(PRIMARY_AUDIO_BASE_URL, surahId),
-        buildSurahUrl(FALLBACK_AUDIO_BASE_URL, surahId)
-      ];
+      return SURAH_AUDIO_BASE_URLS.map((base) => buildSurahUrl(base, surahId));
     }
 
     function waitForAudioStart(timeoutMs, signal) {
@@ -401,7 +401,6 @@
 
         try {
           stopAndResetCurrentAudio();
-          audio.crossOrigin = "anonymous";
           console.log("FINAL_AUDIO_URL: " + nextUrl);
           audio.src = withFreshQuery(nextUrl);
           audio.load();

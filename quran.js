@@ -1,5 +1,6 @@
 const SURAH_API_URL = "https://api.quran.com/api/v4/chapters?language=ar";
 const AUDIO_BASE_URL = "https://download.quranicaudio.com/quran/fahad_alkandari/";
+const AUDIO_RECITER_LABEL = "تلاوة القرآن";
 
 let allChapters = [];
 let activeLoadingSurahId = null;
@@ -206,7 +207,7 @@ function setupListenEvents() {
     }
 
     window.nourAudioPlayer.setTrack({
-      title: `${surahName} - فهد الكندري`,
+      title: `${surahName} - ${AUDIO_RECITER_LABEL}`,
       url: audioUrl,
       autoplay: true
     });
