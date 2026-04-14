@@ -783,6 +783,22 @@ select {
   background: var(--primary-soft);
 }
 
+.surah-audio-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.surah-listen-btn {
+  width: auto;
+  min-height: 46px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
 .listen-spinner {
   width: 18px;
   height: 18px;
