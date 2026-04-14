@@ -1,5 +1,9 @@
 const SURAH_API_URL = "https://api.quran.com/api/v4/chapters?language=ar";
-const AUDIO_BASE_URL = "https://download.quranicaudio.com/quran/fahad_alkandari/";
+const AUDIO_BASE_URLS = [
+  "https://download.quranicaudio.com/quran/fahad_alkandari/",
+  "https://server11.mp3quran.net/fhd/",
+  "https://everyayah.com/data/Alafasy_128kbps/"
+];
 
 let allChapters = [];
 let activeLoadingSurahId = null;
@@ -19,14 +23,19 @@ function buildSurahAudioUrl(surahNumber) {
   const id = Number(surahNumber);
   if (!Number.isInteger(id) || id < 1 || id > 114) return "";
   const filename = id.toString().padStart(3, "0") + ".mp3";
-  const normalized = `${AUDIO_BASE_URL}${filename}`;
-  try {
-    const url = new URL(normalized);
-    url.protocol = "https:";
-    return url.toString();
-  } catch (_error) {
-    return "";
+
+  for (const baseUrl of AUDIO_BASE_URLS) {
+    const normalized = `${baseUrl}${filename}`;
+    try {
+      const url = new URL(normalized);
+      url.protocol = "https:";
+      return url.toString();
+    } catch (_error) {
+      continue;
+    }
   }
+
+  return "";
 }
 
 function showSnackbar(message) {
