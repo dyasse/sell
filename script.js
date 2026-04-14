@@ -72,11 +72,15 @@ async function shareApp() {
 
 function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
+  if (window.location.protocol !== "http:" && window.location.protocol !== "https:") return;
 
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js").catch((error) => {
-      console.error("Service Worker registration failed:", error);
-    });
+    const swUrl = new URL("sw.js", window.location.href);
+    navigator.serviceWorker.register(swUrl, { scope: "./" })
+      .then((registration) => registration.update())
+      .catch((error) => {
+        console.error("Service Worker registration failed:", error);
+      });
   });
 }
 

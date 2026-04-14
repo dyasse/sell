@@ -1,34 +1,42 @@
-const CACHE_NAME = "nour-v4";
+const CACHE_NAME = "nour-v5";
 
 const ASSETS_TO_CACHE = [
-  "/",
-  "/index.html",
-  "/quran.html",
-  "/details.html",
-  "/adhkar.html",
-  "/duas.html",
-  "/favorites.html",
-  "/support.html",
-  "/salat.html",
-  "/auth.js",
-  "/firebase-config.js",
-  "/styles.css",
-  "/script.js",
-  "/quran.js",
-  "/details.js",
-  "/adhkar.js",
-  "/duas.js",
-  "/favorites.js",
-  "/salat.js",
-  "/adhkar.json",
-  "/manifest.json",
-  "/assets/favicon.png"
+  "./",
+  "./index.html",
+  "./quran.html",
+  "./details.html",
+  "./adhkar.html",
+  "./duas.html",
+  "./favorites.html",
+  "./support.html",
+  "./salat.html",
+  "./auth.js",
+  "./firebase-config.js",
+  "./styles.css",
+  "./script.js",
+  "./quran.js",
+  "./details.js",
+  "./adhkar.js",
+  "./duas.js",
+  "./favorites.js",
+  "./salat.js",
+  "./adhkar.json",
+  "./manifest.json",
+  "./assets/favicon.png"
 ];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
+    caches.open(CACHE_NAME).then(async (cache) => {
+      await Promise.all(
+        ASSETS_TO_CACHE.map(async (asset) => {
+          try {
+            await cache.add(new Request(asset, { cache: "reload" }));
+          } catch (error) {
+            console.warn("Failed to precache asset", asset, error);
+          }
+        })
+      );
     })
   );
 
@@ -77,7 +85,7 @@ self.addEventListener("fetch", (event) => {
         })
         .catch(() => {
           if (request.mode === "navigate") {
-            return caches.match("/index.html");
+            return caches.match("./index.html");
           }
         });
     })
