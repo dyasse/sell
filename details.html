@@ -32,6 +32,13 @@
       <p style="color: #64748b; margin-top: 8px;">
         اضغط على الآية لحفظ موضع القراءة وقراءة التفسير
       </p>
+      <div class="surah-audio-cta">
+        <button id="playSurahBtn" class="listen-btn surah-listen-btn" type="button" aria-label="تشغيل تلاوة السورة">
+          <span class="listen-spinner" aria-hidden="true"></span>
+          <i class="fa-solid fa-headphones"></i>
+          <span>تشغيل MP3 للسورة</span>
+        </button>
+      </div>
     </div>
 
     <div id="quranArea" class="quran-card">
@@ -53,6 +60,7 @@
       </div>
     </div>
   </div>
+  <div id="snackbarRoot" class="snackbar" role="status" aria-live="polite"></div>
   <script src="app-shell.js"></script>
   <script src="monetization.js"></script>
 

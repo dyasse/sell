@@ -7,6 +7,84 @@ function getParams() {
   };
 }
 
+function buildSurahAudioUrl(surahNumber) {
+  const id = Number(surahNumber);
+  if (!Number.isInteger(id) || id < 1 || id > 114) return "";
+  const filename = id.toString().padStart(3, "0") + ".mp3";
+  const normalized = `https://download.quranicaudio.com/quran/fahad_alkandari/${filename}`;
+  try {
+    const url = new URL(normalized);
+    url.protocol = "https:";
+    return url.toString();
+  } catch (_error) {
+    return "";
+  }
+}
+
+function showSnackbar(message) {
+  const root = document.getElementById("snackbarRoot");
+  if (!root) return;
+
+  root.textContent = message;
+  root.classList.add("show");
+
+  window.clearTimeout(showSnackbar.timerId);
+  showSnackbar.timerId = window.setTimeout(() => {
+    root.classList.remove("show");
+  }, 2800);
+}
+
+function setPlayButtonLoading(isLoading) {
+  const button = document.getElementById("playSurahBtn");
+  if (!button) return;
+  button.classList.toggle("is-loading", Boolean(isLoading));
+  button.disabled = Boolean(isLoading);
+}
+
+function setupSurahAudioButton({ id, surahName }) {
+  const button = document.getElementById("playSurahBtn");
+  if (!button) return;
+
+  button.dataset.surahId = String(id);
+  button.dataset.surahName = surahName || `سورة ${id}`;
+
+  if (button.dataset.bound === "1") return;
+  button.dataset.bound = "1";
+
+  button.addEventListener("click", async () => {
+    const surahId = Number(button.dataset.surahId);
+    const name = button.dataset.surahName || `سورة ${surahId}`;
+
+    if (!surahId) return;
+    if (!window.nourAudioPlayer?.setTrack) {
+      showSnackbar("مشغل الصوت غير متاح حالياً. أعد تحميل الصفحة.");
+      return;
+    }
+
+    const audioUrl = buildSurahAudioUrl(surahId);
+    if (!audioUrl) {
+      showSnackbar("تعذر إنشاء رابط MP3 لهذه السورة.");
+      return;
+    }
+
+    setPlayButtonLoading(true);
+
+    try {
+      await window.nourAudioPlayer.setTrack({
+        title: `${name} - فهد الكندري`,
+        url: audioUrl,
+        autoplay: true
+      });
+    } catch (error) {
+      console.error("Audio playback failed", error);
+    } finally {
+      window.setTimeout(() => {
+        setPlayButtonLoading(false);
+      }, 1000);
+    }
+  });
+}
+
 function escapeHtml(text) {
   if (typeof text !== "string") return "";
 
@@ -82,6 +160,10 @@ async function loadSurah() {
     }
 
     title.textContent = `سورة ${chapter.name_arabic}`;
+    setupSurahAudioButton({
+      id,
+      surahName: chapter.name_arabic
+    });
 
     const showBismillah = id !== 1 && id !== 9;
     const versesHtml = verses
