@@ -1,4 +1,27 @@
 (function () {
+  function initVercelAnalytics() {
+    const isBrowser = typeof window !== "undefined" && typeof document !== "undefined";
+    if (!isBrowser) return;
+
+    const host = window.location.hostname;
+    const isLocalHost =
+      host === "localhost" ||
+      host === "127.0.0.1" ||
+      host === "[::1]" ||
+      host.endsWith(".local");
+
+    if (isLocalHost) return;
+    if (document.querySelector('script[data-nour-vercel-analytics="true"]')) return;
+
+    const script = document.createElement("script");
+    script.defer = true;
+    script.src = "/_vercel/insights/script.js";
+    script.setAttribute("data-nour-vercel-analytics", "true");
+    document.head.appendChild(script);
+  }
+
+  initVercelAnalytics();
+
   const THEME_KEY = "nour_theme_mode";
   const AUDIO_KEY = "nour_audio_player_state";
   const DARK_THEME = "dark";
