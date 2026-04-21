@@ -1,4 +1,33 @@
 (function () {
+  function initGoogleAnalytics() {
+    const isBrowser = typeof window !== "undefined" && typeof document !== "undefined";
+    if (!isBrowser) return;
+
+    const host = window.location.hostname;
+    const isLocalHost =
+      host === "localhost" ||
+      host === "127.0.0.1" ||
+      host === "[::1]" ||
+      host.endsWith(".local");
+
+    if (isLocalHost) return;
+    if (document.querySelector('script[data-nour-ga-loader="true"]')) return;
+
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = "https://www.googletagmanager.com/gtag/js?id=G-8K72MGRLFG";
+    script.setAttribute("data-nour-ga-loader", "true");
+    document.head.appendChild(script);
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function gtag() {
+      window.dataLayer.push(arguments);
+    };
+
+    window.gtag("js", new Date());
+    window.gtag("config", "G-8K72MGRLFG");
+  }
+
   function initVercelAnalytics() {
     const isBrowser = typeof window !== "undefined" && typeof document !== "undefined";
     if (!isBrowser) return;
@@ -20,6 +49,7 @@
     document.head.appendChild(script);
   }
 
+  initGoogleAnalytics();
   initVercelAnalytics();
 
   const THEME_KEY = "nour_theme_mode";
