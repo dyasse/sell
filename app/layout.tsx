@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://example.com'),
@@ -25,7 +26,18 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ar" dir="rtl">
-      <body>{children}</body>
+      <body>
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-8K72MGRLFG" />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-8K72MGRLFG');
+          `}
+        </Script>
+        {children}
+      </body>
     </html>
   );
 }
