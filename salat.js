@@ -11,8 +11,14 @@ let currentCity = "";
 let prayerTimesToday = null;
 let nextPrayerTimer = null;
 let adhanCheckTimer = null;
-let lastNotifiedPrayerKey = null;
 let qiblaDirection = null;
+const PRAYER_NOTIFICATION_IDS = {
+  Fajr: 201,
+  Dhuhr: 202,
+  Asr: 203,
+  Maghrib: 204,
+  Isha: 205,
+};
 
 function $(id) {
   return document.getElementById(id);
@@ -111,59 +117,100 @@ function startCountdown() {
   }, 1000);
 }
 
-function notificationEnabled() {
-  return "Notification" in window && Notification.permission === "granted";
+function getLocalNotificationsPlugin() {
+  return window.Capacitor?.Plugins?.LocalNotifications || null;
 }
 
-function requestNotificationPermission() {
-  if (!("Notification" in window)) {
-    alert("المتصفح لا يدعم الإشعارات.");
+async function scheduleAdhanNotifications() {
+  const localNotifications = getLocalNotificationsPlugin();
+  if (!localNotifications) {
+    alert("ميزة التنبيهات تعمل داخل تطبيق أندرويد فقط.");
+    return;
+  }
+  if (!prayerTimesToday) {
+    alert("يرجى تحميل أوقات الصلاة أولاً.");
     return;
   }
 
-  Notification.requestPermission().then((permission) => {
-    if (permission === "granted") {
-      alert("تم تفعيل التنبيهات.");
-    } else {
-      alert("لم يتم السماح بالإشعارات.");
+  const ordered = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
+  const now = new Date();
+
+  const notifications = ordered.map((key) => {
+    const scheduleDate = parseTimeToDate(prayerTimesToday[key]);
+    if (scheduleDate <= now) {
+      scheduleDate.setDate(scheduleDate.getDate() + 1);
     }
+
+    return {
+      id: PRAYER_NOTIFICATION_IDS[key],
+      title: `حان الآن وقت صلاة ${prayerNames[key]}`,
+      body: currentCity
+        ? `المدينة: ${currentCity}`
+        : "تطبيق نور يذكرك بموعد الصلاة.",
+      schedule: {
+        at: scheduleDate,
+        repeats: true,
+        every: "day",
+      },
+      smallIcon: "ic_launcher",
+      largeIcon: "ic_launcher",
+      extra: { prayerKey: key },
+    };
   });
+
+  await localNotifications.cancel({
+    notifications: ordered.map((key) => ({ id: PRAYER_NOTIFICATION_IDS[key] })),
+  });
+
+  await localNotifications.schedule({ notifications });
 }
 
-function checkForAdhanNotification() {
-  if (!prayerTimesToday || !notificationEnabled()) return;
-
-  const now = new Date();
-  const ordered = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
-
-  for (const key of ordered) {
-    const prayerDate = parseTimeToDate(prayerTimesToday[key]);
-    const diff = Math.abs(now - prayerDate);
-
-    if (
-      diff < 30000 &&
-      lastNotifiedPrayerKey !== `${key}-${now.toDateString()}`
-    ) {
-      lastNotifiedPrayerKey = `${key}-${now.toDateString()}`;
-
-      new Notification(`حان الآن وقت صلاة ${prayerNames[key]}`, {
-        body: currentCity
-          ? `المدينة: ${currentCity}`
-          : "تطبيق نور يذكرك بموعد الصلاة.",
-        icon: "assets/favicon.png",
-        badge: "assets/favicon.png",
-      });
+async function requestNotificationPermission() {
+  try {
+    const localNotifications = getLocalNotificationsPlugin();
+    if (!localNotifications) {
+      alert("ميزة التنبيهات تعمل داخل تطبيق أندرويد فقط.");
+      return;
     }
+
+    await localNotifications.createChannel?.({
+      id: "prayer-adhan",
+      name: "تنبيهات الصلاة",
+      description: "تنبيهات مواقيت الصلاة اليومية",
+      importance: 5,
+      sound: "default",
+      visibility: 1,
+      vibration: true,
+    });
+
+    const permission = await localNotifications.requestPermissions();
+    if (permission.display !== "granted") {
+      alert("لم يتم السماح بالإشعارات.");
+      return;
+    }
+
+    await scheduleAdhanNotifications();
+    alert("تم تفعيل تنبيهات الصلاة بنجاح.");
+  } catch (error) {
+    console.error("Notification permission/schedule failed", error);
+    alert("تعذر تفعيل التنبيهات حالياً.");
   }
 }
 
 function startAdhanWatcher() {
   if (adhanCheckTimer) clearInterval(adhanCheckTimer);
 
-  checkForAdhanNotification();
+  scheduleAdhanNotifications().catch((error) => {
+    console.warn("Unable to auto-refresh adhan schedule", error);
+  });
 
   adhanCheckTimer = setInterval(() => {
-    checkForAdhanNotification();
+    const now = new Date();
+    if (now.getHours() === 0 && now.getMinutes() === 1 && now.getSeconds() < 20) {
+      scheduleAdhanNotifications().catch((error) => {
+        console.warn("Unable to refresh next-day adhan schedule", error);
+      });
+    }
   }, 15000);
 }
 
