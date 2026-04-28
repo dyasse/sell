@@ -137,6 +137,10 @@ select {
   gap: 10px;
 }
 
+.nav-actions-rtl {
+  margin-inline-start: auto;
+}
+
 .auth-nav-btn {
   color: #0f172a;
 }

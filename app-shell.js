@@ -104,6 +104,8 @@
     const resolvedTheme = theme === DARK_THEME ? DARK_THEME : LIGHT_THEME;
     document.documentElement.setAttribute("data-theme", resolvedTheme);
     document.body?.setAttribute("data-theme", resolvedTheme);
+    document.documentElement.classList.toggle("dark", resolvedTheme === DARK_THEME);
+    document.body?.classList.toggle("dark", resolvedTheme === DARK_THEME);
 
     const metaTheme = document.querySelector('meta[name="theme-color"]');
     if (metaTheme) {
@@ -123,7 +125,7 @@
 
   async function initTheme() {
     try {
-      const savedTheme = await storageGet(THEME_KEY);
+      const savedTheme = localStorage.getItem(THEME_KEY) || (await storageGet(THEME_KEY));
       state.theme = savedTheme || DEFAULT_THEME;
     } catch (error) {
       console.warn("Theme restore failed", error);
@@ -134,8 +136,6 @@
   }
 
   function buildThemeToggle() {
-    if (document.getElementById("themeToggleBtn")) return;
-
     const navbar = document.querySelector(".navbar");
     if (!navbar) return;
 
@@ -144,6 +144,21 @@
       actions = document.createElement("div");
       actions.className = "nav-actions";
       navbar.appendChild(actions);
+    }
+
+    if (!document.getElementById("openSettingsBtn")) {
+      const settingsLink = document.createElement("a");
+      settingsLink.id = "openSettingsBtn";
+      settingsLink.className = "share-app-btn";
+      settingsLink.href = "settings.html";
+      settingsLink.setAttribute("aria-label", "الإعدادات");
+      settingsLink.innerHTML = '<i class="fa-solid fa-gear"></i>';
+      actions.prepend(settingsLink);
+    }
+
+    if (document.getElementById("themeToggleBtn")) {
+      applyTheme(state.theme);
+      return;
     }
 
     const button = document.createElement("button");
@@ -155,6 +170,7 @@
     button.addEventListener("click", async () => {
       state.theme = state.theme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
       applyTheme(state.theme);
+      localStorage.setItem(THEME_KEY, state.theme);
       await storageSet(THEME_KEY, state.theme);
     });
 

@@ -11,6 +11,7 @@
     "android:run": "npx cap run android"
   },
   "dependencies": {
+    "@capacitor/local-notifications": "^7.0.3",
     "@capacitor/core": "^7.4.3",
     "@vercel/analytics": "latest"
   },
