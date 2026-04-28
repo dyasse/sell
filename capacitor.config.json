@@ -1,5 +1,5 @@
 {
-  "appId": "com.dyasse.nourquran",
+  ""appId": "com.nour.el.quran",
   "appName": "Nour Quran",
   "webDir": "dist",
   "bundledWebRuntime": false,
