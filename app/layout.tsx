@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 
 import GoogleAnalytics from '../components/GoogleAnalytics';
+import Header from '../components/Header';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://example.com'),
@@ -30,7 +31,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <GoogleAnalytics />
       </head>
-      <body>{children}</body>
+      <body>
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }

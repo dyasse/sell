@@ -19,6 +19,7 @@ const PRAYER_NOTIFICATION_IDS = {
   Maghrib: 204,
   Isha: 205,
 };
+const PRAYER_CHANNEL_ID = "prayer-adhan";
 
 function $(id) {
   return document.getElementById(id);
@@ -147,6 +148,7 @@ async function scheduleAdhanNotifications() {
       body: currentCity
         ? `المدينة: ${currentCity}`
         : "تطبيق نور يذكرك بموعد الصلاة.",
+      channelId: PRAYER_CHANNEL_ID,
       schedule: {
         at: scheduleDate,
         repeats: true,
@@ -174,7 +176,7 @@ async function requestNotificationPermission() {
     }
 
     await localNotifications.createChannel?.({
-      id: "prayer-adhan",
+      id: PRAYER_CHANNEL_ID,
       name: "تنبيهات الصلاة",
       description: "تنبيهات مواقيت الصلاة اليومية",
       importance: 5,
@@ -200,9 +202,15 @@ async function requestNotificationPermission() {
 function startAdhanWatcher() {
   if (adhanCheckTimer) clearInterval(adhanCheckTimer);
 
-  scheduleAdhanNotifications().catch((error) => {
-    console.warn("Unable to auto-refresh adhan schedule", error);
-  });
+  getLocalNotificationsPlugin()
+    ?.checkPermissions?.()
+    .then((permission) => {
+      if (permission?.display !== "granted") return;
+      return scheduleAdhanNotifications();
+    })
+    .catch((error) => {
+      console.warn("Unable to auto-refresh adhan schedule", error);
+    });
 
   adhanCheckTimer = setInterval(() => {
     const now = new Date();
