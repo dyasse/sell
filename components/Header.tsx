@@ -13,6 +13,13 @@ function applyTheme(theme: string) {
   document.body.classList.toggle(DARK_THEME, isDark);
 }
 
+const links = [
+  { href: "/about", label: "من نحن" },
+  { href: "/privacy-policy", label: "الخصوصية" },
+  { href: "/terms", label: "الشروط" },
+  { href: "/contact", label: "تواصل" },
+];
+
 export default function Header() {
   const [theme, setTheme] = useState<string>(LIGHT_THEME);
 
@@ -37,11 +44,21 @@ export default function Header() {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        gap: "12px",
+        flexWrap: "wrap",
         padding: "12px 16px",
         background: isDark ? "#111827" : "#166534",
       }}
     >
       <strong style={{ color: "#fff" }}>نور</strong>
+
+      <nav aria-label="روابط الصفحات الأساسية" style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+        {links.map((link) => (
+          <a key={link.href} href={link.href} style={{ color: "#fff", textDecoration: "none", fontSize: "14px" }}>
+            {link.label}
+          </a>
+        ))}
+      </nav>
 
       <div style={{ display: "flex", gap: "8px" }}>
         <a
