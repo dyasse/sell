@@ -131,6 +131,24 @@ select {
   transform: translateY(-1px);
 }
 
+
+.nav-meta-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.nav-meta-links a {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.nav-meta-links a:hover {
+  text-decoration: underline;
+}
+
 .nav-actions {
   display: flex;
   align-items: center;
