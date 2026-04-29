@@ -34,6 +34,7 @@ body {
     linear-gradient(180deg, #f7faf9 0%, #f2f5f7 100%);
   color: var(--text);
   min-height: 100vh;
+  padding-bottom: 74px;
 }
 
 img {
@@ -146,6 +147,31 @@ select {
 }
 
 .nav-meta-links a:hover {
+  text-decoration: underline;
+}
+
+
+.bottom-meta-nav {
+  position: sticky;
+  bottom: 0;
+  z-index: 120;
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.9);
+  border-top: 1px solid rgba(230, 236, 232, 0.9);
+  padding: 10px 14px;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.bottom-meta-nav a {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.bottom-meta-nav a:hover {
   text-decoration: underline;
 }
 
