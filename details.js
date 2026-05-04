@@ -67,6 +67,24 @@ function setupSurahAudioButton({ id, surahName }) {
       return;
     }
 
+    const playerState = window.nourAudioPlayer.getState?.();
+    const normalizedCurrent = (playerState?.audioUrl || "").replace(/\?.*$/, "");
+    const normalizedTarget = audioUrl.replace(/\?.*$/, "");
+    const globalAudio = document.getElementById("globalAudioElement");
+
+    if (normalizedCurrent && normalizedCurrent === normalizedTarget && globalAudio) {
+      try {
+        if (globalAudio.paused) {
+          await globalAudio.play();
+        } else {
+          globalAudio.pause();
+        }
+      } catch (error) {
+        console.error("Toggle audio failed", error);
+      }
+      return;
+    }
+
     setPlayButtonLoading(true);
     const onAudioErrorEvent = (event) => {
       const errorInfo = event?.detail || null;
@@ -103,6 +121,17 @@ function escapeHtml(text) {
     .replace(/'/g, "&#39;");
 }
 
+function getVerseTiming(verse) {
+  const startTime = Number(verse?.start_time ?? verse?.startTime ?? verse?.timestamp_from);
+  const endTime = Number(verse?.end_time ?? verse?.endTime ?? verse?.timestamp_to);
+
+  if (!Number.isFinite(startTime) || !Number.isFinite(endTime) || endTime <= startTime) {
+    return null;
+  }
+
+  return { startTime, endTime };
+}
+
 function createVerseHTML(verse, surahId, surahName) {
   const verseNumber = verse?.verse_key?.split(":")[1];
 
@@ -111,17 +140,91 @@ function createVerseHTML(verse, surahId, surahName) {
   }
 
   const safeSurahName = surahName.replace(/'/g, "\\'");
+  const timing = getVerseTiming(verse);
+  const timingAttrs = timing
+    ? `data-start-time="${timing.startTime}" data-end-time="${timing.endTime}"`
+    : "";
 
   return `
     <span
       id="ayah-${verseNumber}"
       class="ayah"
+      ${timingAttrs}
       onclick="saveAndTafsir(${surahId}, ${verseNumber}, '${safeSurahName}')"
       title="اضغط لحفظ العلامة وقراءة التفسير"
     >
       ${escapeHtml(verse.text_uthmani)} <span class="ayah-num">${verseNumber}</span>
     </span>
   `;
+}
+
+function setupAyahAutoSync() {
+  const audio = document.getElementById("globalAudioElement");
+  const verses = Array.from(document.querySelectorAll(".ayah[data-start-time][data-end-time]"));
+  if (!audio || verses.length === 0) return;
+
+  const timeline = verses
+    .map((el) => ({
+      el,
+      start: Number(el.dataset.startTime),
+      end: Number(el.dataset.endTime)
+    }))
+    .filter((item) => Number.isFinite(item.start) && Number.isFinite(item.end) && item.end > item.start)
+    .sort((a, b) => a.start - b.start);
+  if (timeline.length === 0) return;
+
+  let activeIndex = -1;
+  let lastScrollAt = 0;
+  const SCROLL_COOLDOWN_MS = 900;
+
+  const findActiveIndex = (time) => {
+    let low = 0;
+    let high = timeline.length - 1;
+
+    while (low <= high) {
+      const mid = (low + high) >> 1;
+      const item = timeline[mid];
+
+      if (time < item.start) high = mid - 1;
+      else if (time > item.end) low = mid + 1;
+      else return mid;
+    }
+
+    return -1;
+  };
+
+  const activateAyah = (index) => {
+    if (index === activeIndex) return;
+
+    if (activeIndex >= 0) {
+      timeline[activeIndex].el.classList.remove("active-ayah");
+    }
+
+    activeIndex = index;
+    if (activeIndex < 0) return;
+
+    const activeEl = timeline[activeIndex].el;
+    activeEl.classList.add("active-ayah");
+
+    const now = Date.now();
+    if (now - lastScrollAt >= SCROLL_COOLDOWN_MS) {
+      lastScrollAt = now;
+      activeEl.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
+  audio.addEventListener("timeupdate", () => {
+    if (audio.paused) return;
+    activateAyah(findActiveIndex(audio.currentTime));
+  });
+
+  audio.addEventListener("seeking", () => {
+    activateAyah(findActiveIndex(audio.currentTime));
+  });
+
+  audio.addEventListener("ended", () => {
+    activateAyah(-1);
+  });
 }
 
 function renderSurahNavigation(id) {
@@ -194,6 +297,8 @@ async function loadSurah() {
 
       ${renderSurahNavigation(id)}
     `;
+
+    setupAyahAutoSync();
 
     if (ayah) {
       setTimeout(() => {
