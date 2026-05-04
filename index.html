@@ -37,26 +37,55 @@
 </head>
 <body>
   <nav class="navbar">
-    <a href="index.html" class="brand">
-      <div class="brand-mark">
-        <img src="assets/favicon.png" alt="نور" />
-      </div>
-      <div class="brand-text">
-        <span class="brand-title">نور</span>
-        <span class="brand-subtitle">Quran & Azkar</span>
-      </div>
+    <a href="index.html" class="brand premium-brand" aria-label="العودة للرئيسية">
+      <span class="brand-title">Nour</span>
     </a>
-
-
-    <div class="nav-actions">
-      <button id="shareAppBtn" class="share-app-btn" type="button" aria-label="مشاركة التطبيق">
-        <i class="fa-solid fa-share-nodes"></i>
-      </button>
-      <button id="openAuthBtn" class="share-app-btn auth-nav-btn" type="button" aria-label="تسجيل الدخول">
-        <i class="fa-solid fa-user"></i>
+    <button id="openSettingsBtn" class="settings-trigger" type="button" aria-label="فتح الإعدادات">
+      <i class="fa-solid fa-gear"></i>
+    </button>
+  </nav>
+  <div id="settingsBackdrop" class="settings-backdrop" aria-hidden="true"></div>
+  <aside id="settingsDrawer" class="settings-drawer" aria-hidden="true">
+    <div class="settings-head">
+      <h2>Settings</h2>
+      <button id="closeSettingsBtn" class="settings-close-btn" type="button" aria-label="إغلاق الإعدادات">
+        <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
-  </nav>
+
+    <div class="settings-group">
+      <label for="darkModeToggle">Dark Mode</label>
+      <label class="switch">
+        <input id="darkModeToggle" type="checkbox" />
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="settings-group prayer-offset-group">
+      <p>Adjust Prayer Times</p>
+      <div class="offset-control">
+        <button id="decreaseOffsetBtn" type="button" aria-label="تقليل وقت الصلاة">−</button>
+        <strong id="offsetValue">0 min</strong>
+        <button id="increaseOffsetBtn" type="button" aria-label="زيادة وقت الصلاة">+</button>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <label for="languageSelector">Language</label>
+      <select id="languageSelector">
+        <option value="ar">Arabic</option>
+        <option value="fr">French</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+
+    <button id="shareAppBtn" class="settings-action-btn" type="button">
+      <i class="fa-solid fa-share-nodes"></i>
+      <span>Share App</span>
+    </button>
+
+    <button id="openAuthBtn" class="signin-btn" type="button">Sign In</button>
+  </aside>
 
   <main class="page-shell">
     <section class="hero-panel">
