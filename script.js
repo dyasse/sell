@@ -120,6 +120,82 @@ function initShareButton() {
   shareBtn.addEventListener("click", shareApp);
 }
 
+function initSettingsDrawer() {
+  const openBtn = document.getElementById("openSettingsBtn");
+  const closeBtn = document.getElementById("closeSettingsBtn");
+  const drawer = document.getElementById("settingsDrawer");
+  const backdrop = document.getElementById("settingsBackdrop");
+  const darkModeToggle = document.getElementById("darkModeToggle");
+  const decreaseOffsetBtn = document.getElementById("decreaseOffsetBtn");
+  const increaseOffsetBtn = document.getElementById("increaseOffsetBtn");
+  const offsetValue = document.getElementById("offsetValue");
+  const languageSelector = document.getElementById("languageSelector");
+
+  if (!openBtn || !drawer || !backdrop) return;
+
+  const OFFSET_KEY = "nour_prayer_offset_minutes";
+  const THEME_KEY = "nour_theme";
+  const LANG_KEY = "nour_ui_language";
+
+  const openDrawer = () => {
+    drawer.classList.add("show");
+    backdrop.classList.add("show");
+    drawer.setAttribute("aria-hidden", "false");
+    backdrop.setAttribute("aria-hidden", "false");
+  };
+
+  const closeDrawer = () => {
+    drawer.classList.remove("show");
+    backdrop.classList.remove("show");
+    drawer.setAttribute("aria-hidden", "true");
+    backdrop.setAttribute("aria-hidden", "true");
+  };
+
+  openBtn.addEventListener("click", openDrawer);
+  closeBtn?.addEventListener("click", closeDrawer);
+  backdrop.addEventListener("click", closeDrawer);
+
+  const applyTheme = (theme) => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem(THEME_KEY, theme);
+    if (darkModeToggle) darkModeToggle.checked = theme === "dark";
+  };
+
+  const savedTheme = localStorage.getItem(THEME_KEY) || "light";
+  applyTheme(savedTheme);
+  darkModeToggle?.addEventListener("change", (event) => {
+    applyTheme(event.target.checked ? "dark" : "light");
+  });
+
+  let offset = Number(localStorage.getItem(OFFSET_KEY) || 0);
+  const renderOffset = () => {
+    if (offsetValue) offsetValue.textContent = `${offset} min`;
+    localStorage.setItem(OFFSET_KEY, String(offset));
+  };
+  renderOffset();
+
+  decreaseOffsetBtn?.addEventListener("click", () => {
+    offset -= 1;
+    renderOffset();
+  });
+  increaseOffsetBtn?.addEventListener("click", () => {
+    offset += 1;
+    renderOffset();
+  });
+
+  const savedLanguage = localStorage.getItem(LANG_KEY) || "ar";
+  if (languageSelector) languageSelector.value = savedLanguage;
+  languageSelector?.addEventListener("change", (event) => {
+    const selectedLanguage = event.target.value;
+    localStorage.setItem(LANG_KEY, selectedLanguage);
+    // UI-only language selector: translates app labels/buttons only; Quran & Adkar text remains Arabic.
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeDrawer();
+  });
+}
+
 function initSupportPopup() {
   const popup = document.getElementById("supportPopup");
   const closeBtn = document.getElementById("closeSupportPopupBtn");
@@ -162,5 +238,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initShareButton();
   initSupportPopup();
   initInstallPrompt();
+  initSettingsDrawer();
   registerServiceWorker();
 });
