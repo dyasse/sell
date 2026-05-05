@@ -215,6 +215,7 @@
     audio.preload = "auto";
     audio.setAttribute("playsinline", "true");
     wrapper.appendChild(audio);
+    window.globalAudioElement = audio;
 
     document.body.appendChild(wrapper);
     return { wrapper, audio };
@@ -543,11 +544,28 @@
       updateSeekValue();
     });
 
+
+    function syncActiveAyah(currentTime) {
+      const ayat = document.querySelectorAll(".ayah[data-start][data-end]");
+      ayat.forEach((el) => {
+        const start = Number.parseFloat(el.dataset.start);
+        const end = Number.parseFloat(el.dataset.end);
+        if (!Number.isFinite(start) || !Number.isFinite(end)) return;
+
+        const isActive = currentTime >= start && currentTime <= end;
+        el.classList.toggle("active-ayah", isActive);
+
+        if (isActive) {
+          el.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+        }
+      });
+    }
     audio.addEventListener("timeupdate", () => {
       state.currentTime = audio.currentTime;
       state.duration = Number.isFinite(audio.duration) ? audio.duration : state.duration;
       updateTimeLabel();
       updateSeekValue();
+      syncActiveAyah(state.currentTime);
     });
 
     audio.addEventListener("play", () => {
@@ -571,6 +589,7 @@
       updateSeekValue();
       updateTimeLabel();
       updatePlayerVisibility();
+      document.querySelectorAll(".ayah.active-ayah").forEach((el) => el.classList.remove("active-ayah"));
       persistAudioState();
     });
 
