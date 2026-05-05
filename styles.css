@@ -883,11 +883,8 @@ select {
 }
 
 .ayah.active-ayah {
-  background: linear-gradient(135deg, rgba(31, 111, 80, 0.22), rgba(31, 111, 80, 0.12));
-  box-shadow: 0 8px 20px rgba(31, 111, 80, 0.16), inset 0 0 0 1px rgba(31, 111, 80, 0.24);
-  border-radius: 12px;
-  padding: 3px 8px;
-  transition: background 0.25s ease, box-shadow 0.25s ease;
+  background-color: rgba(173, 216, 230, 0.12);
+  box-shadow: 0 6px 18px rgba(50, 130, 255, 0.08);
 }
 
 .ayah-num {
