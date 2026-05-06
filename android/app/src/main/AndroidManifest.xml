@@ -15,7 +15,7 @@
         android:theme="@style/Theme.NourQuran">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-2350255696934759~7026357823" />
+            android:value="@string/admob_app_id" />
 
         <activity
             android:name=".MainActivity"

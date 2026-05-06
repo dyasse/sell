@@ -16,6 +16,35 @@
   --radius-lg: 28px;
 }
 
+@font-face {
+  font-display: swap;
+  font-family: "Uthmani";
+  src:
+    local("KFGQPC Uthman Taha Naskh"),
+    local("Uthman Taha Naskh"),
+    local("Uthmani"),
+    url("assets/fonts/UthmanicHafs.woff2") format("woff2");
+}
+
+html[dir="rtl"] {
+  direction: rtl;
+}
+
+html[dir="rtl"] body {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] .quran-text,
+html[dir="rtl"] .ayah-text,
+html[dir="rtl"] .surah-name {
+  font-family: "Uthmani", "Amiri", "Cairo", serif;
+}
+
+html[dir="ltr"] {
+  direction: ltr;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

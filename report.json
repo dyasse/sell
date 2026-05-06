@@ -1,0 +1,222 @@
+{
+  "generated_at": "2026-05-06T00:00:00Z",
+  "summary": {
+    "repo": "dyasse/sell",
+    "hardcoded_legacy_identifiers_found_after_fix": false,
+    "notes": [
+      "Public secrets/ad IDs were replaced with placeholders and env-driven injection comments.",
+      "Git history was not rewritten; coordinate BFG/git-filter-repo if previous commits contained secrets.",
+      "Quran text/audio source license still needs final owner-approved attribution before production release."
+    ]
+  },
+  "structure": {
+    "directories_depth_2": [
+      ".",
+      "tests",
+      "app",
+      "app/tafsir",
+      "app/about",
+      "app/terms",
+      "app/privacy-policy",
+      "app/contact",
+      "android",
+      "android/app",
+      "android/.gradle",
+      "android/build",
+      "assets",
+      "assets/images",
+      "components",
+      "src",
+      "src/config",
+      "scripts",
+      "ci"
+    ],
+    "files_depth_2": [
+      "tests/quran.test.js",
+      "capacitor.config.json",
+      "package.json",
+      "privacy.html",
+      "about.html",
+      "monetization.js",
+      "support.html",
+      "app-ads.txt",
+      "index.html",
+      "privacy-policy.html",
+      "favorites.js",
+      "favorites.html",
+      "vercel.json",
+      "app/sitemap.ts",
+      "app/layout.tsx",
+      "app/robots.ts",
+      "duas.js",
+      "salat.js",
+      "manifest.json",
+      "SECURITY.md",
+      "android/gradle.properties",
+      "android/build.gradle",
+      "android/capacitor.settings.gradle",
+      "android/settings.gradle",
+      "assets/readme.txt",
+      "assets/favicon.png",
+      "salat.html",
+      "components/Header.tsx",
+      "components/TafsirContent.tsx",
+      "components/GoogleAnalytics.tsx",
+      "details.js",
+      "adhkar.html",
+      "README.md",
+      "robots.txt",
+      ".env.example",
+      "LICENSE_NOTE.md",
+      "terms.html",
+      "quran.js",
+      "script.js",
+      "sw.js",
+      "styles.css",
+      "ads.txt",
+      "quran.html",
+      "adhkar.js",
+      "app-shell.js",
+      "details.html",
+      "contact.html",
+      ".gitignore",
+      "support.js",
+      "products.json",
+      "settings.html",
+      "adhkar-details.html",
+      "sitemap.xml",
+      "adhkar.json",
+      "scripts/lint-js.mjs",
+      "scripts/build-web.mjs",
+      "ci/github-actions.yml",
+      "firebase-config.js",
+      "auth.js",
+      "duas.html"
+    ]
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "exists": true,
+      "notes": [
+        "uses placeholders/env injection"
+      ]
+    },
+    {
+      "path": ".gitignore",
+      "exists": true,
+      "notes": []
+    },
+    {
+      "path": ".env.example",
+      "exists": true,
+      "notes": [
+        "uses placeholders/env injection"
+      ]
+    },
+    {
+      "path": "LICENSE_NOTE.md",
+      "exists": true,
+      "notes": []
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "exists": true,
+      "notes": [
+        "uses placeholders/env injection",
+        "runs npm ci, lint, test, build:web; deploy placeholder disabled"
+      ]
+    },
+    {
+      "path": "ci/github-actions.yml",
+      "exists": true,
+      "notes": [
+        "uses placeholders/env injection",
+        "runs npm ci, lint, test, build:web; deploy placeholder disabled"
+      ]
+    },
+    {
+      "path": "tests/quran.test.js",
+      "exists": true,
+      "notes": [
+        "covers parseAyah, search, and audio URL validation"
+      ]
+    },
+    {
+      "path": "firebase-config.js",
+      "exists": true,
+      "notes": [
+        "uses placeholders/env injection"
+      ]
+    },
+    {
+      "path": "src/config/firebase-config.js",
+      "exists": true,
+      "notes": [
+        "uses placeholders/env injection"
+      ]
+    },
+    {
+      "path": "index.html",
+      "exists": true,
+      "notes": [
+        "uses placeholders/env injection"
+      ]
+    },
+    {
+      "path": "manifest.json",
+      "exists": true,
+      "notes": []
+    },
+    {
+      "path": "sw.js",
+      "exists": true,
+      "notes": [
+        "cache-first for versioned static assets; network-first for APIs; stale-while-revalidate for fonts"
+      ]
+    },
+    {
+      "path": "styles.css",
+      "exists": true,
+      "notes": [
+        "includes RTL and Uthmani fallback snippet"
+      ]
+    },
+    {
+      "path": "package.json",
+      "exists": true,
+      "notes": []
+    },
+    {
+      "path": "scripts/build-web.mjs",
+      "exists": true,
+      "notes": [
+        "uses placeholders/env injection"
+      ]
+    },
+    {
+      "path": "scripts/lint-js.mjs",
+      "exists": true,
+      "notes": []
+    },
+    {
+      "path": "ads.txt",
+      "exists": true,
+      "notes": [
+        "uses placeholders/env injection"
+      ]
+    },
+    {
+      "path": "app-ads.txt",
+      "exists": true,
+      "notes": [
+        "uses placeholders/env injection"
+      ]
+    },
+    {
+      "path": "android/app/src/main/AndroidManifest.xml",
+      "exists": true,
+      "notes": []
+    }
+  ]
+}

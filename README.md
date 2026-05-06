@@ -1,26 +1,35 @@
 # Nour Quran
 
-Nour Quran is a production-oriented Islamic app project with:
+Nour Quran is a mobile-friendly Islamic web app with Quran browsing, audio playback, adhkar, duas, prayer-time helpers, support pages, and a Capacitor Android shell.
 
-- A **stable web app** deployed on Vercel.
-- A **Capacitor-based Android project** prepared for Android Studio and Play Store release.
+## Project structure
 
-The repository is structured so web deployment and Android workflows are isolated and do not interfere with each other.
+- Root web files: `index.html`, `quran.html`, `styles.css`, and browser scripts.
+- `scripts/build-web.mjs`: builds a deployable `dist/` folder and injects CI-provided placeholders when matching environment variables exist.
+- `android/`: Capacitor Android project using bundled `dist/` assets.
+- `tests/`: Node unit tests for Quran parsing/search helpers.
+- `.github/workflows/ci.yml`: CI for lint, tests, web build, and a deploy placeholder.
+- `report.json`: repository audit report for required files and security notes.
 
----
+## Prerequisites
 
-## Project Structure
+- Node.js 18+ recommended.
+- npm.
+- Android Studio only if you build/run the Capacitor Android project.
 
-- Web source files remain in the repository root (`index.html`, `styles.css`, JS/JSON/assets files).
-- `scripts/build-web.mjs` builds a deployment-safe `dist/` directory for Vercel and Capacitor bundling.
-- `capacitor.config.json` defines Capacitor app identity and local web asset source.
-- `android/` contains the Android Studio project (Capacitor host app, package ID `com.dyasse.nourquran`).
+## Install
 
----
+```bash
+npm ci
+```
 
-## Local Web Development
+## Run locally
 
-You can run the site with any static server. Example:
+```bash
+npm run dev
+```
+
+If your environment does not support the npm dev command, run:
 
 ```bash
 python3 -m http.server 5173
@@ -28,161 +37,116 @@ python3 -m http.server 5173
 
 Then open `http://localhost:5173`.
 
----
-
-## Web Build (for Vercel + Capacitor)
+## Test and lint
 
 ```bash
-npm install
+npm test
+npm run lint
+```
+
+## Build for web
+
+```bash
 npm run build:web
 ```
 
-This creates `dist/` with only web deploy assets.
+The build output is written to `dist/`.
 
----
-
-## Vercel Deployment
-
-Vercel uses:
-
-- `buildCommand`: `npm run build:web`
-- `outputDirectory`: `dist`
-
-No Android/Gradle/Capacitor sync command is executed in Vercel build.
-
----
-
-## Capacitor Android Workflow
-
-Install dependencies first:
+## Capacitor Android workflow
 
 ```bash
-npm install
-```
-
-Sync the web build into Android and refresh Capacitor native config:
-
-```bash
+npm ci
 npm run cap:sync
-```
-
-Open Android Studio project:
-
-```bash
 npm run android:open
 ```
 
-Optional direct run command:
+Optional device/emulator run:
 
 ```bash
 npm run android:run
 ```
 
----
+For Play Store release, create a release keystore locally in Android Studio and never commit keystores, `.env`, or `android/local.properties`.
 
+## Environment variables
 
-## Capacitor + Android Studio Recovery Guide
-
-If Android Studio shows errors like:
-
-- `Configuring project 'capacitor-android' without an existing directory is not allowed`
-
-run this exact recovery flow from the repository root:
+Copy `.env.example` to `.env` for local secret/reference values:
 
 ```bash
-npm install
-npm run build:web
-npx cap add android
-npx cap sync android
+cp .env.example .env
 ```
 
-Notes:
+Do not commit `.env`. The public source keeps placeholders such as `{{AD_CLIENT_ID}}` and `REPLACE_ME` committed intentionally.
 
-- `capacitor.config.json` is expected to use `webDir: "dist"`; always build web assets before syncing.
-- `android/capacitor.settings.gradle` is committed and conditionally includes local `node_modules/@capacitor/android/capacitor` only when it exists.
-- `android/app/build.gradle` includes a safe fallback to Maven artifact `com.capacitorjs:capacitor-android:7.4.3` when local node modules are unavailable, so Android Studio can still sync.
+Important keys:
 
-### Open Android project cleanly
+- `FIREBASE_API_KEY`, `FIREBASE_AUTH_DOMAIN`, `FIREBASE_PROJECT_ID`, `FIREBASE_STORAGE_BUCKET`, `FIREBASE_MESSAGING_SENDER_ID`, `FIREBASE_APP_ID`, `FIREBASE_MEASUREMENT_ID`
+- `AD_CLIENT_ID`, `AD_SLOT_ID`, `ADS_PUBLISHER_ID`
+- `ADMOB_APP_ID`, `ADMOB_BANNER_AD_UNIT_ID`
+- `GA_MEASUREMENT_ID`
+- `PAYPAL_CLIENT_ID`
+- `QURAN_API_URL`, `QURAN_CHAPTERS_API_URL`, `QURAN_AUDIO_BASE_URL`
 
-1. Open Android Studio.
-2. Choose **Open** and select the `android/` folder.
-3. Wait for Gradle Sync to complete.
-4. If prompted, run `npm run cap:sync` again after any web changes.
+## Secrets in GitHub Actions
 
-### Build signed AAB for Play Store
+Store production values in **GitHub repository settings > Secrets and variables > Actions**. Add the same key names from `.env.example`, then expose them only to build/deploy steps that need them. The web build replaces `{{KEY}}` placeholders in copied deploy assets when a matching environment variable is present.
 
-1. In Android Studio, go to **Build > Generate Signed Bundle / APK**.
-2. Select **Android App Bundle**.
-3. Select/create your release keystore (never commit keystores to git).
-4. Choose `release` build variant.
-5. Build and validate the generated `.aab` before uploading to Play Console.
+Example CI environment mapping:
 
-## Android Release (Signed AAB)
+```yaml
+env:
+  AD_CLIENT_ID: ${{ secrets.AD_CLIENT_ID }}
+  AD_SLOT_ID: ${{ secrets.AD_SLOT_ID }}
+  GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}
+```
 
-1. Open `android/` in Android Studio.
-2. Confirm app ID/version:
-   - `applicationId`: `com.dyasse.nourquran`
-   - `versionCode`: `1`
-   - `versionName`: `1.0.0`
-3. Create/choose release keystore (**do not commit keystore files**).
-4. Use **Build > Generate Signed Bundle / APK > Android App Bundle (AAB)**.
-5. Choose `release` variant and sign.
-6. Validate bundle locally and upload to Google Play Console.
+## Ads and analytics placeholders
 
----
+- Web AdSense placeholders live in `index.html` and are replaced by `AD_CLIENT_ID` / `AD_SLOT_ID` during deployment.
+- App ads authorization files use `ADS_PUBLISHER_ID` placeholders.
+- Android AdMob uses `ADMOB_APP_ID` in Android resources and `ADMOB_BANNER_AD_UNIT_ID` in `monetization.js`; inject real values before a release build.
+- Google Analytics uses `GA_MEASUREMENT_ID`; keep placeholders in committed code.
 
-## Google Play Console Checklist
+## Quran text/audio license
 
-Before submission:
+See `LICENSE_NOTE.md` before release. Add exact source names, license URLs, and attribution text for any Quran text, tafsir, translation, or audio that is bundled, cached, fetched, or redistributed by the app.
 
-- App name and metadata finalized.
-- Privacy policy URL ready.
-- Screenshots and feature graphic prepared.
-- Target SDK and Data Safety form completed.
-- Internal testing track upload completed and verified.
+Recommended attribution placeholder:
 
----
+> Quran text, metadata, and audio are provided by their respective source providers. Please verify each provider's current license and attribution requirements before production release.
 
-## Notes
+## Local testing checklist
 
-- Android uses local bundled assets from `dist/` in production (not remote website loading).
-- Keep running `npm run cap:sync` after web changes to update Android assets.
-- Do not add secrets, signing keys, or local properties files to git.
+```bash
+npm ci
+npm run dev || python3 -m http.server 5173
+npm test
+npm run build:web
+npm run lint || echo "no linter configured"
+```
 
----
+## Contributing
 
+1. Create a branch for one concern.
+2. Keep commits concise, actionable, and reversible.
+3. Run `npm test`, `npm run lint`, and `npm run build:web` before opening a PR.
+4. Do not commit secrets, real ad IDs, keystores, `.env`, or local Android files.
+5. Update `README.md`, `LICENSE_NOTE.md`, and `report.json` when adding new integrations or content sources.
 
-## Monetization
+## PR template
 
-Monetization is intentionally separated by platform:
+```md
+Summary
+- What changed and why
 
-### Android (AdMob IDs configured in app)
+How to test locally
+1. npm ci
+2. cp .env.example .env and fill placeholders if needed
+3. npm test
+4. npm run build:web
+5. npm run lint
 
-- AdMob App ID is configured in Android manifest metadata:
-  - `android/app/src/main/AndroidManifest.xml`
-  - `com.google.android.gms.ads.APPLICATION_ID=ca-app-pub-2350255696934759~7026357823`
-- Android banner loading is implemented in `monetization.js` and only executes inside Capacitor Android runtime.
-- Android banner ad unit ID used by the app:
-  - `ca-app-pub-2350255696934759/8346363680`
-
-### Web (AdSense only)
-
-- AdSense script and ad unit markup are added to the web home page in `index.html`.
-- The inserted web AdSense values are:
-  - Client: `ca-pub-2350255696934759`
-  - Slot: `3365499747`
-- No Android AdMob IDs are used in web HTML.
-
-### App Ads Authorization
-
-- `app-ads.txt` is present at the repository root and included in `dist/` by the web build pipeline.
-- File content:
-  - `google.com, pub-2350255696934759, DIRECT, f08c47fec0942fa0`
-
-### Separation Guarantee
-
-- Android app monetization uses **AdMob only**.
-- Website monetization uses **AdSense only**.
-- `app-ads.txt` is kept as a plain root-level authorization file.
-- The implementation avoids mixing identifiers or SDK responsibilities across Android and web.
-
+Notes
+- I did not rewrite git history to remove secrets from past commits. If required, coordinate a BFG or git-filter-repo cleanup with the team.
+- Add exact Quran text/audio license attribution before production release.
+```
