@@ -1,5 +1,6 @@
-const SURAH_API_URL = "https://api.quran.com/api/v4/chapters?language=ar";
-const AUDIO_BASE_URL = "https://download.quranicaudio.com/quran/fahad_alkandari/";
+const runtimeEnv = typeof window !== "undefined" ? window.NOUR_ENV || {} : {};
+const SURAH_API_URL = runtimeEnv.QURAN_CHAPTERS_API_URL || runtimeEnv.QURAN_API_URL || "https://api.quran.com/api/v4/chapters?language=ar";
+const AUDIO_BASE_URL = runtimeEnv.QURAN_AUDIO_BASE_URL || "https://download.quranicaudio.com/quran/fahad_alkandari/";
 
 let allChapters = [];
 let activeLoadingSurahId = null;
@@ -27,6 +28,59 @@ function buildSurahAudioUrl(surahNumber) {
   } catch (_error) {
     return "";
   }
+}
+
+function parseAyah(input) {
+  if (typeof input !== "string") {
+    throw new TypeError("Ayah input must be a string");
+  }
+
+  const match = input.trim().match(/^(\d{1,3})\s*[:：-]\s*(\d{1,3})\s+(.+)$/u);
+  if (!match) {
+    throw new Error("Ayah input must use the format 'sura:ayah text'");
+  }
+
+  return {
+    sura: Number(match[1]),
+    ayah: Number(match[2]),
+    text: match[3].trim()
+  };
+}
+
+function normalizeSearchText(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u064B-\u065F\u0670]/g, "")
+    .replace(/[إأآٱ]/g, "ا")
+    .replace(/ى/g, "ي")
+    .replace(/ة/g, "ه");
+}
+
+function search(keyword, entries = allChapters) {
+  const term = normalizeSearchText(keyword).trim();
+  if (!term || !Array.isArray(entries)) return [];
+
+  return entries
+    .map((entry, index) => ({ entry, index }))
+    .filter(({ entry }) => {
+      const haystack = normalizeSearchText([
+        entry?.text,
+        entry?.name,
+        entry?.englishName,
+        entry?.sura,
+        entry?.ayah,
+        entry?.number
+      ].join(" "));
+
+      return haystack.includes(term);
+    })
+    .map(({ entry, index }) => ({
+      ...entry,
+      index,
+      sura: Number(entry?.sura || entry?.number || 0),
+      ayah: entry?.ayah == null ? undefined : Number(entry.ayah)
+    }));
 }
 
 function showSnackbar(message) {
@@ -261,4 +315,15 @@ async function loadQuran() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", loadQuran);
+if (typeof document !== "undefined") {
+  document.addEventListener("DOMContentLoaded", loadQuran);
+}
+
+if (typeof module !== "undefined") {
+  module.exports = {
+    buildSurahAudioUrl,
+    parseAyah,
+    search,
+    normalizeSearchText
+  };
+}

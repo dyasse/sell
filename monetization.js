@@ -1,5 +1,6 @@
 (function () {
-  const ANDROID_BANNER_AD_UNIT_ID = 'ca-app-pub-2350255696934759/8346363680';
+  const ANDROID_BANNER_AD_UNIT_ID = '{{ADMOB_BANNER_AD_UNIT_ID}}';
+  // Inject ADMOB_BANNER_AD_UNIT_ID from CI/local secrets before Android release.
   const BANNER_BOTTOM_PADDING_PX = 56;
 
   function isAndroidCapacitor() {
@@ -9,6 +10,10 @@
 
   async function showAndroidBannerAd() {
     if (!isAndroidCapacitor()) return;
+    if (!ANDROID_BANNER_AD_UNIT_ID || ANDROID_BANNER_AD_UNIT_ID.includes("{{")) {
+      console.warn('AdMob banner ID is a placeholder. Inject ADMOB_BANNER_AD_UNIT_ID before release.');
+      return;
+    }
 
     const admob = window.Capacitor?.Plugins?.AdMob;
     if (!admob) {

@@ -1,12 +1,15 @@
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseEnv = typeof window !== "undefined" ? window.NOUR_ENV || {} : {};
+
+// Placeholder-only Firebase config. Inject real values from .env/CI secrets at build time.
 const firebaseConfig = {
-  apiKey: "AIzaSyDTYiaVkb_PL5pG73v0nhKgwR5TAif_xnc",
-  authDomain: "nour-30704.firebaseapp.com",
-  projectId: "nour-30704",
-  storageBucket: "nour-30704.firebasestorage.app",
-  messagingSenderId: "387739904110",
-  appId: "1:387739904110:web:33600e65dfb0ed72f91e7f",
-  measurementId: "G-8K72MGRLFG"
+  apiKey: firebaseEnv.FIREBASE_API_KEY || "REPLACE_ME",
+  authDomain: firebaseEnv.FIREBASE_AUTH_DOMAIN || "REPLACE_ME.firebaseapp.com",
+  projectId: firebaseEnv.FIREBASE_PROJECT_ID || "REPLACE_ME",
+  storageBucket: firebaseEnv.FIREBASE_STORAGE_BUCKET || "REPLACE_ME.appspot.com",
+  messagingSenderId: firebaseEnv.FIREBASE_MESSAGING_SENDER_ID || "REPLACE_ME",
+  appId: firebaseEnv.FIREBASE_APP_ID || "REPLACE_ME",
+  measurementId: firebaseEnv.FIREBASE_MEASUREMENT_ID || "REPLACE_ME"
 };
 
 function checkBookmark() {

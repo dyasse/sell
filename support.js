@@ -4,14 +4,17 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-// ضع إعدادات Firebase هنا
+const firebaseEnv = typeof window !== "undefined" ? window.NOUR_ENV || {} : {};
+
+// Configure these values through CI secrets or a local, uncommitted env injection step.
 const firebaseConfig = {
-  apiKey: "PUT_YOUR_API_KEY",
-  authDomain: "PUT_YOUR_PROJECT.firebaseapp.com",
-  projectId: "PUT_YOUR_PROJECT_ID",
-  storageBucket: "PUT_YOUR_PROJECT.appspot.com",
-  messagingSenderId: "PUT_ID",
-  appId: "PUT_APP_ID"
+  apiKey: firebaseEnv.FIREBASE_API_KEY || "REPLACE_ME",
+  authDomain: firebaseEnv.FIREBASE_AUTH_DOMAIN || "REPLACE_ME.firebaseapp.com",
+  projectId: firebaseEnv.FIREBASE_PROJECT_ID || "REPLACE_ME",
+  storageBucket: firebaseEnv.FIREBASE_STORAGE_BUCKET || "REPLACE_ME.appspot.com",
+  messagingSenderId: firebaseEnv.FIREBASE_MESSAGING_SENDER_ID || "REPLACE_ME",
+  appId: firebaseEnv.FIREBASE_APP_ID || "REPLACE_ME",
+  measurementId: firebaseEnv.FIREBASE_MEASUREMENT_ID || "REPLACE_ME"
 };
 
 // init firebase

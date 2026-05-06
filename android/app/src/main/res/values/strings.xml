@@ -4,4 +4,6 @@
     <string name="title_activity_main">Nour Quran</string>
     <string name="package_name">com.dyasse.nourquran</string>
     <string name="custom_url_scheme">com.dyasse.nourquran</string>
+    <!-- Replace from CI/local secrets before release; never commit real ad IDs. -->
+    <string name="admob_app_id">{{ADMOB_APP_ID}}</string>
 </resources>

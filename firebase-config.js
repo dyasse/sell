@@ -1,14 +1,22 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
 
+const runtimeEnv =
+  typeof process !== "undefined" && process.env
+    ? process.env
+    : typeof window !== "undefined"
+      ? window.NOUR_ENV || {}
+      : {};
+
+// Configure these values through .env locally and GitHub Actions secrets in CI.
 const firebaseConfig = {
-  apiKey: "AIzaSyDTYiaVkb_PL5pG73v0nhKgwR5TAif_xnc",
-  authDomain: "nour-30704.firebaseapp.com",
-  projectId: "nour-30704",
-  storageBucket: "nour-30704.firebasestorage.app",
-  messagingSenderId: "387739904110",
-  appId: "1:387739904110:web:33600e65dfb0ed72f91e7f",
-  measurementId: "G-8K72MGRLFG"
+  apiKey: runtimeEnv.FIREBASE_API_KEY || "REPLACE_ME",
+  authDomain: runtimeEnv.FIREBASE_AUTH_DOMAIN || "REPLACE_ME.firebaseapp.com",
+  projectId: runtimeEnv.FIREBASE_PROJECT_ID || "REPLACE_ME",
+  storageBucket: runtimeEnv.FIREBASE_STORAGE_BUCKET || "REPLACE_ME.appspot.com",
+  messagingSenderId: runtimeEnv.FIREBASE_MESSAGING_SENDER_ID || "REPLACE_ME",
+  appId: runtimeEnv.FIREBASE_APP_ID || "REPLACE_ME",
+  measurementId: runtimeEnv.FIREBASE_MEASUREMENT_ID || "REPLACE_ME"
 };
 
 const app = initializeApp(firebaseConfig);

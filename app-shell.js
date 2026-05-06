@@ -11,11 +11,13 @@
       host.endsWith(".local");
 
     if (isLocalHost) return;
+    const measurementId = "{{GA_MEASUREMENT_ID}}";
+    if (!measurementId || measurementId.includes("{{")) return;
     if (document.querySelector('script[data-nour-ga-loader="true"]')) return;
 
     const script = document.createElement("script");
     script.async = true;
-    script.src = "https://www.googletagmanager.com/gtag/js?id=G-8K72MGRLFG";
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
     script.setAttribute("data-nour-ga-loader", "true");
     document.head.appendChild(script);
 
@@ -25,7 +27,7 @@
     };
 
     window.gtag("js", new Date());
-    window.gtag("config", "G-8K72MGRLFG");
+    window.gtag("config", measurementId);
   }
 
   function initVercelAnalytics() {
