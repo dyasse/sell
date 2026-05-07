@@ -19,3 +19,7 @@ This repository contains application code and references Quran text/audio provid
 2. Add exact source names, URLs, license names, and attribution statements to this file.
 3. Keep copies of license pages or written permissions for release records.
 4. If a provider requires a specific attribution string, display it in the app's About or License screen.
+
+## Audio sync and caching note
+
+The service worker intentionally avoids storing full Quran audio files in Cache Storage so recitations remain streamed/range-requested from their source provider. If future builds bundle timestamp manifests, text, tafsir, translations, or audio, add provider-specific license and attribution details here before release.

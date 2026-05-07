@@ -3,6 +3,7 @@ const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const API_CACHE = `${CACHE_VERSION}-api`;
 const FONT_CACHE = `${CACHE_VERSION}-fonts`;
+const AUDIO_MANIFEST_CACHE = `${CACHE_VERSION}-audio-manifest`;
 
 const APP_SHELL = [
   "./",
@@ -18,6 +19,7 @@ const APP_SHELL = [
   "./app-shell.js",
   "./script.js",
   "./quran.js",
+  "./src/quran-sync.js",
   "./details.js",
   "./adhkar.js",
   "./duas.js",
@@ -58,6 +60,17 @@ function isFontRequest(requestUrl) {
     requestUrl.hostname === "fonts.gstatic.com" ||
     /\.(?:woff2?|ttf|otf)$/i.test(requestUrl.pathname)
   );
+}
+
+function isAudioFileRequest(request, requestUrl) {
+  return (
+    request.destination === "audio" ||
+    /\.(?:mp3|m4a|aac|ogg|opus|wav)$/i.test(requestUrl.pathname)
+  );
+}
+
+function isAudioManifestRequest(requestUrl) {
+  return /(?:audio[-_]?manifest|timings|timestamps|verse[-_]?timings)\.(?:json|txt)$/i.test(requestUrl.pathname);
 }
 
 async function cacheFirst(request, cacheName) {
@@ -123,7 +136,7 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("activate", (event) => {
-  const validCaches = [STATIC_CACHE, RUNTIME_CACHE, API_CACHE, FONT_CACHE];
+  const validCaches = [STATIC_CACHE, RUNTIME_CACHE, API_CACHE, FONT_CACHE, AUDIO_MANIFEST_CACHE];
 
   event.waitUntil(
     caches.keys().then((keys) => Promise.all(
@@ -140,6 +153,12 @@ self.addEventListener("fetch", (event) => {
 
   const requestUrl = new URL(request.url);
 
+  if (isAudioFileRequest(request, requestUrl)) {
+    // Do not cache full Quran audio files in Cache Storage; let the browser stream/range-request them.
+    event.respondWith(fetch(request));
+    return;
+  }
+
   if (isApiRequest(request, requestUrl)) {
     event.respondWith(networkFirst(request, API_CACHE));
     return;
@@ -147,6 +166,11 @@ self.addEventListener("fetch", (event) => {
 
   if (isFontRequest(requestUrl)) {
     event.respondWith(staleWhileRevalidate(request, FONT_CACHE));
+    return;
+  }
+
+  if (isAudioManifestRequest(requestUrl)) {
+    event.respondWith(staleWhileRevalidate(request, AUDIO_MANIFEST_CACHE));
     return;
   }
 

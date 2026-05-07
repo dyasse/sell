@@ -1,3 +1,8 @@
+const runtimeEnv = typeof window !== "undefined" ? window.NOUR_ENV || {} : {};
+const QURAN_AUDIO_BASE_URL = runtimeEnv.QURAN_AUDIO_BASE_URL || "https://download.quranicaudio.com/quran/fahad_alkandari/";
+const DEFAULT_RECITER_ID = runtimeEnv.QURAN_RECITER_ID || "fahad_alkandari";
+let quranSyncInstance = null;
+
 function getParams() {
   const params = new URLSearchParams(window.location.search);
 
@@ -11,7 +16,7 @@ function buildSurahAudioUrl(surahNumber) {
   const id = Number(surahNumber);
   if (!Number.isInteger(id) || id < 1 || id > 114) return "";
   const filename = id.toString().padStart(3, "0") + ".mp3";
-  const normalized = `https://download.quranicaudio.com/quran/fahad_alkandari/${filename}`;
+  const normalized = `${QURAN_AUDIO_BASE_URL}${filename}`;
   try {
     const url = new URL(normalized);
     url.protocol = "https:";
@@ -142,13 +147,15 @@ function createVerseHTML(verse, surahId, surahName) {
   const safeSurahName = surahName.replace(/'/g, "\\'");
   const timing = getVerseTiming(verse);
   const timingAttrs = timing
-    ? `data-start-time="${timing.startTime}" data-end-time="${timing.endTime}"`
+    ? `data-start="${timing.startTime}" data-end="${timing.endTime}"`
     : "";
 
   return `
     <span
       id="ayah-${verseNumber}"
       class="ayah"
+      data-sura="sura_${surahId}"
+      data-ayah="${verseNumber}"
       ${timingAttrs}
       onclick="saveAndTafsir(${surahId}, ${verseNumber}, '${safeSurahName}')"
       title="اضغط لحفظ العلامة وقراءة التفسير"
@@ -158,74 +165,27 @@ function createVerseHTML(verse, surahId, surahName) {
   `;
 }
 
-function setupAyahAutoSync() {
+function setupAyahAutoSync({ id, surahName }) {
   const audio = document.getElementById("globalAudioElement");
-  const verses = Array.from(document.querySelectorAll(".ayah[data-start-time][data-end-time]"));
-  if (!audio || verses.length === 0) return;
+  if (!audio || !window.NourQuranSync?.initQuranSync) return;
 
-  const timeline = verses
-    .map((el) => ({
-      el,
-      start: Number(el.dataset.startTime),
-      end: Number(el.dataset.endTime)
-    }))
-    .filter((item) => Number.isFinite(item.start) && Number.isFinite(item.end) && item.end > item.start)
-    .sort((a, b) => a.start - b.start);
-  if (timeline.length === 0) return;
+  if (quranSyncInstance?.destroy) {
+    quranSyncInstance.destroy();
+  }
 
-  let activeIndex = -1;
-  let lastScrollAt = 0;
-  const SCROLL_COOLDOWN_MS = 900;
-
-  const findActiveIndex = (time) => {
-    let low = 0;
-    let high = timeline.length - 1;
-
-    while (low <= high) {
-      const mid = (low + high) >> 1;
-      const item = timeline[mid];
-
-      if (time < item.start) high = mid - 1;
-      else if (time > item.end) low = mid + 1;
-      else return mid;
-    }
-
-    return -1;
-  };
-
-  const activateAyah = (index) => {
-    if (index === activeIndex) return;
-
-    if (activeIndex >= 0) {
-      timeline[activeIndex].el.classList.remove("active-ayah");
-    }
-
-    activeIndex = index;
-    if (activeIndex < 0) return;
-
-    const activeEl = timeline[activeIndex].el;
-    activeEl.classList.add("active-ayah");
-
-    const now = Date.now();
-    if (now - lastScrollAt >= SCROLL_COOLDOWN_MS) {
-      lastScrollAt = now;
-      activeEl.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  };
-
-  audio.addEventListener("timeupdate", () => {
-    if (audio.paused) return;
-    activateAyah(findActiveIndex(audio.currentTime));
+  quranSyncInstance = window.NourQuranSync.initQuranSync({
+    audioEl: audio,
+    ayahSelector: ".ayah",
+    reciterId: DEFAULT_RECITER_ID,
+    suraId: `sura_${id}`,
+    title: `سورة ${surahName}`,
+    artist: DEFAULT_RECITER_ID,
+    album: "Nour Quran"
   });
 
-  audio.addEventListener("seeking", () => {
-    activateAyah(findActiveIndex(audio.currentTime));
-  });
-
-  audio.addEventListener("ended", () => {
-    activateAyah(-1);
-  });
+  window.quranSyncInstance = quranSyncInstance;
 }
+
 
 function renderSurahNavigation(id) {
   return `
@@ -298,7 +258,7 @@ async function loadSurah() {
       ${renderSurahNavigation(id)}
     `;
 
-    setupAyahAutoSync();
+    setupAyahAutoSync({ id, surahName: chapter.name_arabic });
 
     if (ayah) {
       setTimeout(() => {

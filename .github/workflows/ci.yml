@@ -66,6 +66,8 @@ jobs:
           QURAN_API_URL: ${{ secrets.QURAN_API_URL }}
           QURAN_CHAPTERS_API_URL: ${{ secrets.QURAN_CHAPTERS_API_URL }}
           QURAN_AUDIO_BASE_URL: ${{ secrets.QURAN_AUDIO_BASE_URL }}
+          QURAN_RECITER_ID: ${{ secrets.QURAN_RECITER_ID }}
+          QURAN_ARTWORK_URL: ${{ secrets.QURAN_ARTWORK_URL }}
         run: npm run build:web
 
   deploy-placeholder:
