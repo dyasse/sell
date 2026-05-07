@@ -1,222 +1,432 @@
 {
-  "generated_at": "2026-05-06T00:00:00Z",
-  "summary": {
-    "repo": "dyasse/sell",
-    "hardcoded_legacy_identifiers_found_after_fix": false,
-    "notes": [
-      "Public secrets/ad IDs were replaced with placeholders and env-driven injection comments.",
-      "Git history was not rewritten; coordinate BFG/git-filter-repo if previous commits contained secrets.",
-      "Quran text/audio source license still needs final owner-approved attribution before production release."
-    ]
-  },
-  "structure": {
-    "directories_depth_2": [
-      ".",
-      "tests",
-      "app",
-      "app/tafsir",
-      "app/about",
-      "app/terms",
-      "app/privacy-policy",
-      "app/contact",
-      "android",
-      "android/app",
-      "android/.gradle",
-      "android/build",
-      "assets",
-      "assets/images",
-      "components",
-      "src",
-      "src/config",
-      "scripts",
-      "ci"
-    ],
-    "files_depth_2": [
-      "tests/quran.test.js",
-      "capacitor.config.json",
-      "package.json",
-      "privacy.html",
-      "about.html",
-      "monetization.js",
-      "support.html",
-      "app-ads.txt",
-      "index.html",
-      "privacy-policy.html",
-      "favorites.js",
-      "favorites.html",
-      "vercel.json",
-      "app/sitemap.ts",
-      "app/layout.tsx",
-      "app/robots.ts",
-      "duas.js",
-      "salat.js",
-      "manifest.json",
-      "SECURITY.md",
-      "android/gradle.properties",
-      "android/build.gradle",
-      "android/capacitor.settings.gradle",
-      "android/settings.gradle",
-      "assets/readme.txt",
-      "assets/favicon.png",
-      "salat.html",
-      "components/Header.tsx",
-      "components/TafsirContent.tsx",
-      "components/GoogleAnalytics.tsx",
-      "details.js",
-      "adhkar.html",
-      "README.md",
-      "robots.txt",
-      ".env.example",
-      "LICENSE_NOTE.md",
-      "terms.html",
-      "quran.js",
-      "script.js",
-      "sw.js",
-      "styles.css",
-      "ads.txt",
-      "quran.html",
-      "adhkar.js",
-      "app-shell.js",
-      "details.html",
-      "contact.html",
-      ".gitignore",
-      "support.js",
-      "products.json",
-      "settings.html",
-      "adhkar-details.html",
-      "sitemap.xml",
-      "adhkar.json",
-      "scripts/lint-js.mjs",
-      "scripts/build-web.mjs",
-      "ci/github-actions.yml",
-      "firebase-config.js",
-      "auth.js",
-      "duas.html"
-    ]
-  },
   "files": [
-    {
-      "path": "README.md",
-      "exists": true,
-      "notes": [
-        "uses placeholders/env injection"
-      ]
-    },
     {
       "path": ".gitignore",
       "exists": true,
-      "notes": []
+      "notes": "present"
     },
     {
       "path": ".env.example",
       "exists": true,
-      "notes": [
-        "uses placeholders/env injection"
-      ]
+      "notes": "contains committed placeholders intended for CI/env injection, not production values; Firebase configuration is placeholder/env-driven"
+    },
+    {
+      "path": "README.md",
+      "exists": true,
+      "notes": "contains committed placeholders intended for CI/env injection, not production values; Firebase configuration is placeholder/env-driven"
     },
     {
       "path": "LICENSE_NOTE.md",
       "exists": true,
-      "notes": []
+      "notes": "present"
     },
     {
-      "path": ".github/workflows/ci.yml",
+      "path": "report.json",
       "exists": true,
-      "notes": [
-        "uses placeholders/env injection",
-        "runs npm ci, lint, test, build:web; deploy placeholder disabled"
-      ]
-    },
-    {
-      "path": "ci/github-actions.yml",
-      "exists": true,
-      "notes": [
-        "uses placeholders/env injection",
-        "runs npm ci, lint, test, build:web; deploy placeholder disabled"
-      ]
-    },
-    {
-      "path": "tests/quran.test.js",
-      "exists": true,
-      "notes": [
-        "covers parseAyah, search, and audio URL validation"
-      ]
-    },
-    {
-      "path": "firebase-config.js",
-      "exists": true,
-      "notes": [
-        "uses placeholders/env injection"
-      ]
-    },
-    {
-      "path": "src/config/firebase-config.js",
-      "exists": true,
-      "notes": [
-        "uses placeholders/env injection"
-      ]
-    },
-    {
-      "path": "index.html",
-      "exists": true,
-      "notes": [
-        "uses placeholders/env injection"
-      ]
-    },
-    {
-      "path": "manifest.json",
-      "exists": true,
-      "notes": []
-    },
-    {
-      "path": "sw.js",
-      "exists": true,
-      "notes": [
-        "cache-first for versioned static assets; network-first for APIs; stale-while-revalidate for fonts"
-      ]
-    },
-    {
-      "path": "styles.css",
-      "exists": true,
-      "notes": [
-        "includes RTL and Uthmani fallback snippet"
-      ]
+      "notes": "present"
     },
     {
       "path": "package.json",
       "exists": true,
-      "notes": []
+      "notes": "present"
+    },
+    {
+      "path": "package-lock.json",
+      "exists": true,
+      "notes": "present"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "exists": true,
+      "notes": "contains committed placeholders intended for CI/env injection, not production values; runs npm ci, lint, test, build:web with deployment placeholder"
+    },
+    {
+      "path": "ci/github-actions.yml",
+      "exists": true,
+      "notes": "contains committed placeholders intended for CI/env injection, not production values; runs npm ci, lint, test, build:web with deployment placeholder"
+    },
+    {
+      "path": "tests/quran.test.js",
+      "exists": true,
+      "notes": "Node test coverage for Quran parsing/search/audio URL helpers"
     },
     {
       "path": "scripts/build-web.mjs",
       "exists": true,
-      "notes": [
-        "uses placeholders/env injection"
-      ]
+      "notes": "contains committed placeholders intended for CI/env injection, not production values; Firebase configuration is placeholder/env-driven"
     },
     {
       "path": "scripts/lint-js.mjs",
       "exists": true,
-      "notes": []
+      "notes": "present"
+    },
+    {
+      "path": "firebase-config.js",
+      "exists": true,
+      "notes": "contains committed placeholders intended for CI/env injection, not production values; Firebase configuration is placeholder/env-driven"
+    },
+    {
+      "path": "src/config/firebase-config.js",
+      "exists": true,
+      "notes": "contains committed placeholders intended for CI/env injection, not production values; Firebase configuration is placeholder/env-driven"
+    },
+    {
+      "path": "support.js",
+      "exists": true,
+      "notes": "contains committed placeholders intended for CI/env injection, not production values; Firebase configuration is placeholder/env-driven"
+    },
+    {
+      "path": "index.html",
+      "exists": true,
+      "notes": "contains committed placeholders intended for CI/env injection, not production values"
+    },
+    {
+      "path": "quran.html",
+      "exists": true,
+      "notes": "present"
+    },
+    {
+      "path": "quran.js",
+      "exists": true,
+      "notes": "loads Quran chapter metadata from Quran.com API and streams recitation from QuranicAudio-compatible base URL"
+    },
+    {
+      "path": "details.html",
+      "exists": true,
+      "notes": "present"
+    },
+    {
+      "path": "details.js",
+      "exists": true,
+      "notes": "present"
+    },
+    {
+      "path": "app-shell.js",
+      "exists": true,
+      "notes": "contains committed placeholders intended for CI/env injection, not production values; global audio player streams MP3 tracks with fallback candidates and persists playback state in localStorage"
+    },
+    {
+      "path": "sw.js",
+      "exists": true,
+      "notes": "service worker uses app-shell precache, network-first API cache, and stale-while-revalidate fonts/static assets"
+    },
+    {
+      "path": "styles.css",
+      "exists": true,
+      "notes": "contains RTL direction and Arabic font fallbacks"
+    },
+    {
+      "path": "manifest.json",
+      "exists": true,
+      "notes": "present"
     },
     {
       "path": "ads.txt",
       "exists": true,
-      "notes": [
-        "uses placeholders/env injection"
-      ]
+      "notes": "contains committed placeholders intended for CI/env injection, not production values"
     },
     {
       "path": "app-ads.txt",
       "exists": true,
-      "notes": [
-        "uses placeholders/env injection"
-      ]
+      "notes": "contains committed placeholders intended for CI/env injection, not production values"
+    },
+    {
+      "path": "monetization.js",
+      "exists": true,
+      "notes": "contains committed placeholders intended for CI/env injection, not production values"
+    },
+    {
+      "path": "capacitor.config.json",
+      "exists": true,
+      "notes": "present"
     },
     {
       "path": "android/app/src/main/AndroidManifest.xml",
       "exists": true,
-      "notes": []
+      "notes": "Android shell declares internet permission, RTL support, AdMob placeholder metadata, no backup, and no cleartext traffic"
+    },
+    {
+      "path": "android/app/src/main/res/xml/network_security_config.xml",
+      "exists": true,
+      "notes": "cleartext HTTP is disabled"
+    },
+    {
+      "path": "android/app/src/main/res/values/strings.xml",
+      "exists": true,
+      "notes": "contains committed placeholders intended for CI/env injection, not production values"
+    },
+    {
+      "path": "android/app/build.gradle",
+      "exists": true,
+      "notes": "present"
+    },
+    {
+      "path": "assets/favicon.png",
+      "exists": true,
+      "notes": "contains committed placeholders intended for CI/env injection, not production values"
+    },
+    {
+      "path": "assets/images/nour-logo.png",
+      "exists": true,
+      "notes": "contains committed placeholders intended for CI/env injection, not production values"
+    },
+    {
+      "path": "adhkar.json",
+      "exists": true,
+      "notes": "present"
+    },
+    {
+      "path": "products.json",
+      "exists": true,
+      "notes": "present"
     }
+  ],
+  "functionality_summary": {
+    "website": "Static RTL Arabic web app with home/index navigation, Quran surah listing, details pages, adhkar/duas/favorites/salat/support/privacy/terms pages, global settings drawer, and shared audio player.",
+    "quran_page": "quran.html loads quran.js, fetches chapter metadata from QURAN_CHAPTERS_API_URL/QURAN_API_URL, renders searchable surah cards, and sends selected surah MP3 URLs to window.nourAudioPlayer.",
+    "audio_player": "app-shell.js creates a global HTMLAudioElement, stores playback state in localStorage, supports play/pause/seek/volume, and tries primary/fallback HTTPS audio URLs.",
+    "mobile_android": "Capacitor app id com.nour.el.quran wraps web assets in android/ with Android package namespace com.dyasse.nourquran, INTERNET permission, RTL support, and AdMob placeholders.",
+    "build_flow": "npm run build:web copies web assets to dist/ and injects known placeholders from environment variables; npm run cap:sync builds web then syncs Android.",
+    "deploy_targets": "Static web hosting/Vercel via dist plus Capacitor Android/Play Store release after secrets, signing, and content licensing are finalized."
+  },
+  "issues": [
+    {
+      "id": "SEC-001",
+      "severity": "high",
+      "title": "Production secrets and ad IDs must stay out of committed source",
+      "description": "Firebase, AdSense, AdMob, Analytics, PayPal, and Quran API values are now placeholders/env-driven, but production release still depends on CI/local injection. If real values existed in previous commits, do not rewrite history without team coordination.",
+      "files": [
+        "firebase-config.js",
+        "src/config/firebase-config.js",
+        "support.js",
+        "index.html",
+        "ads.txt",
+        "app-ads.txt",
+        "monetization.js",
+        "android/app/src/main/res/values/strings.xml",
+        ".env.example",
+        "scripts/build-web.mjs"
+      ],
+      "fix_suggestion": "Keep committed placeholders and inject via CI secrets. Command: cp .env.example .env && npm run build:web. Snippet: const firebaseConfig = { apiKey: process.env.FIREBASE_API_KEY || \"REPLACE_ME\" }; If prior git history contains real secrets, rotate the keys first, then coordinate: git filter-repo --path firebase-config.js --invert-paths (example only; do not run without team approval)."
+    },
+    {
+      "id": "SEC-002",
+      "severity": "medium",
+      "title": "Android generated secrets and signing files need strict ignore coverage",
+      "description": "Release keystores, google-services.json, PEM/P12 certificates, local.properties, .env, and Android build folders must never be committed.",
+      "files": [
+        ".gitignore",
+        "android/app/google-services.json",
+        "google-services.json",
+        "android/local.properties"
+      ],
+      "fix_suggestion": "Use the committed ignore entries. Snippet to keep in .gitignore: android/app/google-services.json\ngoogle-services.json\n*.keystore\n*.jks\n*.pem\n*.p12\nandroid/local.properties\n.env\n.env.local"
+    },
+    {
+      "id": "SEC-003",
+      "severity": "medium",
+      "title": "Android cleartext HTTP and backup should remain disabled",
+      "description": "The Android app is an Islamic content/audio app that can rely on HTTPS sources. Allowing cleartext traffic or Android backups increases data exposure risk.",
+      "files": [
+        "android/app/src/main/AndroidManifest.xml",
+        "android/app/src/main/res/xml/network_security_config.xml"
+      ],
+      "fix_suggestion": "Keep the manifest/network config hardened. Snippet: <application android:allowBackup=\"false\" android:usesCleartextTraffic=\"false\" ...> and <base-config cleartextTrafficPermitted=\"false\" />. Verify with: rg -n \"allowBackup|usesCleartextTraffic|cleartextTrafficPermitted\" android/app/src/main"
+    },
+    {
+      "id": "LEGAL-001",
+      "severity": "high",
+      "title": "Quran text, metadata, audio, tafsir, translations, and fonts need explicit license attribution",
+      "description": "The app fetches Quran.com metadata and streams QuranicAudio-compatible recitation URLs, while pages use Google Fonts/CDN Font Awesome. Production release requires exact source, license URL, redistribution/caching permission, and attribution text.",
+      "files": [
+        "LICENSE_NOTE.md",
+        "README.md",
+        "quran.js",
+        "app-shell.js",
+        "details.js",
+        "styles.css",
+        "index.html",
+        "quran.html",
+        "details.html"
+      ],
+      "fix_suggestion": "Fill LICENSE_NOTE.md before release. Paste template: Source: <provider name>\nContent: <Quran text|translation|audio|font>\nURL: <license URL>\nLicense/permission: <exact terms>\nRequired attribution: <text to display>\nRedistribution/cache allowed: <yes/no>. Add a visible About/License page link after legal approval."
+    },
+    {
+      "id": "PERF-001",
+      "severity": "medium",
+      "title": "Audio streaming needs explicit offline/range-request policy",
+      "description": "Large MP3 files are streamed from external providers. The current service worker does not cache MP3 files, which avoids storage bloat but means offline playback only works for already-buffered browser media, not full surah downloads/background replay.",
+      "files": [
+        "app-shell.js",
+        "quran.js",
+        "sw.js",
+        "privacy-policy.html"
+      ],
+      "fix_suggestion": "Keep MP3s out of generic precache. For optional downloads, add user-initiated Cache Storage with quota checks. Snippet: if (navigator.storage?.estimate) { const { quota, usage } = await navigator.storage.estimate(); if (usage / quota > 0.8) throw new Error(\"Storage quota too low\"); } Do not cache audio in sw.js fetch handler unless request.destination === \"audio\" and the user explicitly opted in."
+    },
+    {
+      "id": "PERF-002",
+      "severity": "low",
+      "title": "Third-party CSS/fonts can block rendering and weaken offline mode",
+      "description": "Several HTML pages load Google Fonts and Font Awesome from CDNs. The service worker can stale-while-revalidate fonts after first load, but first render still depends on network/CDN availability.",
+      "files": [
+        "index.html",
+        "quran.html",
+        "details.html",
+        "adhkar.html",
+        "styles.css",
+        "sw.js"
+      ],
+      "fix_suggestion": "Self-host critical WOFF2 fonts/icons or preload only required fonts. Example: <link rel=\"preload\" href=\"assets/fonts/amiri.woff2\" as=\"font\" type=\"font/woff2\" crossorigin> and CSS: @font-face { font-family: \"Amiri\"; src: url(\"assets/fonts/amiri.woff2\") format(\"woff2\"); font-display: swap; }"
+    },
+    {
+      "id": "A11Y-001",
+      "severity": "medium",
+      "title": "RTL is present, but accessibility needs keyboard and screen-reader regression coverage",
+      "description": "Pages declare lang=ar and dir=rtl and many controls have aria-labels. Remaining risk is untested keyboard focus order, settings drawer dialog semantics, dynamic snackbar announcements, player status announcements, and contrast at all theme states.",
+      "files": [
+        "index.html",
+        "quran.html",
+        "details.html",
+        "app-shell.js",
+        "script.js",
+        "styles.css"
+      ],
+      "fix_suggestion": "Add semantic live regions and focus management tests. Snippet: <div id=\"snackbarRoot\" role=\"status\" aria-live=\"polite\"></div>. For the drawer: <aside id=\"settingsDrawer\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"settingsTitle\"> and move focus to the close button on open, then restore focus on close."
+    },
+    {
+      "id": "TEST-001",
+      "severity": "medium",
+      "title": "Tests exist but coverage is too narrow for release confidence",
+      "description": "Node tests cover quran.js helpers only. There are no browser integration tests for service worker caching, audio error fallback, settings drawer, RTL rendering, Android bridge/AdMob placeholder behavior, or build placeholder injection.",
+      "files": [
+        "tests/quran.test.js",
+        "package.json",
+        "scripts/build-web.mjs",
+        "sw.js",
+        "app-shell.js",
+        "monetization.js"
+      ],
+      "fix_suggestion": "Add Playwright or Vitest/browser tests. Command: npm install -D @playwright/test && npx playwright install --with-deps chromium. Suggested test: await page.goto(\"/quran.html\"); await expect(page.locator(\"html\")).toHaveAttribute(\"dir\", \"rtl\"); await expect(page.getByRole(\"button\", { name: /الاستماع/ })).toBeVisible();"
+    },
+    {
+      "id": "CI-001",
+      "severity": "low",
+      "title": "CI exists but can be expanded with Android and secret-scan jobs",
+      "description": "GitHub Actions runs lint, test, and web build. It does not yet run Android Gradle assemble, dependency audit, license checks, or a dedicated secret scanner.",
+      "files": [
+        ".github/workflows/ci.yml",
+        "ci/github-actions.yml",
+        "package.json",
+        "android/app/build.gradle"
+      ],
+      "fix_suggestion": "Extend CI after baseline is stable. Snippet: - name: Secret scan\n  run: npx --yes gitleaks detect --source . --no-git --redact\n- name: Android debug build\n  run: cd android && ./gradlew assembleDebug"
+    },
+    {
+      "id": "ANDROID-001",
+      "severity": "medium",
+      "title": "Android release signing and background audio behavior are not production-ready yet",
+      "description": "The Android project has a release build type but no documented signing config or MediaSession/foreground service for robust background recitation. Browser audio may pause under OS pressure.",
+      "files": [
+        "android/app/build.gradle",
+        "app-shell.js",
+        "README.md",
+        "android/app/src/main/AndroidManifest.xml"
+      ],
+      "fix_suggestion": "Document signing through Android Studio or local gradle.properties only. For background audio, add a Capacitor/native media plugin with notification controls. Gradle signing example for local-only properties: signingConfigs { release { storeFile file(System.getenv(\"ANDROID_KEYSTORE_PATH\")); storePassword System.getenv(\"ANDROID_KEYSTORE_PASSWORD\"); keyAlias System.getenv(\"ANDROID_KEY_ALIAS\"); keyPassword System.getenv(\"ANDROID_KEY_PASSWORD\") } }"
+    }
+  ],
+  "missing_files": [],
+  "tests": {
+    "has_tests": true,
+    "suggested_tests": [
+      "Unit: quran.js parseAyah rejects malformed input and normalizes Arabic diacritics in search.",
+      "Unit: scripts/build-web.mjs replaces only known placeholders and leaves unknown placeholders untouched.",
+      "Integration: quran.html renders fallback error state when Quran API fails.",
+      "Integration: app-shell.js dispatches nour:audio-error and tries fallback audio candidates.",
+      "Service worker: static shell precaches, API requests are network-first, audio is not blindly precached.",
+      "Accessibility: keyboard opens/closes settings drawer, focus is trapped/restored, snackbar has aria-live.",
+      "Android: debug build validates manifest placeholders, no cleartext traffic, no backup, and no real AdMob IDs in source."
+    ]
+  },
+  "ci": {
+    "has_ci": true,
+    "suggested_workflow": "Use .github/workflows/ci.yml: lint job runs npm ci then npm run lint; test job runs npm ci then npm test; build job runs npm ci then npm run build:web with secrets placeholders; optional deploy step stays disabled until Vercel/Pages/Play credentials are configured. Recommended additions: gitleaks secret scan, npm audit --audit-level=high, license checker, and cd android && ./gradlew assembleDebug."
+  },
+  "pr_plan": [
+    {
+      "branch": "fix/cleanup-secrets-ci-tests",
+      "commit_message": "chore: add .gitignore and .env.example",
+      "files_changed": [
+        ".gitignore",
+        ".env.example"
+      ],
+      "description": "Ignore generated secrets/build artifacts and document environment placeholders."
+    },
+    {
+      "branch": "fix/cleanup-secrets-ci-tests",
+      "commit_message": "fix(security): remove hardcoded firebase and ad keys",
+      "files_changed": [
+        "firebase-config.js",
+        "src/config/firebase-config.js",
+        "support.js",
+        "index.html",
+        "ads.txt",
+        "app-ads.txt",
+        "monetization.js",
+        "android/app/src/main/res/values/strings.xml",
+        "scripts/build-web.mjs"
+      ],
+      "description": "Keep real Firebase/ad/analytics IDs out of committed source and inject via CI/local env."
+    },
+    {
+      "branch": "fix/cleanup-secrets-ci-tests",
+      "commit_message": "fix(android): disable backup and cleartext traffic",
+      "files_changed": [
+        "android/app/src/main/AndroidManifest.xml",
+        "android/app/src/main/res/xml/network_security_config.xml"
+      ],
+      "description": "Harden the Android shell for HTTPS-only traffic and reduced backup exposure."
+    },
+    {
+      "branch": "fix/cleanup-secrets-ci-tests",
+      "commit_message": "feat(ci): add GitHub Actions workflow",
+      "files_changed": [
+        ".github/workflows/ci.yml",
+        "ci/github-actions.yml"
+      ],
+      "description": "Run lint, tests, and web build in CI; include deploy placeholder using repository secrets."
+    },
+    {
+      "branch": "fix/cleanup-secrets-ci-tests",
+      "commit_message": "test: add unit tests for quran parsing",
+      "files_changed": [
+        "tests/quran.test.js",
+        "package.json"
+      ],
+      "description": "Add Node test coverage for Quran parsing, search, and audio URL normalization."
+    },
+    {
+      "branch": "fix/cleanup-secrets-ci-tests",
+      "commit_message": "docs: add README template, LICENSE_NOTE, and audit report",
+      "files_changed": [
+        "README.md",
+        "LICENSE_NOTE.md",
+        "report.json"
+      ],
+      "description": "Document setup/build/release/legal checks and attach the complete audit report."
+    }
+  ],
+  "how_to_verify": [
+    "npm ci",
+    "npm run dev or python3 -m http.server 5173, then open http://localhost:5173 and inspect index/quran/details/audio controls.",
+    "npm run lint",
+    "npm test",
+    "npm run build:web",
+    "npx serve dist to test production build output and placeholder injection behavior.",
+    "rg -n \"AIza|client_secret|ca-app-pub-[0-9]|BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY\" --glob \"!node_modules/**\" --glob \"!.git/**\" --glob \"!report.json\" .",
+    "rg -n \"allowBackup|usesCleartextTraffic|cleartextTrafficPermitted\" android/app/src/main",
+    "cd android && ./gradlew assembleDebug after installing/configuring Android Gradle wrapper/SDK if not already available.",
+    "In GitHub Actions, confirm lint, test, and build jobs pass; keep deploy-placeholder disabled until secrets and deployment target are configured."
   ]
 }

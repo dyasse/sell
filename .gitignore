@@ -31,3 +31,13 @@ android/keystore*
 .DS_Store
 .idea/
 .vscode/
+# Android/Firebase generated secrets
+android/app/google-services.json
+google-services.json
+*.pem
+*.p12
+*.mobileprovision
+
+# Local reports and caches
+.cache/
+
