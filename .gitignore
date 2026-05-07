@@ -32,6 +32,7 @@ android/keystore*
 .idea/
 .vscode/
 # Android/Firebase generated secrets
+# Quran/Android release secrets
 android/app/google-services.json
 google-services.json
 *.pem

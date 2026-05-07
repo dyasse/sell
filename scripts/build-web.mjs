@@ -15,7 +15,6 @@ const excluded = new Set([
   'dist',
   'node_modules',
   'scripts',
-  'src',
   'tests',
   'package.json',
   'package-lock.json',
@@ -45,7 +44,9 @@ const placeholderKeys = [
   'NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION',
   'QURAN_API_URL',
   'QURAN_CHAPTERS_API_URL',
-  'QURAN_AUDIO_BASE_URL'
+  'QURAN_AUDIO_BASE_URL',
+  'QURAN_RECITER_ID',
+  'QURAN_ARTWORK_URL'
 ];
 
 const injectableExtensions = new Set(['.html', '.js', '.json', '.txt', '.xml']);

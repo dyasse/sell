@@ -645,6 +645,22 @@
     updatePlaybackIcon();
     updatePlayerVisibility();
 
+
+    const capacitorApp = window.Capacitor?.Plugins?.App;
+    if (capacitorApp?.addListener) {
+      // Capacitor lifecycle hook: persist audio state when Android backgrounds the app.
+      // For production background playback, pair this with a Capacitor Background Audio plugin
+      // or a native foreground MediaSession service configured in AndroidManifest.xml.
+      capacitorApp.addListener("appStateChange", (appState) => {
+        if (!appState?.isActive) {
+          state.currentTime = audio.currentTime || state.currentTime;
+          state.duration = Number.isFinite(audio.duration) ? audio.duration : state.duration;
+          persistAudioState();
+          window.quranSyncInstance?.saveNow?.();
+        }
+      });
+    }
+
     window.addEventListener("beforeunload", () => {
       state.currentTime = audio.currentTime || state.currentTime;
       state.duration = Number.isFinite(audio.duration) ? audio.duration : state.duration;
