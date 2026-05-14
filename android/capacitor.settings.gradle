@@ -7,3 +7,16 @@ if (capacitorAndroidDir.exists()) {
     include ':capacitor-android'
     project(':capacitor-android').projectDir = capacitorAndroidDir
 }
+
+
+def capacitorLocalNotificationsDir = new File(rootDir, '../node_modules/@capacitor/local-notifications/android')
+if (capacitorLocalNotificationsDir.exists()) {
+    include ':capacitor-local-notifications'
+    project(':capacitor-local-notifications').projectDir = capacitorLocalNotificationsDir
+}
+
+def capacitorCommunityAdmobDir = new File(rootDir, '../node_modules/@capacitor-community/admob/android')
+if (capacitorCommunityAdmobDir.exists()) {
+    include ':capacitor-community-admob'
+    project(':capacitor-community-admob').projectDir = capacitorCommunityAdmobDir
+}

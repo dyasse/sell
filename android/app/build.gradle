@@ -2,6 +2,10 @@ plugins {
     id 'com.android.application'
 }
 
+def admobAppIdProvider = providers.gradleProperty('ADMOB_APP_ID')
+        .orElse(providers.environmentVariable('ADMOB_APP_ID'))
+def admobAppId = admobAppIdProvider.getOrElse('ca-app-pub-3940256099942544~3347511713')
+
 android {
     namespace 'com.dyasse.nourquran'
     compileSdk 35
@@ -13,7 +17,9 @@ android {
         versionCode 1
         versionName '1.0.0'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        resValue 'string', 'admob_app_id', admobAppId
     }
+
 
     buildTypes {
         debug {
@@ -32,6 +38,16 @@ android {
     }
 }
 
+
+gradle.taskGraph.whenReady { taskGraph ->
+    def isReleaseBuild = taskGraph.allTasks.any { task ->
+        task.path == ':app:assembleRelease' || task.path == ':app:bundleRelease'
+    }
+    if (isReleaseBuild && !admobAppIdProvider.isPresent()) {
+        throw new GradleException('ADMOB_APP_ID must be supplied as a Gradle property or environment variable for release builds.')
+    }
+}
+
 dependencies {
     if (findProject(':capacitor-android') != null) {
         implementation project(':capacitor-android')
@@ -42,6 +58,13 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
     implementation 'androidx.core:core-splashscreen:1.0.1'
+
+    if (findProject(':capacitor-local-notifications') != null) {
+        implementation project(':capacitor-local-notifications')
+    }
+    if (findProject(':capacitor-community-admob') != null) {
+        implementation project(':capacitor-community-admob')
+    }
 }
 
 apply from: 'capacitor.build.gradle'

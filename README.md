@@ -153,7 +153,8 @@ env:
 
 - Web AdSense placeholders live in `index.html` and are replaced by `AD_CLIENT_ID` / `AD_SLOT_ID` during deployment.
 - App ads authorization files use `ADS_PUBLISHER_ID` placeholders.
-- Android AdMob uses `ADMOB_APP_ID` in Android resources and `ADMOB_BANNER_AD_UNIT_ID` in `monetization.js`; inject real values before a release build.
+- Android AdMob uses `ADMOB_APP_ID` in Android resources and `ADMOB_BANNER_AD_UNIT_ID` / `ADMOB_INTERSTITIAL_AD_UNIT_ID` in `monetization.js`; inject real values before a release build. Release Android builds fail if `ADMOB_APP_ID` is missing.
+- Install the native AdMob plugin before building Android ads: `npm install @capacitor-community/admob && npm run cap:sync`. The committed Gradle settings auto-link the plugin project when it exists in `node_modules`.
 - Google Analytics uses `GA_MEASUREMENT_ID`; keep placeholders in committed code.
 
 ## Quran text/audio license
