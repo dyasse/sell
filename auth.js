@@ -1,34 +1,11 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  FacebookAuthProvider,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
-  sendEmailVerification,
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+const SUPABASE_URL = "https://oqebxioqmcjlhkwqwktk.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9xZWJ4aW9xbWNqbGhrd3F3a3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NjkyMzUsImV4cCI6MjA5NDI0NTIzNX0.8F8qtO9solmaVf-lzyygLM-O9Ff9-LYuDf5O1Xf6wSA";
 
-// إعدادات Firebase
-const firebaseEnv = typeof window !== "undefined" ? window.NOUR_ENV || {} : {};
+if (!window.supabase?.createClient) {
+  throw new Error("Supabase client library is not loaded. Add @supabase/supabase-js v2 before auth.js.");
+}
 
-// Configure these values through CI secrets or a local, uncommitted env injection step.
-const firebaseConfig = {
-  apiKey: firebaseEnv.FIREBASE_API_KEY || "REPLACE_ME",
-  authDomain: firebaseEnv.FIREBASE_AUTH_DOMAIN || "REPLACE_ME.firebaseapp.com",
-  projectId: firebaseEnv.FIREBASE_PROJECT_ID || "REPLACE_ME",
-  storageBucket: firebaseEnv.FIREBASE_STORAGE_BUCKET || "REPLACE_ME.appspot.com",
-  messagingSenderId: firebaseEnv.FIREBASE_MESSAGING_SENDER_ID || "REPLACE_ME",
-  appId: firebaseEnv.FIREBASE_APP_ID || "REPLACE_ME",
-  measurementId: firebaseEnv.FIREBASE_MEASUREMENT_ID || "REPLACE_ME"
-};
-
-// init
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const openAuthBtn = document.getElementById("openAuthBtn");
 const closeAuthBtn = document.getElementById("closeAuthBtn");
@@ -45,36 +22,38 @@ const googleBtn = document.getElementById("loginGoogleBtn");
 const facebookBtn = document.getElementById("loginFacebookBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 
-const loginProvider = new GoogleAuthProvider();
-const facebookProvider = new FacebookAuthProvider();
-
 let isSignupMode = false;
 let isBusy = false;
 
 function mapAuthError(error) {
-  const code = error?.code || "";
+  const message = error?.message || "";
+  const normalized = message.toLowerCase();
 
-  switch (code) {
-    case "auth/invalid-email":
-      return "الإيميل غير صالح.";
-    case "auth/missing-password":
-      return "أدخل كلمة المرور.";
-    case "auth/user-not-found":
-    case "auth/invalid-credential":
-      return "الإيميل أو كلمة السر غير صحيحة.";
-    case "auth/wrong-password":
-      return "كلمة السر غير صحيحة.";
-    case "auth/email-already-in-use":
-      return "هذا البريد الإلكتروني مستخدم مسبقًا.";
-    case "auth/weak-password":
-      return "كلمة المرور ضعيفة. يجب أن تتكون من 6 أحرف على الأقل.";
-    case "auth/too-many-requests":
-      return "هناك عدد كبير من المحاولات. حاول لاحقًا.";
-    case "auth/network-request-failed":
-      return "توجد مشكلة في الاتصال بالإنترنت.";
-    default:
-      return error?.message || "وقع خطأ غير متوقع.";
+  if (normalized.includes("invalid login") || normalized.includes("invalid credentials")) {
+    return "الإيميل أو كلمة السر غير صحيحة.";
   }
+
+  if (normalized.includes("email") && normalized.includes("invalid")) {
+    return "الإيميل غير صالح.";
+  }
+
+  if (normalized.includes("password") && normalized.includes("6")) {
+    return "كلمة المرور ضعيفة. يجب أن تتكون من 6 أحرف على الأقل.";
+  }
+
+  if (normalized.includes("already registered") || normalized.includes("already exists")) {
+    return "هذا البريد الإلكتروني مستخدم مسبقًا.";
+  }
+
+  if (normalized.includes("rate limit") || normalized.includes("too many")) {
+    return "هناك عدد كبير من المحاولات. حاول لاحقًا.";
+  }
+
+  if (normalized.includes("network") || normalized.includes("failed to fetch")) {
+    return "توجد مشكلة في الاتصال بالإنترنت.";
+  }
+
+  return message || "وقع خطأ غير متوقع.";
 }
 
 function setBusy(busy) {
@@ -136,6 +115,17 @@ function setMode(signupMode) {
   resetPasswordBtn?.classList.toggle("hidden", signupMode);
 }
 
+async function signInWithProvider(provider) {
+  const { error } = await supabaseClient.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo: window.location.href
+    }
+  });
+
+  if (error) throw error;
+}
+
 loginTabBtn?.addEventListener("click", () => setMode(false));
 signupTabBtn?.addEventListener("click", () => setMode(true));
 openAuthBtn?.addEventListener("click", showAuthModal);
@@ -152,15 +142,12 @@ loginBtn?.addEventListener("click", async () => {
 
   try {
     setBusy(true);
-    const userCredential = await signInWithEmailAndPassword(auth, creds.email, creds.password);
-    const { user } = userCredential;
+    const { error } = await supabaseClient.auth.signInWithPassword({
+      email: creds.email,
+      password: creds.password
+    });
 
-    if (!user.emailVerified) {
-      await sendEmailVerification(user);
-      await signOut(auth);
-      setStatus("يجب تفعيل الحساب عبر البريد الإلكتروني أولًا. أعدنا إرسال رابط التفعيل.", true);
-      return;
-    }
+    if (error) throw error;
 
     setStatus("تم تسجيل الدخول بنجاح.");
     closeAuthModal();
@@ -178,10 +165,14 @@ createAccountBtn?.addEventListener("click", async () => {
 
   try {
     setBusy(true);
-    const userCredential = await createUserWithEmailAndPassword(auth, creds.email, creds.password);
-    await sendEmailVerification(userCredential.user);
-    await signOut(auth);
-    setStatus("تم إنشاء الحساب. فعّل البريد الإلكتروني ثم سجّل الدخول.");
+    const { error } = await supabaseClient.auth.signUp({
+      email: creds.email,
+      password: creds.password
+    });
+
+    if (error) throw error;
+
+    setStatus("تم إنشاء الحساب. تحقق من بريدك الإلكتروني إذا كان التفعيل مطلوبًا ثم سجّل الدخول.");
     passwordInput.value = "";
     setMode(false);
   } catch (error) {
@@ -201,7 +192,12 @@ resetPasswordBtn?.addEventListener("click", async () => {
 
   try {
     setBusy(true);
-    await sendPasswordResetEmail(auth, email);
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.href
+    });
+
+    if (error) throw error;
+
     setStatus("تم إرسال رابط استعادة كلمة المرور.");
   } catch (error) {
     setStatus(mapAuthError(error), true);
@@ -214,9 +210,8 @@ googleBtn?.addEventListener("click", async () => {
   if (isBusy) return;
   try {
     setBusy(true);
-    await signInWithPopup(auth, loginProvider);
-    setStatus("تم تسجيل الدخول عبر Google.");
-    closeAuthModal();
+    await signInWithProvider("google");
+    setStatus("جارٍ تحويلك لتسجيل الدخول عبر Google.");
   } catch (error) {
     setStatus(mapAuthError(error), true);
   } finally {
@@ -228,9 +223,8 @@ facebookBtn?.addEventListener("click", async () => {
   if (isBusy) return;
   try {
     setBusy(true);
-    await signInWithPopup(auth, facebookProvider);
-    setStatus("تم تسجيل الدخول عبر Facebook.");
-    closeAuthModal();
+    await signInWithProvider("facebook");
+    setStatus("جارٍ تحويلك لتسجيل الدخول عبر Facebook.");
   } catch (error) {
     setStatus(mapAuthError(error), true);
   } finally {
@@ -242,7 +236,10 @@ logoutBtn?.addEventListener("click", async () => {
   if (isBusy) return;
   try {
     setBusy(true);
-    await signOut(auth);
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error) throw error;
+
     setStatus("تم تسجيل الخروج.");
   } catch (error) {
     setStatus(mapAuthError(error), true);
@@ -251,12 +248,16 @@ logoutBtn?.addEventListener("click", async () => {
   }
 });
 
-onAuthStateChanged(auth, (user) => {
+supabaseClient.auth.onAuthStateChange((event, session) => {
+  const user = session?.user;
+
   if (user) {
-    setStatus(`مرحبا ${user.displayName || user.email}`);
+    const name = user.user_metadata?.full_name || user.user_metadata?.name || user.email;
+    setStatus(`مرحبا ${name}`);
     logoutBtn?.classList.remove("hidden");
+    closeAuthModal();
   } else {
-    setStatus("مرحبا بك في نور");
+    setStatus(event === "SIGNED_OUT" ? "تم تسجيل الخروج." : "مرحبا بك في نور");
     logoutBtn?.classList.add("hidden");
   }
 });

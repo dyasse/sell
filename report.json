@@ -64,7 +64,7 @@
     "Integrated Quran sync on the Quran detail page and exposed window.quranSyncInstance for lifecycle saves.",
     "Added Capacitor/Android background-audio manifest permissions plus app pause lifecycle persistence hooks and documentation for plugin/native service integration.",
     "Updated service worker strategies: cache-first for hashed static assets, network-first for API, stale-while-revalidate for fonts/audio manifests, and no Cache Storage persistence for large streamed audio files.",
-    "Kept Firebase/ad/analytics values as environment placeholders, added Quran sync env placeholders, and ensured build placeholder injection includes the new keys.",
+    "Kept Supabase/ad/analytics values as environment placeholders, added Quran sync env placeholders, and ensured build placeholder injection includes the new keys.",
     "Added Node/Jest-style quran sync test coverage and CI placeholder workflow to run npm ci, npm test, and npm run build:web.",
     "Documented audio timestamp generation, env vars, Android background playback testing, and license/caching notes.",
     "No git history rewrite was performed for previously committed secrets; rotate credentials and coordinate BFG/git-filter-repo cleanup separately if needed."
