@@ -1,25 +1,11 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import {
-  getAuth,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+const SUPABASE_URL = "https://oqebxioqmcjlhkwqwktk.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9xZWJ4aW9xbWNqbGhrd3F3a3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NjkyMzUsImV4cCI6MjA5NDI0NTIzNX0.8F8qtO9solmaVf-lzyygLM-O9Ff9-LYuDf5O1Xf6wSA";
 
-const firebaseEnv = typeof window !== "undefined" ? window.NOUR_ENV || {} : {};
+if (!window.supabase?.createClient) {
+  throw new Error("Supabase client library is not loaded. Add @supabase/supabase-js v2 before support.js.");
+}
 
-// Configure these values through CI secrets or a local, uncommitted env injection step.
-const firebaseConfig = {
-  apiKey: firebaseEnv.FIREBASE_API_KEY || "REPLACE_ME",
-  authDomain: firebaseEnv.FIREBASE_AUTH_DOMAIN || "REPLACE_ME.firebaseapp.com",
-  projectId: firebaseEnv.FIREBASE_PROJECT_ID || "REPLACE_ME",
-  storageBucket: firebaseEnv.FIREBASE_STORAGE_BUCKET || "REPLACE_ME.appspot.com",
-  messagingSenderId: firebaseEnv.FIREBASE_MESSAGING_SENDER_ID || "REPLACE_ME",
-  appId: firebaseEnv.FIREBASE_APP_ID || "REPLACE_ME",
-  measurementId: firebaseEnv.FIREBASE_MEASUREMENT_ID || "REPLACE_ME"
-};
-
-// init firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ==========================
 // 👤 USER BAR
@@ -30,11 +16,13 @@ function setupUserBar() {
 
   if (!userBar || !userText) return;
 
-  onAuthStateChanged(auth, (user) => {
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+    const user = session?.user;
+
     if (user) {
       userBar.classList.add("show");
 
-      const name = user.displayName || user.email || "مستخدم";
+      const name = user.user_metadata?.full_name || user.user_metadata?.name || user.email || "مستخدم";
       userText.textContent = `أنت مسجل: ${name}`;
     } else {
       userBar.classList.remove("show");
