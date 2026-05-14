@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
@@ -20,12 +23,8 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_app_id" />
 
-        <!-- Background audio placeholder: install a Capacitor Background Audio/Media plugin
-             or replace this with your native foreground media service implementation. -->
-        <service
-            android:name="com.getcapacitor.plugin.media.MediaService"
-            android:exported="false"
-            android:foregroundServiceType="mediaPlayback" />
+        <!-- Do not declare a media foreground service until the matching native audio plugin/service
+             is installed. The web audio player currently persists state on app backgrounding. -->
 
         <activity
             android:name=".MainActivity"
