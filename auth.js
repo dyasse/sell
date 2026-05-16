@@ -6,6 +6,8 @@ if (!window.supabase?.createClient) {
 }
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const WEB_AUTH_REDIRECT_URL = "https://nour-quran.com/index.html";
+const MAIN_APP_URL = WEB_AUTH_REDIRECT_URL;
 
 const openAuthBtn = document.getElementById("openAuthBtn");
 const closeAuthBtn = document.getElementById("closeAuthBtn");
@@ -115,15 +117,65 @@ function setMode(signupMode) {
   resetPasswordBtn?.classList.toggle("hidden", signupMode);
 }
 
+function isMainAppPage() {
+  const currentUrl = new URL(window.location.href);
+  const mainUrl = new URL(MAIN_APP_URL);
+  const currentPath = currentUrl.pathname.replace(/\/$/, "/index.html");
+
+  return currentUrl.origin === mainUrl.origin && currentPath === mainUrl.pathname;
+}
+
+function redirectToMainAppIfNeeded() {
+  if (isMainAppPage()) return;
+  window.location.replace(MAIN_APP_URL);
+}
+
+function updateAuthenticatedUi(session, event = "INITIAL_SESSION") {
+  const user = session?.user;
+
+  if (user) {
+    const name = user.user_metadata?.full_name || user.user_metadata?.name || user.email;
+    setStatus(`مرحبا ${name}`);
+    logoutBtn?.classList.remove("hidden");
+    closeAuthModal();
+    redirectToMainAppIfNeeded();
+    return;
+  }
+
+  setStatus(event === "SIGNED_OUT" ? "تم تسجيل الخروج." : "مرحبا بك في نور");
+  logoutBtn?.classList.add("hidden");
+}
+
 async function signInWithProvider(provider) {
   const { error } = await supabaseClient.auth.signInWithOAuth({
     provider,
     options: {
-      redirectTo: window.location.href
+      redirectTo: WEB_AUTH_REDIRECT_URL
     }
   });
 
   if (error) throw error;
+}
+
+async function signInWithGoogle() {
+  await signInWithProvider("google");
+}
+
+async function signInWithFacebook() {
+  await signInWithProvider("facebook");
+}
+
+window.nourAuth = {
+  signInWithGoogle,
+  signInWithFacebook
+};
+
+async function restoreExistingSession() {
+  const { data, error } = await supabaseClient.auth.getSession();
+
+  if (error) throw error;
+
+  updateAuthenticatedUi(data.session);
 }
 
 loginTabBtn?.addEventListener("click", () => setMode(false));
@@ -193,7 +245,7 @@ resetPasswordBtn?.addEventListener("click", async () => {
   try {
     setBusy(true);
     const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.href
+      redirectTo: WEB_AUTH_REDIRECT_URL
     });
 
     if (error) throw error;
@@ -210,7 +262,7 @@ googleBtn?.addEventListener("click", async () => {
   if (isBusy) return;
   try {
     setBusy(true);
-    await signInWithProvider("google");
+    await signInWithGoogle();
     setStatus("جارٍ تحويلك لتسجيل الدخول عبر Google.");
   } catch (error) {
     setStatus(mapAuthError(error), true);
@@ -223,7 +275,7 @@ facebookBtn?.addEventListener("click", async () => {
   if (isBusy) return;
   try {
     setBusy(true);
-    await signInWithProvider("facebook");
+    await signInWithFacebook();
     setStatus("جارٍ تحويلك لتسجيل الدخول عبر Facebook.");
   } catch (error) {
     setStatus(mapAuthError(error), true);
@@ -249,15 +301,9 @@ logoutBtn?.addEventListener("click", async () => {
 });
 
 supabaseClient.auth.onAuthStateChange((event, session) => {
-  const user = session?.user;
+  updateAuthenticatedUi(session, event);
+});
 
-  if (user) {
-    const name = user.user_metadata?.full_name || user.user_metadata?.name || user.email;
-    setStatus(`مرحبا ${name}`);
-    logoutBtn?.classList.remove("hidden");
-    closeAuthModal();
-  } else {
-    setStatus(event === "SIGNED_OUT" ? "تم تسجيل الخروج." : "مرحبا بك في نور");
-    logoutBtn?.classList.add("hidden");
-  }
+restoreExistingSession().catch((error) => {
+  setStatus(mapAuthError(error), true);
 });
