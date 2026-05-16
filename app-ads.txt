@@ -1,1 +1,1 @@
-google.com, {{ADS_PUBLISHER_ID}}, DIRECT, f08c47fec0942fa0
+google.com, pub-2350255696934759, DIRECT, f08c47fec0942fa0
