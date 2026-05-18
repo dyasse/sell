@@ -124,7 +124,6 @@ function initSettingsDrawer() {
 
   const OFFSET_KEY = "nour_prayer_offset_minutes";
   const THEME_KEY = "nour_theme";
-  const LANG_KEY = "nour_ui_language";
 
   const openDrawer = () => {
     drawer.classList.add("show");
@@ -172,12 +171,15 @@ function initSettingsDrawer() {
     renderOffset();
   });
 
-  const savedLanguage = localStorage.getItem(LANG_KEY) || "ar";
+  const savedLanguage = window.NourI18n?.getLanguage?.() || "ar";
   if (languageSelector) languageSelector.value = savedLanguage;
   languageSelector?.addEventListener("change", (event) => {
     const selectedLanguage = event.target.value;
-    localStorage.setItem(LANG_KEY, selectedLanguage);
-    // UI-only language selector: translates app labels/buttons only; Quran & Adkar text remains Arabic.
+    if (window.NourI18n) {
+      window.NourI18n.setLanguage(selectedLanguage);
+    } else {
+      localStorage.setItem("nour_ui_language", selectedLanguage);
+    }
   });
 
   document.addEventListener("keydown", (event) => {

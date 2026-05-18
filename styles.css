@@ -1952,8 +1952,6 @@ body.has-audio-player {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 24px;
   align-items: center;
-  direction: ltr;
-  text-align: left;
 }
 
 .seo-hero::before {
@@ -2008,7 +2006,7 @@ body.has-audio-player {
   gap: 10px;
 }
 
-.seo-hero-features span {
+.seo-hero-features > span {
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -2043,8 +2041,6 @@ body.has-audio-player {
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 20px 60px rgba(15, 23, 42, 0.18);
   backdrop-filter: blur(16px);
-  direction: ltr;
-  text-align: left;
 }
 
 .cookie-consent-banner.show {
@@ -2108,4 +2104,104 @@ body.has-audio-player {
   .cookie-consent-btn {
     width: 100%;
   }
+}
+
+.legal-page-shell {
+  width: min(980px, calc(100% - 32px));
+  margin: 24px auto 40px;
+}
+
+.legal-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: var(--shadow-sm);
+  padding: clamp(22px, 4vw, 34px);
+  line-height: 1.9;
+}
+
+.legal-card section + section {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(31, 111, 80, 0.12);
+}
+
+.legal-badge {
+  display: inline-flex;
+  width: fit-content;
+  margin-bottom: 12px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #fff8df;
+  color: #8a6410;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.legal-card h1 {
+  margin: 0 0 12px;
+  color: #10253a;
+  font-size: clamp(28px, 4vw, 42px);
+}
+
+.legal-card h2 {
+  margin: 0 0 10px;
+  color: var(--primary-dark);
+  font-size: clamp(20px, 3vw, 26px);
+}
+
+.legal-card p,
+.legal-card li {
+  color: #405166;
+  font-size: 16px;
+}
+
+.legal-card ul {
+  padding-inline-start: 1.3rem;
+}
+
+.legal-card a {
+  color: var(--primary);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.legal-card a:hover,
+.legal-card a:focus-visible {
+  text-decoration: underline;
+}
+
+.legal-hero {
+  margin-bottom: 24px;
+  padding: clamp(18px, 3vw, 26px);
+  border: 1px solid rgba(31, 111, 80, 0.12);
+  border-radius: 20px;
+  background: radial-gradient(circle at top left, rgba(244, 197, 66, 0.16), transparent 34%), rgba(234, 245, 240, 0.62);
+}
+
+html[dir="rtl"] .legal-hero {
+  background: radial-gradient(circle at top right, rgba(244, 197, 66, 0.16), transparent 34%), rgba(234, 245, 240, 0.62);
+}
+
+.legal-support,
+.legal-note {
+  border-radius: 18px;
+  background: rgba(234, 245, 240, 0.7);
+  padding: 16px;
+}
+
+.legal-home-link {
+  margin-top: 18px;
+}
+
+html[dir="rtl"] .seo-hero,
+html[dir="rtl"] .cookie-consent-banner {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="ltr"] .seo-hero,
+html[dir="ltr"] .cookie-consent-banner {
+  direction: ltr;
+  text-align: left;
 }
