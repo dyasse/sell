@@ -185,6 +185,31 @@ function initSettingsDrawer() {
   });
 }
 
+
+function initCookieConsent() {
+  const banner = document.getElementById("cookieConsentBanner");
+  const acceptBtn = document.getElementById("acceptCookieConsent");
+  if (!banner || !acceptBtn) return;
+
+  const CONSENT_KEY = "nour_cookie_consent_accepted";
+  const hasConsent = localStorage.getItem(CONSENT_KEY) === "true";
+
+  if (hasConsent) {
+    banner.classList.remove("show");
+    banner.setAttribute("aria-hidden", "true");
+    return;
+  }
+
+  banner.classList.add("show");
+  banner.setAttribute("aria-hidden", "false");
+
+  acceptBtn.addEventListener("click", () => {
+    localStorage.setItem(CONSENT_KEY, "true");
+    banner.classList.remove("show");
+    banner.setAttribute("aria-hidden", "true");
+  });
+}
+
 function initSupportPopup() {
   const popup = document.getElementById("supportPopup");
   const closeBtn = document.getElementById("closeSupportPopupBtn");
@@ -226,6 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
   checkBookmark();
   initShareButton();
   initSupportPopup();
+  initCookieConsent();
   initInstallPrompt();
   initSettingsDrawer();
   registerServiceWorker();
