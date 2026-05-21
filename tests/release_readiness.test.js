@@ -4,7 +4,7 @@ const { readFileSync, existsSync } = require('node:fs');
 const { join } = require('node:path');
 
 const root = join(__dirname, '..');
-const publicDir = join(root, 'android/app/src/main/assets/public');
+const publicDir = root;
 
 function readPublic(file) {
   return readFileSync(join(publicDir, file), 'utf8');
@@ -46,4 +46,35 @@ test('Supabase service-role keys are not present in frontend config', () => {
   assert.doesNotMatch(auth + config, /service_role/i);
   assert.match(auth, /\{\{SUPABASE_URL\}\}/);
   assert.match(auth, /\{\{SUPABASE_ANON_KEY\}\}/);
+});
+
+test('platform detector defaults to web without Capacitor and detects Android Capacitor', () => {
+  const { detectPlatform } = require('../app-shell.js');
+
+  assert.deepEqual(detectPlatform(undefined), {
+    platform: 'web',
+    isCapacitor: false,
+    isAndroid: false,
+    isIos: false,
+    isWeb: true
+  });
+
+  assert.deepEqual(detectPlatform({ getPlatform: () => 'android' }), {
+    platform: 'android',
+    isCapacitor: true,
+    isAndroid: true,
+    isIos: false,
+    isWeb: false
+  });
+});
+
+test('web source hides Android-only UI and does not inline AdSense with placeholders', () => {
+  const index = readPublic('index.html');
+  const styles = readPublic('styles.css');
+
+  assert.match(index, /class="app-footer-section android-only-footer"/);
+  assert.doesNotMatch(index, /adsbygoogle\s*=\s*window\.adsbygoogle/);
+  assert.match(styles, /\.admob-banner-fixed-slot/);
+  assert.match(styles, /display:\s*none\s*!important/);
+  assert.match(styles, /body\.platform-android\.platform-capacitor \.admob-banner-fixed-slot/);
 });

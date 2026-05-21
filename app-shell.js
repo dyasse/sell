@@ -1,4 +1,34 @@
 (function () {
+  function detectPlatform(capacitor = typeof window !== "undefined" ? window.Capacitor : undefined) {
+    const platform = typeof capacitor?.getPlatform === "function" ? capacitor.getPlatform() : "web";
+    const isCapacitor = Boolean(capacitor && platform !== "web");
+
+    return {
+      platform,
+      isCapacitor,
+      isAndroid: isCapacitor && platform === "android",
+      isIos: isCapacitor && platform === "ios",
+      isWeb: !isCapacitor
+    };
+  }
+
+  function applyPlatformClasses(target, platformInfo) {
+    if (!target?.classList) return;
+
+    target.classList.toggle("platform-web", platformInfo.isWeb);
+    target.classList.toggle("platform-capacitor", platformInfo.isCapacitor);
+    target.classList.toggle("platform-android", platformInfo.isAndroid);
+    target.classList.toggle("platform-ios", platformInfo.isIos);
+  }
+
+  const platformInfo = detectPlatform();
+  applyPlatformClasses(typeof document !== "undefined" ? document.documentElement : null, platformInfo);
+
+  function initPlatformClasses() {
+    applyPlatformClasses(document.documentElement, platformInfo);
+    applyPlatformClasses(document.body, platformInfo);
+  }
+
   function initGoogleAnalytics() {
     const isBrowser = typeof window !== "undefined" && typeof document !== "undefined";
     if (!isBrowser) return;
@@ -53,6 +83,59 @@
 
   initGoogleAnalytics();
   initVercelAnalytics();
+
+  function hasConfiguredValue(value) {
+    return Boolean(value && !value.includes("{{") && !value.includes("REPLACE_"));
+  }
+
+  function initWebAdsense() {
+    if (platformInfo.isCapacitor) return;
+
+    const adClientId = "{{AD_CLIENT_ID}}";
+    const slots = Array.from(document.querySelectorAll(".web-adsense-slot"));
+    if (slots.length === 0) return;
+
+    const configuredSlots = slots.filter((slot) => {
+      const adUnit = slot.querySelector(".adsbygoogle");
+      const slotId = adUnit?.getAttribute("data-ad-slot") || "";
+      const isConfigured = hasConfiguredValue(adClientId) && hasConfiguredValue(slotId);
+      slot.hidden = !isConfigured;
+      slot.classList.toggle("is-configured", isConfigured);
+      return isConfigured;
+    });
+
+    if (configuredSlots.length === 0) return;
+
+    const loadAds = () => {
+      configuredSlots.forEach(() => {
+        try {
+          window.adsbygoogle = window.adsbygoogle || [];
+          window.adsbygoogle.push({});
+        } catch (error) {
+          console.warn("AdSense slot could not be initialized:", error);
+        }
+      });
+    };
+
+    if (!document.querySelector('script[data-nour-adsense-loader="true"]')) {
+      const script = document.createElement("script");
+      script.async = true;
+      script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${encodeURIComponent(adClientId)}`;
+      script.crossOrigin = "anonymous";
+      script.setAttribute("data-nour-adsense-loader", "true");
+      script.addEventListener("load", loadAds, { once: true });
+      script.addEventListener("error", () => {
+        configuredSlots.forEach((slot) => {
+          slot.hidden = true;
+          slot.classList.remove("is-configured");
+        });
+      }, { once: true });
+      document.head.appendChild(script);
+      return;
+    }
+
+    loadAds();
+  }
 
   const THEME_KEY = "nour_theme_mode";
   const AUDIO_KEY = "nour_audio_player_state";
@@ -183,7 +266,7 @@
   }
 
   function ensureLegalFooterLinks() {
-    if (document.querySelector(".nour-legal-links")) return;
+    if (document.querySelector(".nour-legal-links, .bottom-meta-nav")) return;
 
     const nav = document.createElement("nav");
     nav.className = "nour-legal-links";
@@ -704,6 +787,8 @@
   }
 
   async function initAppShell() {
+    initPlatformClasses();
+    initWebAdsense();
     await initTheme();
     buildThemeToggle();
     ensureLegalFooterLinks();
@@ -712,5 +797,22 @@
     bindAudioPlayer(player);
   }
 
-  document.addEventListener("DOMContentLoaded", initAppShell);
+  if (typeof document !== "undefined") {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initAppShell);
+    } else {
+      initAppShell();
+    }
+  }
+
+  if (typeof window !== "undefined") {
+    window.NourPlatform = {
+      detectPlatform,
+      current: { ...platformInfo }
+    };
+  }
+
+  if (typeof module !== "undefined") {
+    module.exports = { detectPlatform };
+  }
 })();

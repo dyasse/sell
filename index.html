@@ -24,9 +24,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
-  <!-- Inject AD_CLIENT_ID from CI secrets during deployment; keep placeholders committed. -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{AD_CLIENT_ID}}"
-     crossorigin="anonymous"></script>
   <!-- Inject GA_MEASUREMENT_ID from CI secrets during deployment. -->
   <script async src="https://www.googletagmanager.com/gtag/js?id={{GA_MEASUREMENT_ID}}"></script>
   <script>
@@ -189,12 +186,9 @@
            data-ad-slot="{{AD_SLOT_ID}}"
            data-ad-format="auto"
            data-full-width-responsive="true"></ins>
-      <script>
-           (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
     </section>
 
-    <section class="app-footer-section">
+    <section class="app-footer-section android-only-footer">
       <div class="app-footer-content">
         <p class="footer-mission">نعمل دائماً على تطوير هذا المشروع للأفضل لتلبية تطلعاتكم وتقديم أفضل تجربة إسلامية.</p>
         <div class="footer-contact">
@@ -217,7 +211,7 @@
       </div>
     </section>
 
-    <footer style="padding: 20px; text-align: center; background-color: #f8f9fa; border-top: 1px solid #e0e0e0; margin-top: auto; width: 100%;">
+    <footer class="android-only-footer" style="padding: 20px; text-align: center; background-color: #f8f9fa; border-top: 1px solid #e0e0e0; margin-top: auto; width: 100%;">
       <p style="color: #2e7d32; font-size: 14px; font-weight: bold; line-height: 1.5; margin-bottom: 15px;">نعمل دائماً على تطوير هذا المشروع للأفضل لتلبية تطلعاتكم وتقديم أفضل تجربة إسلامية.</p>
       <div style="margin-bottom: 10px;">
         <a href="about.html" style="color: #555; text-decoration: none; font-size: 13px; margin: 0 10px;">من نحن</a> |

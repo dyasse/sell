@@ -533,6 +533,19 @@ main {
   width: min(1120px, calc(100% - 32px));
 }
 
+.android-only-footer,
+.admob-banner-wrap,
+.admob-banner-fixed-slot {
+  display: none !important;
+}
+
+html.platform-capacitor .android-only-footer,
+body.platform-capacitor .android-only-footer,
+body.platform-android.platform-capacitor .admob-banner-wrap,
+body.platform-android.platform-capacitor .admob-banner-fixed-slot {
+  display: block !important;
+}
+
 .app-footer-content {
   text-align: center;
   display: flex;
@@ -1875,14 +1888,26 @@ main {
   }
 }
 
-body.android-banner-active {
+body.platform-android.platform-capacitor.android-banner-active {
   padding-bottom: var(--android-banner-space, 56px);
 }
 
 
 .web-adsense-slot {
+  display: none;
   margin-top: 18px;
   padding: 0 4px;
+  min-height: 0;
+}
+
+html.platform-web .web-adsense-slot.is-configured,
+body.platform-web .web-adsense-slot.is-configured {
+  display: block;
+}
+
+html.platform-capacitor .web-adsense-slot,
+body.platform-capacitor .web-adsense-slot {
+  display: none !important;
 }
 
 
