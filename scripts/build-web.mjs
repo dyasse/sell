@@ -1,10 +1,10 @@
 import { cp, mkdir, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { basename, dirname, extname, join } from 'node:path';
 
 const rootDir = process.cwd();
 const outDir = join(rootDir, 'dist');
 
-const excluded = new Set([
+const excludedRoots = new Set([
   '.git',
   '.github',
   '.idea',
@@ -15,7 +15,10 @@ const excluded = new Set([
   'dist',
   'node_modules',
   'scripts',
-  'tests',
+  'tests'
+]);
+
+const excludedFiles = new Set([
   'package.json',
   'package-lock.json',
   'capacitor.config.json',
@@ -25,6 +28,14 @@ const excluded = new Set([
   'LICENSE_NOTE.md',
   'report.json'
 ]);
+
+const webAssetExtensions = new Set([
+  '.html', '.js', '.mjs', '.css', '.json', '.txt', '.xml',
+  '.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.ico',
+  '.woff', '.woff2', '.ttf', '.otf', '.eot', '.map'
+]);
+
+const requiredDistFiles = ['index.html', 'styles.css', 'script.js'];
 
 const placeholderKeys = [
   'SUPABASE_URL',
@@ -47,9 +58,33 @@ const placeholderKeys = [
 
 const injectableExtensions = new Set(['.html', '.js', '.json', '.txt', '.xml']);
 
-function extensionOf(filePath) {
-  const dotIndex = filePath.lastIndexOf('.');
-  return dotIndex === -1 ? '' : filePath.slice(dotIndex);
+async function ensureParentDir(filePath) {
+  await mkdir(dirname(filePath), { recursive: true });
+}
+
+async function copyWebAssets(sourceDir, destDir) {
+  for (const entry of await readdir(sourceDir)) {
+    const sourcePath = join(sourceDir, entry);
+    const relFromRoot = sourcePath.slice(rootDir.length + 1);
+    const info = await stat(sourcePath);
+
+    if (sourceDir === rootDir && excludedRoots.has(entry)) continue;
+    if (excludedFiles.has(basename(sourcePath))) continue;
+
+    if (info.isDirectory()) {
+      await copyWebAssets(sourcePath, join(destDir, entry));
+      continue;
+    }
+
+    const extension = extname(sourcePath);
+    if (!webAssetExtensions.has(extension) && !basename(sourcePath).startsWith('.env')) {
+      continue;
+    }
+
+    const targetPath = join(outDir, relFromRoot);
+    await ensureParentDir(targetPath);
+    await cp(sourcePath, targetPath, { force: true });
+  }
 }
 
 async function injectPlaceholders(dir) {
@@ -62,7 +97,7 @@ async function injectPlaceholders(dir) {
       continue;
     }
 
-    if (!injectableExtensions.has(extensionOf(filePath))) continue;
+    if (!injectableExtensions.has(extname(filePath))) continue;
 
     let contents = await readFile(filePath, 'utf8');
     let changed = false;
@@ -85,15 +120,15 @@ async function injectPlaceholders(dir) {
 await rm(outDir, { recursive: true, force: true });
 await mkdir(outDir, { recursive: true });
 
-for (const entry of await readdir(rootDir)) {
-  if (excluded.has(entry)) continue;
-
-  await cp(join(rootDir, entry), join(outDir, entry), {
-    recursive: true,
-    force: true
-  });
-}
-
+await copyWebAssets(rootDir, outDir);
 await injectPlaceholders(outDir);
+
+for (const file of requiredDistFiles) {
+  try {
+    await stat(join(outDir, file));
+  } catch {
+    throw new Error(`Build output is incomplete: dist/${file} is missing.`);
+  }
+}
 
 console.log('Web build completed: dist/');
