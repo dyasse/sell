@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Content Sources & Licenses | Nour Quran</title>
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="page-shell">
+    <section class="hero-panel">
+      <div class="hero-badge">Licenses</div>
+      <h1>Content Sources & Licenses</h1>
+      <p>Last updated: May 21, 2026. This page is intentionally conservative until provider permissions are verified from official terms.</p>
+    </section>
+
+    <section class="status-box">
+      <h2>Important Release Notice</h2>
+      <p><strong>Status: Not production-ready for public Play Store release.</strong> Quran text, tafsir, and audio provider permissions require human/legal verification before production. The app fetches text/metadata/tafsir at runtime and streams audio; it must not bundle or cache third-party Quran audio files unless explicit permission is obtained.</p>
+    </section>
+
+    <section class="status-box">
+      <h2>Quran Text And Chapter Metadata</h2>
+      <p><strong>Provider:</strong> Quran.com API</p>
+      <p><strong>Runtime use:</strong> chapters metadata and Uthmani verses are fetched at runtime from api.quran.com.</p>
+      <p><strong>Terms reference:</strong> https://api-docs.quran.com/ and provider documentation/terms to be verified.</p>
+      <p><strong>Attribution:</strong> Quran text and chapter metadata provided by Quran.com API.</p>
+      <p><strong>Commercial monetized use:</strong> UNVERIFIED.</p>
+      <p><strong>Offline caching/redistribution:</strong> UNVERIFIED; app should not bundle the dataset without written permission.</p>
+      <p><strong>Status:</strong> RELEASE_BLOCKER / UNVERIFIED.</p>
+    </section>
+
+    <section class="status-box">
+      <h2>Tafsir</h2>
+      <p><strong>Provider:</strong> alquran.cloud endpoint using ar.muyassar.</p>
+      <p><strong>Runtime use:</strong> tafsir for selected ayahs is fetched at runtime.</p>
+      <p><strong>Terms reference:</strong> https://alquran.cloud/api and official provider licensing terms to be verified.</p>
+      <p><strong>Attribution:</strong> Tafsir content provided through alquran.cloud ar.muyassar endpoint.</p>
+      <p><strong>Commercial monetized use:</strong> UNVERIFIED.</p>
+      <p><strong>Offline caching/redistribution:</strong> UNVERIFIED; app should not bundle tafsir without written permission.</p>
+      <p><strong>Status:</strong> RELEASE_BLOCKER / UNVERIFIED.</p>
+    </section>
+
+    <section class="status-box">
+      <h2>Audio Recitation</h2>
+      <p><strong>Primary provider/source:</strong> QuranicAudio streaming URL for Fahad Al Kandari recitation.</p>
+      <p><strong>Fallback streaming hosts in code:</strong> mp3quran.net, EveryAyah, Islamic Network CDN.</p>
+      <p><strong>Runtime use:</strong> audio is streamed only. Full audio files are intentionally excluded from the service worker cache.</p>
+      <p><strong>Terms reference:</strong> QuranicAudio catalog/terms and fallback host terms must be verified.</p>
+      <p><strong>Attribution:</strong> Recitation audio source: QuranicAudio / configured reciter source. Reciter label currently shown as Fahad Al Kandari when using that source.</p>
+      <p><strong>Commercial monetized use:</strong> UNVERIFIED.</p>
+      <p><strong>Streaming through this app:</strong> UNVERIFIED.</p>
+      <p><strong>Offline caching/redistribution:</strong> BLOCKED until explicit permission is verified.</p>
+      <p><strong>Status:</strong> RELEASE_BLOCKER / UNVERIFIED.</p>
+    </section>
+
+    <section class="status-box">
+      <h2>Evidence Notes</h2>
+      <p>No official provider screenshots, archived pages, or written permissions are committed in this repository as of May 21, 2026. Release owners must capture official terms, attribution requirements, commercial-use permissions, streaming permissions, and caching/redistribution rules before production.</p>
+    </section>
+  </main>
+  <script src="app-shell.js"></script>
+</body>
+</html>

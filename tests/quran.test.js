@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { parseAyah, search, buildSurahAudioUrl } = require('../quran.js');
+const { parseAyah, search, buildSurahAudioUrl, escapeHtml } = require('../android/app/src/main/assets/public/quran.js');
 
 test('parseAyah returns object with sura, ayah, and text', () => {
   const out = parseAyah('1:1 Bismillah ar-Rahman ar-Rahim');
@@ -32,4 +32,11 @@ test('buildSurahAudioUrl normalizes valid surah numbers to https mp3 URLs', () =
     'https://download.quranicaudio.com/quran/fahad_alkandari/001.mp3'
   );
   assert.equal(buildSurahAudioUrl(115), '');
+});
+
+test('escapeHtml protects Quran and tafsir UI rendering from injected markup', () => {
+  assert.equal(
+    escapeHtml('<img src=x onerror=alert(1)> & "quote"'),
+    '&lt;img src=x onerror=alert(1)&gt; &amp; &quot;quote&quot;'
+  );
 });

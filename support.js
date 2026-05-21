@@ -1,11 +1,10 @@
-const SUPABASE_URL = "https://oqebxioqmcjlhkwqwktk.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9xZWJ4aW9xbWNqbGhrd3F3a3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NjkyMzUsImV4cCI6MjA5NDI0NTIzNX0.8F8qtO9solmaVf-lzyygLM-O9Ff9-LYuDf5O1Xf6wSA";
-
-if (!window.supabase?.createClient) {
-  throw new Error("Supabase client library is not loaded. Add @supabase/supabase-js v2 before support.js.");
-}
-
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const runtimeEnv = typeof window !== "undefined" ? window.NOUR_ENV || {} : {};
+const SUPABASE_URL = runtimeEnv.SUPABASE_URL || "{{SUPABASE_URL}}";
+const SUPABASE_ANON_KEY = runtimeEnv.SUPABASE_ANON_KEY || "{{SUPABASE_ANON_KEY}}";
+const supabaseClient =
+  SUPABASE_URL.includes("{{") || SUPABASE_ANON_KEY.includes("{{") || !window.supabase?.createClient
+    ? null
+    : window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ==========================
 // 👤 USER BAR
@@ -14,7 +13,7 @@ function setupUserBar() {
   const userBar = document.getElementById("supportUserBar");
   const userText = document.getElementById("supportUserText");
 
-  if (!userBar || !userText) return;
+  if (!userBar || !userText || !supabaseClient) return;
 
   supabaseClient.auth.onAuthStateChange((event, session) => {
     const user = session?.user;

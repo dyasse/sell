@@ -56,6 +56,23 @@ const placeholderKeys = [
   'QURAN_ARTWORK_URL'
 ];
 
+const releaseRequiredKeys = [
+  'ADMOB_APP_ID',
+  'ADMOB_BANNER_AD_UNIT_ID',
+  'ADMOB_INTERSTITIAL_AD_UNIT_ID',
+  'AD_CLIENT_ID',
+  'AD_SLOT_ID'
+];
+
+const isReleaseBuild = process.env.NOUR_RELEASE_BUILD === 'true' || process.env.CI_RELEASE_BUILD === 'true';
+
+if (isReleaseBuild) {
+  const missing = releaseRequiredKeys.filter((key) => !process.env[key]);
+  if (missing.length > 0) {
+    throw new Error(`Missing required release environment variables: ${missing.join(', ')}`);
+  }
+}
+
 const injectableExtensions = new Set(['.html', '.js', '.json', '.txt', '.xml']);
 
 async function ensureParentDir(filePath) {

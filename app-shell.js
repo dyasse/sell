@@ -63,6 +63,8 @@
   const DEFAULT_TRACK_URL = "";
   const DEFAULT_TRACK_TITLE = "تلاوة مختارة";
   const STREAM_START_TIMEOUT_MS = 9000;
+  // RELEASE_BLOCKER: reciter/audio streaming permissions remain unverified. Keep these
+  // sources streamed only; the service worker intentionally avoids caching full audio files.
   const PRIMARY_AUDIO_BASE_URL = "https://download.quranicaudio.com/quran/fahad_alkandari/";
   const FALLBACK_AUDIO_BASE_URL = "https://server11.mp3quran.net/fhd/";
   const SECONDARY_FALLBACK_AUDIO_BASE_URL = "https://everyayah.com/data/Alafasy_128kbps/";
@@ -180,6 +182,22 @@
     applyTheme(state.theme);
   }
 
+  function ensureLegalFooterLinks() {
+    if (document.querySelector(".nour-legal-links")) return;
+
+    const nav = document.createElement("nav");
+    nav.className = "nour-legal-links";
+    nav.setAttribute("aria-label", "Important legal and support links");
+    nav.innerHTML = `
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+      <a href="license.html">Content Sources & Licenses</a>
+      <a href="delete-account.html">Delete Account</a>
+      <a href="contact.html">Contact</a>
+    `;
+    document.body.appendChild(nav);
+  }
+
   function formatTime(totalSeconds) {
     const safe = Number.isFinite(totalSeconds) ? Math.max(0, Math.floor(totalSeconds)) : 0;
     const mins = Math.floor(safe / 60);
@@ -280,6 +298,13 @@
       const shouldShow = Boolean(state.audioUrl) && Boolean(state.isPlaying);
       wrapper.hidden = !shouldShow;
       document.body.classList.toggle("has-audio-player", shouldShow);
+    }
+
+    function setAudioLoadingState(isLoading) {
+      if (!playPauseBtn) return;
+      playPauseBtn.disabled = Boolean(isLoading);
+      playPauseBtn.classList.toggle("is-loading", Boolean(isLoading));
+      playPauseBtn.setAttribute("aria-busy", String(Boolean(isLoading)));
     }
 
     function updateSeekValue() {
@@ -483,6 +508,7 @@
           console.log("FINAL_AUDIO_URL: " + nextUrl);
           audio.src = withFreshQuery(nextUrl);
           audio.load();
+          setAudioLoadingState(true);
 
           if (autoplay) {
             await audio.play();
@@ -490,8 +516,10 @@
 
           await waitForAudioStart(STREAM_START_TIMEOUT_MS, controller.abortController.signal);
           await persistAudioState();
+          setAudioLoadingState(false);
           return;
         } catch (error) {
+          setAudioLoadingState(false);
           const aborted = error?.name === "AbortError";
           if (aborted) return;
           controller.retries += 1;
@@ -547,6 +575,8 @@
     });
 
 
+    let lastActiveAyahId = null;
+
     function syncActiveAyah(currentTime) {
       const ayat = document.querySelectorAll(".ayah[data-start][data-end]");
       ayat.forEach((el) => {
@@ -557,9 +587,13 @@
         const isActive = currentTime >= start && currentTime <= end;
         el.classList.toggle("active-ayah", isActive);
 
-        if (isActive) {
-          el.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
-        }
+        if (!isActive) return;
+
+        const ayahId = el.id || `${el.dataset.sura}-${el.dataset.ayah}`;
+        if (ayahId === lastActiveAyahId) return;
+
+        lastActiveAyahId = ayahId;
+        el.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
       });
     }
     audio.addEventListener("timeupdate", () => {
@@ -672,6 +706,7 @@
   async function initAppShell() {
     await initTheme();
     buildThemeToggle();
+    ensureLegalFooterLinks();
     await initAudioState();
     const player = buildAudioPlayer();
     bindAudioPlayer(player);

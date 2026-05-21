@@ -6,7 +6,7 @@
   <title>نور | القرآن الكريم والأذكار والأدعية ومواقيت الصلاة</title>
   <meta name="description" content="نور: القرآن الكريم كاملًا مع التفسير والأذكار والأدعية ومواقيت الصلاة في تجربة سريعة ومتوافقة مع الجوال." />
   <meta name="keywords" content="القرآن الكريم, تفسير القرآن, الأذكار, الأدعية, مواقيت الصلاة, نور, Quran, Azkar" />
-  <meta name="google-site-verification" content="REPLACE_WITH_REAL_GSC_TOKEN" />
+  <meta name="google-site-verification" content="{{NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION}}" />
   <link rel="canonical" href="https://nour-quran.com/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="نور" />
@@ -39,24 +39,24 @@
 </head>
 <body>
   <nav class="navbar">
-    <a href="index.html" class="brand premium-brand" aria-label="العودة للرئيسية" data-i18n-aria="nav.homeAria">
+    <a href="index.html" class="brand premium-brand" aria-label="العودة للرئيسية">
       <span class="brand-title">Nour</span>
     </a>
-    <button id="openSettingsBtn" class="settings-trigger" type="button" aria-label="فتح الإعدادات" data-i18n-aria="nav.settingsAria">
+    <button id="openSettingsBtn" class="settings-trigger" type="button" aria-label="فتح الإعدادات">
       <i class="fa-solid fa-gear"></i>
     </button>
   </nav>
   <div id="settingsBackdrop" class="settings-backdrop" aria-hidden="true"></div>
   <aside id="settingsDrawer" class="settings-drawer" aria-hidden="true">
     <div class="settings-head">
-      <h2 data-i18n="settings.title">الإعدادات</h2>
-      <button id="closeSettingsBtn" class="settings-close-btn" type="button" aria-label="إغلاق الإعدادات" data-i18n-aria="settings.closeAria">
+      <h2>Settings</h2>
+      <button id="closeSettingsBtn" class="settings-close-btn" type="button" aria-label="إغلاق الإعدادات">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
 
     <div class="settings-group">
-      <label for="darkModeToggle" data-i18n="settings.darkMode">الوضع الليلي</label>
+      <label for="darkModeToggle">Dark Mode</label>
       <label class="switch">
         <input id="darkModeToggle" type="checkbox" />
         <span class="slider"></span>
@@ -64,7 +64,7 @@
     </div>
 
     <div class="settings-group prayer-offset-group">
-      <p data-i18n="settings.prayerOffset">تعديل مواقيت الصلاة</p>
+      <p>Adjust Prayer Times</p>
       <div class="offset-control">
         <button id="decreaseOffsetBtn" type="button" aria-label="تقليل وقت الصلاة">−</button>
         <strong id="offsetValue">0 min</strong>
@@ -73,8 +73,8 @@
     </div>
 
     <div class="settings-group">
-      <label for="languageSelector" data-i18n="settings.language">اللغة</label>
-      <select id="languageSelector" data-language-selector>
+      <label for="languageSelector">Language</label>
+      <select id="languageSelector">
         <option value="ar">Arabic</option>
         <option value="fr">French</option>
         <option value="en">English</option>
@@ -83,41 +83,35 @@
 
     <button id="shareAppBtn" class="settings-action-btn" type="button">
       <i class="fa-solid fa-share-nodes"></i>
-      <span data-i18n="settings.share">مشاركة التطبيق</span>
+      <span>Share App</span>
     </button>
 
-    <button id="openAuthBtn" class="signin-btn" type="button" data-i18n="settings.signIn">تسجيل الدخول</button>
+    <a class="settings-action-btn" href="license.html">
+      <i class="fa-solid fa-scale-balanced"></i>
+      <span>Content Sources & Licenses</span>
+    </a>
+    <a class="settings-action-btn" href="delete-account.html">
+      <i class="fa-solid fa-user-slash"></i>
+      <span>Delete Account / Data Deletion</span>
+    </a>
+
+    <button id="openAuthBtn" class="signin-btn" type="button">Sign In</button>
   </aside>
 
-  <main class="page-shell">
+  <main class="page-shell" style="padding-bottom: 80px;">
     <section class="hero-panel">
       <div class="hero-badge">
         <i class="fa-solid fa-sparkles"></i>
-        <span data-i18n="hero.badge">تطبيق إسلامي بسيط ومريح</span>
+        <span>تطبيق إسلامي بسيط ومريح</span>
       </div>
 
       <h1>نُور</h1>
-      <p data-i18n="hero.subtitle">رفيقك اليومي للقرآن والأذكار والأدعية ومواقيت الصلاة</p>
+      <p>رفيقك اليومي للقرآن والأذكار والأدعية ومواقيت الصلاة</p>
       <div class="hero-cta">
         <button id="installAppBtn" class="install-app-btn hidden" type="button">
           <i class="fa-solid fa-mobile-screen-button"></i>
-          <span data-i18n="hero.install">تثبيت التطبيق على الهاتف</span>
+          <span>تثبيت التطبيق على الهاتف</span>
         </button>
-      </div>
-    </section>
-
-    <section class="seo-hero" aria-labelledby="seoHeroTitle">
-      <div class="seo-hero-content">
-        <span class="seo-hero-kicker" data-i18n="seo.kicker">منصة قرآنية مجانية</span>
-        <h2 id="seoHeroTitle" data-i18n="seo.title">اقرأوا واستمعوا وعيشوا مع القرآن يومياً</h2>
-        <p data-i18n="seo.description">
-          مرحباً بكم في نور القرآن، منصتكم الشاملة والمجانية لقراءة والاستماع للقرآن الكريم. استمتعوا بواجهة سلسة مع التمرير التلقائي، مواقيت الصلاة الدقيقة، وبوصلة القبلة المدمجة. تجربة روحانية محسّنة لجميع الأجهزة، بدون انقطاع.
-        </p>
-      </div>
-      <div class="seo-hero-features" aria-label="الميزات الرئيسية" data-i18n-aria="seo.featuresAria">
-        <span><i class="fa-solid fa-book-quran"></i> <span data-i18n="seo.feature.read">قراءة القرآن</span></span>
-        <span><i class="fa-solid fa-headphones"></i> <span data-i18n="seo.feature.listen">الاستماع الصوتي</span></span>
-        <span><i class="fa-solid fa-mosque"></i> <span data-i18n="seo.feature.prayer">الصلاة والقبلة</span></span>
       </div>
     </section>
 
@@ -128,7 +122,7 @@
             <i class="fa-solid fa-bookmark"></i>
           </div>
           <div class="continue-text">
-            <span class="continue-label" data-i18n="bookmark.label">واصل القراءة من</span>
+            <span class="continue-label">واصل القراءة من</span>
             <strong id="bookmarkTitle">سورة الفاتحة - آية 1</strong>
           </div>
         </div>
@@ -143,58 +137,49 @@
         <div class="app-icon-wrap app-icon-quran">
           <i class="fa-solid fa-book-quran"></i>
         </div>
-        <h3 data-i18n="apps.quran.title">القرآن الكريم</h3>
-        <p data-i18n="apps.quran.desc">قراءة وتفسير السور</p>
+        <h3>القرآن الكريم</h3>
+        <p>قراءة وتفسير السور</p>
       </a>
 
       <a class="app-card" href="adhkar.html">
         <div class="app-icon-wrap app-icon-adhkar">
           <i class="fa-solid fa-book-open-reader"></i>
         </div>
-        <h3 data-i18n="apps.adhkar.title">الأذكار</h3>
-        <p data-i18n="apps.adhkar.desc">حصن المسلم اليومي</p>
+        <h3>الأذكار</h3>
+        <p>حصن المسلم اليومي</p>
       </a>
 
       <a class="app-card" href="duas.html">
         <div class="app-icon-wrap app-icon-dua">
           <i class="fa-solid fa-hands-praying"></i>
         </div>
-        <h3 data-i18n="apps.duas.title">الأدعية</h3>
-        <p data-i18n="apps.duas.desc">أدعية مختارة جامعة</p>
+        <h3>الأدعية</h3>
+        <p>أدعية مختارة جامعة</p>
       </a>
 
       <a class="app-card" href="favorites.html">
         <div class="app-icon-wrap app-icon-fav">
           <i class="fa-solid fa-heart"></i>
         </div>
-        <h3 data-i18n="apps.favorites.title">المفضلة</h3>
-        <p data-i18n="apps.favorites.desc">العناصر المحفوظة</p>
+        <h3>المفضلة</h3>
+        <p>العناصر المحفوظة</p>
       </a>
 
       <a class="app-card" href="salat.html">
         <div class="app-icon-wrap app-icon-salat">
           <i class="fa-solid fa-mosque"></i>
         </div>
-        <h3 data-i18n="apps.salat.title">الصلاة</h3>
-        <p data-i18n="apps.salat.desc">المواقيت والقبلة</p>
+        <h3>الصلاة</h3>
+        <p>المواقيت والقبلة</p>
       </a>
 
       <a class="app-card" href="support.html">
         <div class="app-icon-wrap app-icon-support">
           <i class="fa-solid fa-hand-holding-heart"></i>
         </div>
-        <h3 data-i18n="apps.support.title">ادعمنا</h3>
-        <p data-i18n="apps.support.desc">ساهم في استمرار المشروع</p>
+        <h3>ادعمنا</h3>
+        <p>ساهم في استمرار المشروع</p>
       </a>
-    </section>
-    <section class="home-footer-card" aria-label="معلومات التطبيق وروابط الدعم">
-      <p class="home-footer-vision">نعمل دائماً على تطوير هذا المشروع للأفضل لتلبية تطلعاتكم وتقديم أفضل تجربة إسلامية.</p>
-      <div class="home-footer-links">
-        <a href="mailto:support@nour-quran.com">support@nour-quran.com</a>
-        <a href="https://nour-quran.com" target="_blank" rel="noopener noreferrer">nour-quran.com</a>
-        <a href="about.html">من نحن</a>
-        <a href="privacy-policy.html">سياسة الخصوصية</a>
-      </div>
     </section>
     <section class="web-adsense-slot" aria-label="Advertisement">
       <!-- Inject AD_CLIENT_ID and AD_SLOT_ID from CI secrets during deployment. -->
@@ -208,16 +193,50 @@
            (adsbygoogle = window.adsbygoogle || []).push({});
       </script>
     </section>
+
+    <section class="app-footer-section">
+      <div class="app-footer-content">
+        <p class="footer-mission">نعمل دائماً على تطوير هذا المشروع للأفضل لتلبية تطلعاتكم وتقديم أفضل تجربة إسلامية.</p>
+        <div class="footer-contact">
+          <i class="fa-solid fa-envelope"></i>
+          <a href="mailto:support@nour-quran.com">support@nour-quran.com</a>
+        </div>
+        <div class="footer-website">
+          <i class="fa-solid fa-globe"></i>
+          <a href="https://nour-quran.com" target="_blank" rel="noopener noreferrer">https://nour-quran.com</a>
+        </div>
+        <div class="footer-links">
+          <a href="about.html" class="footer-link">من نحن</a>
+          <span class="footer-divider">•</span>
+          <a href="privacy-policy.html" class="footer-link">سياسة الخصوصية</a>
+          <span class="footer-divider">•</span>
+          <a href="terms.html" class="footer-link">الشروط</a>
+          <span class="footer-divider">•</span>
+          <a href="license.html" class="footer-link">المصادر والتراخيص</a>
+        </div>
+      </div>
+    </section>
+
+    <footer style="padding: 20px; text-align: center; background-color: #f8f9fa; border-top: 1px solid #e0e0e0; margin-top: auto; width: 100%;">
+      <p style="color: #2e7d32; font-size: 14px; font-weight: bold; line-height: 1.5; margin-bottom: 15px;">نعمل دائماً على تطوير هذا المشروع للأفضل لتلبية تطلعاتكم وتقديم أفضل تجربة إسلامية.</p>
+      <div style="margin-bottom: 10px;">
+        <a href="about.html" style="color: #555; text-decoration: none; font-size: 13px; margin: 0 10px;">من نحن</a> |
+        <a href="privacy-policy.html" style="color: #555; text-decoration: none; font-size: 13px; margin: 0 10px;">سياسة الخصوصية</a> |
+        <a href="terms.html" style="color: #555; text-decoration: none; font-size: 13px; margin: 0 10px;">الشروط</a> |
+        <a href="license.html" style="color: #555; text-decoration: none; font-size: 13px; margin: 0 10px;">المصادر والتراخيص</a>
+      </div>
+      <p style="color: #777; font-size: 12px; margin-bottom: 5px;">تواصل معنا: <a href="mailto:support@nour-quran.com" style="color: #2e7d32; font-weight: bold;">support@nour-quran.com</a></p>
+      <a href="https://nour-quran.com" style="color: #2e7d32; font-size: 12px; text-decoration: none;">www.nour-quran.com</a>
+    </footer>
   </main>
-  <footer class="bottom-meta-nav" aria-label="روابط قانونية ومعلومات" data-i18n-aria="footer.aria">
-    <a href="privacy-policy.html" data-i18n="footer.privacy">سياسة الخصوصية</a>
-    <a href="about.html" data-i18n="footer.about">من نحن</a>
-    <a href="contact.html" data-i18n="footer.contact">تواصل معنا</a>
-    <a href="terms.html" data-i18n="footer.terms">الشروط</a>
+  <footer class="bottom-meta-nav" aria-label="روابط الصفحات المهمة">
+    <a href="about.html">About</a>
+    <a href="privacy-policy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="license.html">Licenses</a>
+    <a href="delete-account.html">Delete Account</a>
+    <a href="contact.html">Contact</a>
   </footer>
-  <div class="admob-banner-fixed-slot" aria-hidden="true">
-    مساحة مخصّصة لإعلان AdMob Banner
-  </div>
 
   <div id="authModal" class="auth-modal" aria-hidden="true">
     <div class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="authTitle">
@@ -248,15 +267,16 @@
       <div class="auth-socials">
         <button id="loginGoogleBtn" class="auth-social-btn" type="button">
           <i class="fa-brands fa-google"></i>
-          <span>Google</span>
+          <span>Login with Google</span>
         </button>
         <button id="loginFacebookBtn" class="auth-social-btn facebook" type="button">
           <i class="fa-brands fa-facebook-f"></i>
-          <span>Facebook</span>
+          <span>Login with Facebook</span>
         </button>
       </div>
 
       <button id="logoutBtn" class="auth-link-btn hidden" type="button">تسجيل الخروج</button>
+      <button id="deleteAccountBtn" class="auth-link-btn" type="button">Delete Account / Request Data Deletion</button>
       <p id="authStatus" class="auth-status">مرحبا بك في نور</p>
     </div>
   </div>
@@ -294,16 +314,7 @@
     </div>
   </div>
 
-  <div id="cookieConsentBanner" class="cookie-consent-banner" role="region" aria-label="إشعار الموافقة على ملفات تعريف الارتباط" data-i18n-aria="cookie.aria" aria-hidden="true">
-    <div class="cookie-consent-copy">
-      <strong data-i18n="cookie.title">ملفات تعريف الارتباط والخصوصية</strong>
-      <p data-i18n="cookie.message">نحن نستخدم ملفات تعريف الارتباط (الكوكيز) لتخصيص المحتوى، تقديم إعلانات مناسبة، وتحليل حركة الزيارات. باستمرارك في تصفح الموقع، فإنك توافق على سياستنا.</p>
-    </div>
-    <button id="acceptCookieConsent" class="cookie-consent-btn" type="button" data-i18n="cookie.accept">موافق</button>
-  </div>
-
   <script src="app-shell.js"></script>
-  <script src="i18n.js"></script>
   <script src="monetization.js"></script>
   <script src="script.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

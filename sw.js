@@ -15,6 +15,8 @@ const APP_SHELL = [
   "./favorites.html",
   "./support.html",
   "./salat.html",
+  "./license.html",
+  "./delete-account.html",
   "./styles.css",
   "./app-shell.js",
   "./script.js",
@@ -66,6 +68,18 @@ function isAudioFileRequest(request, requestUrl) {
   return (
     request.destination === "audio" ||
     /\.(?:mp3|m4a|aac|ogg|opus|wav)$/i.test(requestUrl.pathname)
+  );
+}
+
+function isLegalOrSensitivePage(requestUrl) {
+  return isSameOrigin(requestUrl) && /\/(?:privacy-policy|privacy|terms|license|delete-account)\.html$/i.test(requestUrl.pathname);
+}
+
+function isSensitiveRequest(requestUrl) {
+  return (
+    requestUrl.hostname.includes("supabase.co") ||
+    /\/auth\/v1\//i.test(requestUrl.pathname) ||
+    /access_token|refresh_token|session/i.test(requestUrl.search)
   );
 }
 
@@ -153,6 +167,12 @@ self.addEventListener("fetch", (event) => {
 
   const requestUrl = new URL(request.url);
 
+  if (isSensitiveRequest(requestUrl)) {
+    // Never cache auth/session traffic or URLs that may contain tokens.
+    event.respondWith(fetch(request));
+    return;
+  }
+
   if (isAudioFileRequest(request, requestUrl)) {
     // Do not cache full Quran audio files in Cache Storage; let the browser stream/range-request them.
     event.respondWith(fetch(request));
@@ -160,7 +180,15 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (isApiRequest(request, requestUrl)) {
+    // Quran text/metadata/tafsir API responses are runtime data. Network-first keeps
+    // corrections and provider policy changes from staying stale for long.
     event.respondWith(networkFirst(request, API_CACHE));
+    return;
+  }
+
+  if (isLegalOrSensitivePage(requestUrl)) {
+    // Legal, privacy, and deletion pages must stay fresh for Play review and users.
+    event.respondWith(networkFirst(request, RUNTIME_CACHE));
     return;
   }
 
