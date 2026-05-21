@@ -738,6 +738,26 @@ select {
   font-weight: 700;
 }
 
+
+.android-only,
+.home-footer-card.android-only,
+.admob-banner-fixed-slot.android-only {
+  display: none !important;
+}
+
+html.platform-capacitor.platform-android .android-only,
+body.platform-capacitor.platform-android .android-only {
+  display: block !important;
+}
+
+html.platform-capacitor.platform-android .home-footer-card.android-only {
+  display: block !important;
+}
+
+html.platform-capacitor.platform-android .admob-banner-fixed-slot.android-only {
+  display: block !important;
+}
+
 .admob-banner-fixed-slot {
   position: fixed;
   inset-inline: 0;
@@ -1837,7 +1857,7 @@ select {
   }
 }
 
-body.android-banner-active {
+body.platform-capacitor.platform-android.android-banner-active {
   padding-bottom: var(--android-banner-space, 56px);
 }
 
