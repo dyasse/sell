@@ -1,0 +1,78 @@
+name: Android Release Readiness
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.11.1
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test
+        run: npm test
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build web
+        run: npm run build:web
+
+      - name: Capacitor sync
+        run: npx cap sync android
+
+      - name: Build debug APK
+        working-directory: android
+        run: gradle assembleDebug
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: nour-quran-debug-apk
+          path: android/app/build/outputs/apk/debug/*.apk
+
+      - name: Decode release keystore
+        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
+        working-directory: android
+        run: |
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > nour-quran-release.jks
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+
+      - name: Build release AAB when signing secrets exist
+        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' && secrets.ADMOB_APP_ID != '' && secrets.ADMOB_BANNER_AD_UNIT_ID != '' && secrets.ADMOB_INTERSTITIAL_AD_UNIT_ID != '' }}
+        working-directory: android
+        run: gradle bundleRelease
+        env:
+          ADMOB_APP_ID: ${{ secrets.ADMOB_APP_ID }}
+          ADMOB_BANNER_AD_UNIT_ID: ${{ secrets.ADMOB_BANNER_AD_UNIT_ID }}
+          ADMOB_INTERSTITIAL_AD_UNIT_ID: ${{ secrets.ADMOB_INTERSTITIAL_AD_UNIT_ID }}
+
+      - name: Upload release AAB
+        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' && secrets.ADMOB_APP_ID != '' && secrets.ADMOB_BANNER_AD_UNIT_ID != '' && secrets.ADMOB_INTERSTITIAL_AD_UNIT_ID != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: nour-quran-release-aab
+          path: android/app/build/outputs/bundle/release/*.aab

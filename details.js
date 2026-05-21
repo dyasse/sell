@@ -1,4 +1,6 @@
 const runtimeEnv = typeof window !== "undefined" ? window.NOUR_ENV || {} : {};
+// RELEASE_BLOCKER: Quran.com text/metadata, alquran.cloud tafsir, and QuranicAudio terms
+// need official license verification before production. Content is fetched/streamed at runtime.
 const QURAN_AUDIO_BASE_URL = runtimeEnv.QURAN_AUDIO_BASE_URL || "https://download.quranicaudio.com/quran/fahad_alkandari/";
 const DEFAULT_RECITER_ID = runtimeEnv.QURAN_RECITER_ID || "fahad_alkandari";
 let quranSyncInstance = null;
@@ -165,27 +167,30 @@ function createVerseHTML(verse, surahId, surahName) {
   `;
 }
 
-function setupAyahAutoSync({ id, surahName }) {
-  const audio = document.getElementById("globalAudioElement");
-  if (!audio || !window.NourQuranSync?.initQuranSync) return;
-
-  if (quranSyncInstance?.destroy) {
-    quranSyncInstance.destroy();
+function saveLastRead(id, verse, name) {
+  try {
+    localStorage.setItem(
+      "lastRead",
+      JSON.stringify({ id, verse, name, savedAt: new Date().toISOString() })
+    );
+  } catch (error) {
+    console.error("Last read save error:", error);
   }
-
-  quranSyncInstance = window.NourQuranSync.initQuranSync({
-    audioEl: audio,
-    ayahSelector: ".ayah",
-    reciterId: DEFAULT_RECITER_ID,
-    suraId: `sura_${id}`,
-    title: `سورة ${surahName}`,
-    artist: DEFAULT_RECITER_ID,
-    album: "Nour Quran"
-  });
-
-  window.quranSyncInstance = quranSyncInstance;
 }
 
+function getSavedLastRead(currentId) {
+  try {
+    const raw = localStorage.getItem("lastRead");
+    if (!raw) return null;
+    const lastRead = JSON.parse(raw);
+    if (!lastRead || Number(lastRead.id) !== Number(currentId) || !lastRead.verse) return null;
+    return Number(lastRead.verse);
+  } catch (error) {
+    console.error("Last read load error:", error);
+    localStorage.removeItem("lastRead");
+    return null;
+  }
+}
 
 function renderSurahNavigation(id) {
   return `
@@ -224,6 +229,8 @@ async function loadSurah() {
 
     const chapter = chapterData?.chapter;
     const verses = Array.isArray(versesData?.verses) ? versesData.verses : [];
+    const savedAyah = !ayah ? getSavedLastRead(id) : null;
+    const launchAyah = ayah || savedAyah;
 
     if (!chapter || !verses.length) {
       throw new Error("Invalid surah data");
@@ -258,11 +265,10 @@ async function loadSurah() {
       ${renderSurahNavigation(id)}
     `;
 
-    setupAyahAutoSync({ id, surahName: chapter.name_arabic });
-
-    if (ayah) {
-      setTimeout(() => {
-        const target = document.getElementById(`ayah-${ayah}`);
+    const resumeAyah = launchAyah;
+    if (resumeAyah) {
+      window.setTimeout(() => {
+        const target = document.getElementById(`ayah-${resumeAyah}`);
 
         if (target) {
           target.scrollIntoView({
@@ -275,6 +281,8 @@ async function loadSurah() {
           target.style.padding = "4px 8px";
         }
       }, 500);
+
+      saveLastRead(id, Number(resumeAyah), chapter.name_arabic);
     }
   } catch (error) {
     console.error("Error loading surah:", error);
@@ -289,10 +297,9 @@ async function loadSurah() {
 
 function saveBookmark(id, verse, name) {
   try {
-    localStorage.setItem(
-      "nour_bookmark",
-      JSON.stringify({ id, verse, name })
-    );
+    const payload = { id, verse, name };
+    localStorage.setItem("nour_bookmark", JSON.stringify(payload));
+    localStorage.setItem("lastRead", JSON.stringify({ ...payload, savedAt: new Date().toISOString() }));
   } catch (error) {
     console.error("Bookmark save error:", error);
   }

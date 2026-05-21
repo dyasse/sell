@@ -1,4 +1,4 @@
 export const supabaseConfig = {
-  url: process.env.SUPABASE_URL || 'https://oqebxioqmcjlhkwqwktk.supabase.co',
-  anonKey: process.env.SUPABASE_ANON_KEY || 'REPLACE_ME'
+  url: process.env.SUPABASE_URL || '{{SUPABASE_URL}}',
+  anonKey: process.env.SUPABASE_ANON_KEY || '{{SUPABASE_ANON_KEY}}'
 };

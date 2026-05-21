@@ -1,25 +1,31 @@
-# License and Quran Source Note
+# Nour Quran Content License Note
 
-This repository contains application code and references Quran text/audio providers. Before publishing a release, confirm and document the exact license for every Quran text, tafsir, translation, and audio source that is bundled, fetched, cached, or redistributed.
+Last updated: May 21, 2026.
 
-## Current source references
+This document is a production release control. Do not mark Nour Quran as production-ready until every content source below has verified official license terms, attribution requirements, commercial-use permission, streaming permission, and caching/redistribution permission.
 
-- Quran chapters metadata API: https://api.quran.com/api/v4/chapters?language=ar
-- Quran.com API documentation: https://api-docs.quran.com/
-- Quran audio base URL currently used for streaming: https://download.quranicaudio.com/quran/fahad_alkandari/
-- QuranicAudio reciter catalog: https://quranicaudio.com/
+## Current Status
 
-## Recommended attribution text
+Final content status: **NOT READY / RELEASE_BLOCKED**.
 
-> Quran text, metadata, and audio are provided by their respective source providers. Please verify each provider's current license and attribution requirements before production release.
+The app currently fetches Quran text, chapter metadata, and tafsir at runtime and streams Quran audio. It does not intentionally bundle Quran text datasets, tafsir datasets, or full Quran audio files for offline redistribution. Full audio files must remain streamed only and must not be cached until explicit provider permission is verified.
 
-## Release checklist
+## Provider Matrix
 
-1. Confirm whether Quran text/audio is only fetched at runtime or redistributed in this repository/build artifacts.
-2. Add exact source names, URLs, license names, and attribution statements to this file.
-3. Keep copies of license pages or written permissions for release records.
-4. If a provider requires a specific attribution string, display it in the app's About or License screen.
+| Content | Provider/source | Runtime/bundled/cache status | Official terms or license reference | Required attribution | Commercial monetized use | Streaming allowed | Offline caching/redistribution | Status |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Quran chapters metadata | Quran.com API (`api.quran.com/api/v4/chapters`) | Fetched at runtime; service worker uses network-first API cache | https://api-docs.quran.com/ plus official provider terms still required | "Chapter metadata provided by Quran.com API" until provider-specific wording is verified | UNVERIFIED | N/A | UNVERIFIED; do not bundle | RELEASE_BLOCKER / UNVERIFIED |
+| Quran Uthmani text | Quran.com API (`api.quran.com/api/v4/quran/verses/uthmani`) | Fetched at runtime; not bundled | https://api-docs.quran.com/ plus official provider terms still required | "Quran text provided by Quran.com API" until provider-specific wording is verified | UNVERIFIED | N/A | UNVERIFIED; do not bundle | RELEASE_BLOCKER / UNVERIFIED |
+| Tafsir | alquran.cloud `ar.muyassar` endpoint | Fetched at runtime after user opens tafsir | https://alquran.cloud/api plus official provider terms still required | "Tafsir content provided through alquran.cloud ar.muyassar endpoint" until verified | UNVERIFIED | N/A | UNVERIFIED; do not bundle | RELEASE_BLOCKER / UNVERIFIED |
+| Recitation audio | QuranicAudio URL for Fahad Al Kandari | Streamed at runtime; full audio file caching blocked in service worker | QuranicAudio catalog/official terms still required | "Audio source: QuranicAudio / configured reciter source" until verified | UNVERIFIED | UNVERIFIED | BLOCKED until explicit permission | RELEASE_BLOCKER / UNVERIFIED |
+| Audio fallback streams | mp3quran.net, EveryAyah, Islamic Network CDN | Streamed only as fallback | Official terms for each fallback required | Provider-specific attribution not verified | UNVERIFIED | UNVERIFIED | BLOCKED until explicit permission | RELEASE_BLOCKER / UNVERIFIED |
 
-## Audio sync and caching note
+## Evidence Notes
 
-The service worker intentionally avoids storing full Quran audio files in Cache Storage so recitations remain streamed/range-requested from their source provider. If future builds bundle timestamp manifests, text, tafsir, translations, or audio, add provider-specific license and attribution details here before release.
+- No official provider screenshots, archived terms pages, or written permissions are committed in this repository as of May 21, 2026.
+- Before production release, attach evidence to the release ticket or repository docs showing exact provider terms, attribution text, commercial/monetized use permission, app streaming permission, and offline caching/redistribution permission.
+- If any provider denies or does not clearly grant the needed use, replace that provider or disable the affected feature before release.
+
+## In-App Attribution
+
+The Android/web app includes `license.html` with conservative attribution and clear release blockers. Keep the page linked from footer/navigation/settings/privacy/about surfaces.

@@ -4,8 +4,8 @@ Nour Quran is a mobile-friendly Islamic web app with Quran browsing, audio playb
 
 ## Project structure
 
-- Root web files: `index.html`, `quran.html`, `styles.css`, and browser scripts.
-- `scripts/build-web.mjs`: builds a deployable `dist/` folder and injects CI-provided placeholders when matching environment variables exist.
+- Android asset web files: `android/app/src/main/assets/public/index.html`, `quran.html`, `styles.css`, and browser scripts are the current build source.
+- `scripts/build-web.mjs`: builds a deployable `dist/` folder from Android public assets and injects CI-provided placeholders when matching environment variables exist.
 - `android/`: Capacitor Android project using bundled `dist/` assets.
 - `tests/`: Node unit tests for Quran parsing/search helpers.
 - `.github/workflows/ci.yml`: CI for lint, tests, web build, and a deploy placeholder.
@@ -99,7 +99,7 @@ Timestamp sources can be generated from a trusted verse-timing manifest, forced-
 
 ### Android background audio testing
 
-The Android manifest includes wake-lock/foreground-service permissions and a placeholder media service entry. For reliable Android 8+ background playback, install a Capacitor Background Audio or Media plugin, or implement a native foreground service with a notification and Android MediaSession. Example lifecycle save hook is included in `app-shell.js` and `src/quran-sync.js`:
+The Android manifest does not declare wake-lock or foreground media service permissions. For reliable Android 8+ background playback, first install a Capacitor Background Audio or Media plugin or implement a native foreground service with a notification and Android MediaSession, then update `docs/PERMISSIONS.md`, the privacy policy, and Play declarations. Example lifecycle save hook is included in `app-shell.js` and `src/quran-sync.js`:
 
 ```js
 const { App } = Capacitor.Plugins;
@@ -125,13 +125,13 @@ Copy `.env.example` to `.env` for local secret/reference values:
 cp .env.example .env
 ```
 
-Do not commit `.env`. The public source keeps placeholders such as `{{AD_CLIENT_ID}}` and `REPLACE_ME` committed intentionally.
+Do not commit `.env`. Keep service-role keys, keystores, Play credentials, and production private secrets out of the repo. Supabase anon keys are public client configuration, but still inject them through environment/CI for release consistency.
 
 Important keys:
 
 - `SUPABASE_URL`, `SUPABASE_ANON_KEY`
 - `AD_CLIENT_ID`, `AD_SLOT_ID`, `ADS_PUBLISHER_ID`
-- `ADMOB_APP_ID`, `ADMOB_BANNER_AD_UNIT_ID`
+- `ADMOB_APP_ID`, `ADMOB_BANNER_AD_UNIT_ID`, `ADMOB_INTERSTITIAL_AD_UNIT_ID`
 - `GA_MEASUREMENT_ID`
 - `PAYPAL_CLIENT_ID`
 - `QURAN_API_URL`, `QURAN_CHAPTERS_API_URL`, `QURAN_AUDIO_BASE_URL`, `QURAN_RECITER_ID`, `QURAN_ARTWORK_URL`
@@ -153,13 +153,20 @@ env:
 
 - Web AdSense placeholders live in `index.html` and are replaced by `AD_CLIENT_ID` / `AD_SLOT_ID` during deployment.
 - App ads authorization files use `ADS_PUBLISHER_ID` placeholders.
-- Android AdMob uses `ADMOB_APP_ID` in Android resources and `ADMOB_BANNER_AD_UNIT_ID` / `ADMOB_INTERSTITIAL_AD_UNIT_ID` in `monetization.js`; inject real values before a release build. Release Android builds fail if `ADMOB_APP_ID` is missing.
-- Install the native AdMob plugin before building Android ads: `npm install @capacitor-community/admob && npm run cap:sync`. The committed Gradle settings auto-link the plugin project when it exists in `node_modules`.
+- Android AdMob uses `ADMOB_APP_ID` in Android resources and `ADMOB_BANNER_AD_UNIT_ID` / `ADMOB_INTERSTITIAL_AD_UNIT_ID` in `monetization.js`; inject real values before a release build. Release Android builds fail if production AdMob IDs are missing.
+- The native AdMob plugin is required: `npm install @capacitor-community/admob && npm run cap:sync`.
 - Google Analytics uses `GA_MEASUREMENT_ID`; keep placeholders in committed code.
+
+For release builds that must fail when ad config is missing:
+
+```bash
+NOUR_RELEASE_BUILD=true npm run build:web
+cd android && ./gradlew bundleRelease
+```
 
 ## Quran text/audio license
 
-See `LICENSE_NOTE.md` before release. Add exact source names, license URLs, and attribution text for any Quran text, tafsir, translation, or audio that is bundled, cached, fetched, or redistributed by the app.
+See `LICENSE_NOTE.md` and `license.html` before release. Current Quran.com, alquran.cloud, QuranicAudio, and fallback audio source permissions are **UNVERIFIED RELEASE_BLOCKERS**. Do not claim the app is production-ready or legally approved until official provider terms and permissions are documented.
 
 Recommended attribution placeholder:
 

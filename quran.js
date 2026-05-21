@@ -1,4 +1,6 @@
 const runtimeEnv = typeof window !== "undefined" ? window.NOUR_ENV || {} : {};
+// RELEASE_BLOCKER: Quran.com chapters and QuranicAudio streaming terms must be verified
+// before production release. This app fetches/streams at runtime and does not bundle/cache audio.
 const SURAH_API_URL = runtimeEnv.QURAN_CHAPTERS_API_URL || runtimeEnv.QURAN_API_URL || "https://api.quran.com/api/v4/chapters?language=ar";
 const AUDIO_BASE_URL = runtimeEnv.QURAN_AUDIO_BASE_URL || "https://download.quranicaudio.com/quran/fahad_alkandari/";
 
@@ -322,6 +324,7 @@ if (typeof document !== "undefined") {
 if (typeof module !== "undefined") {
   module.exports = {
     buildSurahAudioUrl,
+    escapeHtml,
     parseAyah,
     search,
     normalizeSearchText

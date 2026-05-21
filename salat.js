@@ -12,8 +12,14 @@ let prayerTimesToday = null;
 let nextPrayerTimer = null;
 let adhanCheckTimer = null;
 let qiblaDirection = null;
+const PRAYER_NOTIFICATION_IDS = {
+  Fajr: 201,
+  Dhuhr: 202,
+  Asr: 203,
+  Maghrib: 204,
+  Isha: 205,
+};
 const PRAYER_CHANNEL_ID = "prayer-adhan";
-const PRAYER_ORDER = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
 
 function $(id) {
   return document.getElementById(id);
@@ -31,23 +37,14 @@ function formatRemaining(ms) {
   return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 }
 
-function parseTimeToDate(timeString, referenceDate = new Date()) {
+function parseTimeToDate(timeString) {
   const clean = String(timeString).split(" ")[0];
   const [hours, minutes] = clean.split(":").map(Number);
+  const now = new Date();
   const d = new Date();
-  d.setFullYear(referenceDate.getFullYear(), referenceDate.getMonth(), referenceDate.getDate());
+  d.setFullYear(now.getFullYear(), now.getMonth(), now.getDate());
   d.setHours(hours || 0, minutes || 0, 0, 0);
   return d;
-}
-
-function getDayOfYear(date) {
-  const start = new Date(date.getFullYear(), 0, 0);
-  const diff = date - start + (start.getTimezoneOffset() - date.getTimezoneOffset()) * 60000;
-  return Math.floor(diff / 86400000);
-}
-
-function buildPrayerNotificationId(date, prayerIndex) {
-  return (date.getFullYear() * 1000) + (getDayOfYear(date) * 10) + prayerIndex;
 }
 
 function getNextPrayerInfo(times) {
@@ -125,9 +122,13 @@ function getLocalNotificationsPlugin() {
   return window.Capacitor?.Plugins?.LocalNotifications || null;
 }
 
+function generateUniqueNotificationId(prayerIndex) {
+  return new Date().getTime() + prayerIndex;
+}
+
 async function scheduleAdhanNotifications() {
-  const localNotifications = getLocalNotificationsPlugin();
-  if (!localNotifications) {
+  const LocalNotifications = getLocalNotificationsPlugin();
+  if (!LocalNotifications) {
     alert("ميزة التنبيهات تعمل داخل تطبيق أندرويد فقط.");
     return;
   }
@@ -136,24 +137,34 @@ async function scheduleAdhanNotifications() {
     return;
   }
 
-  const now = new Date();
-
-  const pendingResult = await localNotifications.getPending();
-  const pending = Array.isArray(pendingResult?.notifications) ? pendingResult.notifications : [];
-  if (pending.length > 0) {
-    await localNotifications.cancel({
-      notifications: pending.map((item) => ({ id: item.id })),
-    });
+  try {
+    const pending = await LocalNotifications.getPending();
+    if (pending.notifications.length > 0) {
+      await LocalNotifications.cancel(pending);
+    }
+  } catch (error) {
+    console.warn("Could not fetch/cancel pending notifications:", error);
   }
 
-  const notifications = PRAYER_ORDER.map((key, index) => {
-    const scheduleDate = parseTimeToDate(prayerTimesToday[key], now);
+  const ordered = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
+  const now = new Date();
+  const notifications = [];
+
+  for (let prayerIndex = 0; prayerIndex < ordered.length; prayerIndex++) {
+    const key = ordered[prayerIndex];
+
+    // Parse prayer time strictly using device's local timezone
+    const scheduleDate = parseTimeToDate(prayerTimesToday[key]);
+
+    // If time has already passed today, schedule for tomorrow
     if (scheduleDate <= now) {
       scheduleDate.setDate(scheduleDate.getDate() + 1);
     }
 
-    return {
-      id: buildPrayerNotificationId(scheduleDate, index + 1),
+    const uniqueId = generateUniqueNotificationId(prayerIndex);
+
+    notifications.push({
+      id: uniqueId,
       title: `حان الآن وقت صلاة ${prayerNames[key]}`,
       body: currentCity
         ? `المدينة: ${currentCity}`
@@ -161,15 +172,22 @@ async function scheduleAdhanNotifications() {
       channelId: PRAYER_CHANNEL_ID,
       schedule: {
         at: scheduleDate,
-        repeats: false,
+        repeats: true,
+        every: "day",
       },
       smallIcon: "ic_launcher",
       largeIcon: "ic_launcher",
-      extra: { prayerKey: key },
-    };
-  });
+      extra: { prayerKey: key, prayerIndex },
+    });
+  }
 
-  await localNotifications.schedule({ notifications });
+  try {
+    await LocalNotifications.schedule({ notifications });
+    console.log(`Scheduled ${notifications.length} prayer notifications with unique IDs`);
+  } catch (error) {
+    console.error("Failed to schedule notifications:", error);
+    throw error;
+  }
 }
 
 async function requestNotificationPermission() {
@@ -311,6 +329,10 @@ async function loadPrayerExperience(lat, lon) {
 }
 
 function locateUser() {
+  const disclosure = $("locationDisclosure");
+  if (disclosure) {
+    disclosure.textContent = "Nour Quran uses your location to calculate prayer times and qibla direction. Location is not sold.";
+  }
   $("locationText").textContent = "جاري تحديد الموقع...";
   $("cityName").textContent = "...";
 
@@ -333,7 +355,7 @@ function locateUser() {
       $("prayerTimes").innerHTML = `<div class="status-box">اسمح بالوصول للموقع لعرض الأوقات الصحيحة.</div>`;
     },
     {
-      enableHighAccuracy: true,
+      enableHighAccuracy: false,
       timeout: 15000,
       maximumAge: 60000,
     }
@@ -406,7 +428,8 @@ async function startCompass() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  locateUser();
+  $("locationText").textContent = "اضغط على زر تحديد الموقع لعرض مواقيت الصلاة واتجاه القبلة.";
+  $("cityName").textContent = "غير محدد";
 
   $("enableNotificationsBtn")?.addEventListener("click", requestNotificationPermission);
   $("refreshLocationBtn")?.addEventListener("click", locateUser);

@@ -14,13 +14,14 @@
     "test": "node --test tests/*.test.js"
   },
   "dependencies": {
-    "@capacitor/local-notifications": "^7.0.3",
+    "@capacitor-community/admob": "^8.0.0",
     "@capacitor/core": "^7.4.3",
-    "lucide-react": "^0.511.0",
-    "@vercel/analytics": "latest"
+    "@capacitor/local-notifications": "^7.0.3",
+    "@vercel/analytics": "latest",
+    "lucide-react": "^0.511.0"
   },
   "devDependencies": {
     "@capacitor/android": "^7.4.3",
-    "@capacitor/cli": "^7.4.3"
+    "@capacitor/cli": "^7.6.5"
   }
 }
