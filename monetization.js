@@ -41,7 +41,7 @@
 
     const admob = getAdMobPlugin();
     if (!admob) {
-      console.warn('AdMob plugin is not available. Install @capacitor-community/admob and run Capacitor sync.');
+      console.warn('Android ads plugin is not available. Install @capacitor-community/admob and run Capacitor sync.');
       return null;
     }
 
@@ -51,7 +51,7 @@
           await admob.requestConsentInfo?.();
           await admob.showConsentForm?.();
         } catch (error) {
-          console.warn('AdMob consent flow unavailable or skipped:', error);
+          console.warn('Android ads consent flow unavailable or skipped:', error);
         }
         await admob.initialize({
           initializeForTesting: !isReleaseBuild(),
@@ -67,7 +67,7 @@
     if (!isAndroidCapacitor()) return;
     const adId = resolveAdUnitId(ANDROID_BANNER_AD_UNIT_ID, TEST_BANNER_AD_UNIT_ID);
     if (!adId) {
-      console.warn('AdMob banner ID is a placeholder. Inject ADMOB_BANNER_AD_UNIT_ID before release.');
+      console.warn('Android banner ad ID is a placeholder. Inject ADMOB_BANNER_AD_UNIT_ID before release.');
       return;
     }
 
@@ -86,7 +86,7 @@
       document.body.classList.add('android-banner-active');
       document.documentElement.style.setProperty('--android-banner-space', `${BANNER_BOTTOM_PADDING_PX}px`);
     } catch (error) {
-      console.error('Failed to show Android AdMob banner:', error);
+      console.error('Failed to show Android banner ad:', error);
     }
   }
 
@@ -108,7 +108,7 @@
         return true;
       })().catch((error) => {
         interstitialReady = false;
-        console.error('Failed to prepare Android AdMob interstitial:', error);
+        console.error('Failed to prepare Android interstitial ad:', error);
         return false;
       }).finally(() => {
         interstitialPreparePromise = null;
@@ -141,7 +141,7 @@
       return true;
     } catch (error) {
       interstitialReady = false;
-      console.error('Failed to show Android AdMob interstitial:', error);
+      console.error('Failed to show Android interstitial ad:', error);
       return false;
     }
   }

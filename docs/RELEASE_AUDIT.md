@@ -12,7 +12,7 @@ Final status: **NOT READY FOR PRODUCTION**. The app may proceed only to internal
 - Prayer/qibla page requests location only after the user opens the feature and taps the location button. Coordinates are sent to Aladhan and BigDataCloud.
 - Local preferences, bookmarks, resume positions, audio state, theme, and ad cooldown counters are stored locally.
 - Supabase authentication is present but disabled unless `SUPABASE_URL` and `SUPABASE_ANON_KEY` are injected.
-- Google AdMob/AdSense and Google Analytics/Vercel Analytics run only when configured and available.
+- Google web advertising, Android app advertising, and Google Analytics/Vercel Analytics run only when configured and available.
 
 ## Third-Party SDK/API List
 
@@ -52,7 +52,7 @@ Final status: **NOT READY FOR PRODUCTION**. The app may proceed only to internal
 - Coordinates to Aladhan and BigDataCloud.
 - Requested Quran chapters, verses, tafsir, and audio URLs to content providers.
 - Auth/account data to Supabase when configured.
-- Ad/device/activity data to Google AdMob/AdSense.
+- Ad/device/activity data to Google advertising services.
 - Analytics events/device data to Google Analytics/Vercel Analytics when configured.
 - Payment/support details to PayPal or support email providers if used.
 

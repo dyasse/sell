@@ -23,11 +23,11 @@ This mapping must match `privacy-policy.html`.
 - User can request data deletion: Yes, `delete-account.html` and `support@nour-quran.com`.
 - Local device data deletion: user can clear app/browser storage.
 - Data sale: No sale of personal/sensitive data.
-- Ads personalization: possible through Google AdMob/AdSense depending on consent and Google settings; disclose as used for ads/personalization if production ads are enabled.
+- Ads personalization: possible through Google advertising services depending on consent and Google settings; disclose as used for ads/personalization if production ads are enabled.
 
 ## Third-Party Sharing
 
-- Google AdMob/AdSense: ads, device IDs, ad interactions, diagnostics.
+- Google advertising services: ads, device IDs, ad interactions, diagnostics.
 - Google Analytics/Vercel Analytics: app/page activity and device/browser data when configured.
 - Supabase: email, user ID, auth session if login/signup enabled.
 - Aladhan/BigDataCloud: location coordinates for prayer/qibla/city.

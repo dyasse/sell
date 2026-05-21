@@ -78,3 +78,24 @@ test('web source hides Android-only UI and does not inline AdSense with placehol
   assert.match(styles, /display:\s*none\s*!important/);
   assert.match(styles, /body\.platform-android\.platform-capacitor \.admob-banner-fixed-slot/);
 });
+
+test('public web-facing copy does not expose Android ad placeholder wording', () => {
+  const publicFiles = [
+    'index.html',
+    'privacy-policy.html',
+    'terms.html',
+    'i18n.js'
+  ];
+
+  publicFiles.forEach((file) => {
+    const contents = readPublic(file);
+    const blockedPhrases = [
+      ['Ad', 'Mob Banner'].join(''),
+      ['مساحة ', 'مخص'].join(''),
+      ['مساحة ', 'مخصصة'].join(''),
+      ['AdSense/', 'AdMob'].join(''),
+      ['AdMob', '/AdSense'].join('')
+    ];
+    blockedPhrases.forEach((phrase) => assert.equal(contents.includes(phrase), false));
+  });
+});
