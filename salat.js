@@ -12,14 +12,8 @@ let prayerTimesToday = null;
 let nextPrayerTimer = null;
 let adhanCheckTimer = null;
 let qiblaDirection = null;
-const PRAYER_NOTIFICATION_IDS = {
-  Fajr: 201,
-  Dhuhr: 202,
-  Asr: 203,
-  Maghrib: 204,
-  Isha: 205,
-};
 const PRAYER_CHANNEL_ID = "prayer-adhan";
+const PRAYER_ORDER = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
 
 function $(id) {
   return document.getElementById(id);
@@ -37,14 +31,23 @@ function formatRemaining(ms) {
   return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 }
 
-function parseTimeToDate(timeString) {
+function parseTimeToDate(timeString, referenceDate = new Date()) {
   const clean = String(timeString).split(" ")[0];
   const [hours, minutes] = clean.split(":").map(Number);
-  const now = new Date();
   const d = new Date();
-  d.setFullYear(now.getFullYear(), now.getMonth(), now.getDate());
+  d.setFullYear(referenceDate.getFullYear(), referenceDate.getMonth(), referenceDate.getDate());
   d.setHours(hours || 0, minutes || 0, 0, 0);
   return d;
+}
+
+function getDayOfYear(date) {
+  const start = new Date(date.getFullYear(), 0, 0);
+  const diff = date - start + (start.getTimezoneOffset() - date.getTimezoneOffset()) * 60000;
+  return Math.floor(diff / 86400000);
+}
+
+function buildPrayerNotificationId(date, prayerIndex) {
+  return (date.getFullYear() * 1000) + (getDayOfYear(date) * 10) + prayerIndex;
 }
 
 function getNextPrayerInfo(times) {
@@ -133,17 +136,24 @@ async function scheduleAdhanNotifications() {
     return;
   }
 
-  const ordered = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
   const now = new Date();
 
-  const notifications = ordered.map((key) => {
-    const scheduleDate = parseTimeToDate(prayerTimesToday[key]);
+  const pendingResult = await localNotifications.getPending();
+  const pending = Array.isArray(pendingResult?.notifications) ? pendingResult.notifications : [];
+  if (pending.length > 0) {
+    await localNotifications.cancel({
+      notifications: pending.map((item) => ({ id: item.id })),
+    });
+  }
+
+  const notifications = PRAYER_ORDER.map((key, index) => {
+    const scheduleDate = parseTimeToDate(prayerTimesToday[key], now);
     if (scheduleDate <= now) {
       scheduleDate.setDate(scheduleDate.getDate() + 1);
     }
 
     return {
-      id: PRAYER_NOTIFICATION_IDS[key],
+      id: buildPrayerNotificationId(scheduleDate, index + 1),
       title: `حان الآن وقت صلاة ${prayerNames[key]}`,
       body: currentCity
         ? `المدينة: ${currentCity}`
@@ -151,17 +161,12 @@ async function scheduleAdhanNotifications() {
       channelId: PRAYER_CHANNEL_ID,
       schedule: {
         at: scheduleDate,
-        repeats: true,
-        every: "day",
+        repeats: false,
       },
       smallIcon: "ic_launcher",
       largeIcon: "ic_launcher",
       extra: { prayerKey: key },
     };
-  });
-
-  await localNotifications.cancel({
-    notifications: ordered.map((key) => ({ id: PRAYER_NOTIFICATION_IDS[key] })),
   });
 
   await localNotifications.schedule({ notifications });

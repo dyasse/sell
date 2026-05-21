@@ -11,7 +11,6 @@
 })(typeof globalThis !== "undefined" ? globalThis : window, function () {
   const STORAGE_PREFIX = "quran_pos";
   const SAVE_THROTTLE_MS = 2000;
-  const SCROLL_THROTTLE_MS = 700;
 
   function storageKey(reciterId, suraId) {
     return `${STORAGE_PREFIX}::${reciterId || "default"}::${suraId || "sura_1"}`;
@@ -239,24 +238,12 @@
     const index = buildAyahIndex(ayahElements, normalizedSuraId);
     let currentActive = null;
     let hasResumedForTrack = false;
-    let lastScrollAt = 0;
-
-    const setActiveAyah = (item, forceScroll = false) => {
+    const setActiveAyah = (item) => {
       if (!item) return;
       if (currentActive === item.el) return;
       if (currentActive) currentActive.classList.remove("active-ayah", "active");
       item.el.classList.add("active-ayah", "active");
       currentActive = item.el;
-
-      const now = Date.now();
-      if (forceScroll || now - lastScrollAt >= SCROLL_THROTTLE_MS) {
-        lastScrollAt = now;
-        try {
-          item.el.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
-        } catch (_error) {
-          item.el.scrollIntoView();
-        }
-      }
     };
 
     const clearActiveAyah = () => {
@@ -264,9 +251,9 @@
       currentActive = null;
     };
 
-    const highlightAtCurrentTime = (forceScroll = false) => {
+    const highlightAtCurrentTime = () => {
       const item = findAyahByTime(index, audioEl.currentTime || 0);
-      if (item) setActiveAyah(item, forceScroll);
+      if (item) setActiveAyah(item);
       else clearActiveAyah();
       return item;
     };
@@ -281,7 +268,7 @@
       if (Math.abs((audioEl.currentTime || 0) - saved) <= 0.5) return;
       audioEl.currentTime = saved;
       hasResumedForTrack = true;
-      highlightAtCurrentTime(true);
+      highlightAtCurrentTime();
     };
 
     const onPlay = () => {
@@ -295,13 +282,13 @@
       updateMediaPosition(audioEl);
     };
     const onTimeUpdate = () => {
-      highlightAtCurrentTime(false);
+      highlightAtCurrentTime();
       throttledSave();
       updateMediaPosition(audioEl);
     };
-    const onSeeking = () => highlightAtCurrentTime(true);
+    const onSeeking = () => highlightAtCurrentTime();
     const onSeeked = () => {
-      highlightAtCurrentTime(true);
+      highlightAtCurrentTime();
       saveNow();
       updateMediaPosition(audioEl);
     };

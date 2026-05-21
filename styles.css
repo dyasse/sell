@@ -63,7 +63,7 @@ body {
     linear-gradient(180deg, #f7faf9 0%, #f2f5f7 100%);
   color: var(--text);
   min-height: 100vh;
-  padding-bottom: 74px;
+  padding-bottom: 60px;
 }
 
 img {
@@ -315,8 +315,7 @@ select {
 
 
 .bottom-meta-nav {
-  position: sticky;
-  bottom: 0;
+  position: static;
   z-index: 120;
   backdrop-filter: blur(12px);
   background: rgba(255, 255, 255, 0.9);
@@ -326,6 +325,8 @@ select {
   justify-content: center;
   gap: 14px;
   flex-wrap: wrap;
+  margin: 8px 16px 72px;
+  border-radius: 16px;
 }
 
 .bottom-meta-nav a {
@@ -511,7 +512,7 @@ select {
 .container,
 .page-wrap {
   width: min(1120px, calc(100% - 32px));
-  margin: 28px auto 48px;
+  margin: 28px auto 24px;
 }
 
 .hero-panel,
@@ -702,6 +703,53 @@ select {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
+}
+
+.home-footer-card {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 22px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--shadow-sm);
+}
+
+.home-footer-vision {
+  color: #1e293b;
+  font-size: 15px;
+  line-height: 1.9;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.home-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.home-footer-links a {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(31, 111, 80, 0.18);
+  color: var(--primary-dark);
+  background: rgba(234, 245, 240, 0.55);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.admob-banner-fixed-slot {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.96);
+  border-top: 1px solid rgba(230, 236, 232, 0.95);
+  color: #64748b;
+  font-size: 12px;
+  z-index: 150;
 }
 
 .app-card {
@@ -1821,11 +1869,11 @@ body.android-banner-active {
 
 body {
   background-color: var(--bg);
-  padding-bottom: 16px;
+  padding-bottom: 60px;
 }
 
 body.has-audio-player {
-  padding-bottom: calc(var(--audio-player-height) + 16px);
+  padding-bottom: calc(var(--audio-player-height) + 60px);
 }
 
 [data-theme="dark"] body {
