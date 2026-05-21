@@ -1,4 +1,41 @@
 (function () {
+(function applyPlatformClasses() {
+  function getPlatform() {
+    try {
+      if (window.Capacitor && typeof window.Capacitor.getPlatform === "function") {
+        return window.Capacitor.getPlatform();
+      }
+    } catch (_) {}
+    return "web";
+  }
+
+  const platform = getPlatform();
+  const root = document.documentElement;
+
+  root.classList.remove("platform-web", "platform-capacitor", "platform-android", "platform-ios");
+
+  if (platform === "android") {
+    root.classList.add("platform-capacitor", "platform-android");
+  } else if (platform === "ios") {
+    root.classList.add("platform-capacitor", "platform-ios");
+  } else {
+    root.classList.add("platform-web");
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    if (!document.body) return;
+    document.body.classList.remove("platform-web", "platform-capacitor", "platform-android", "platform-ios");
+
+    if (platform === "android") {
+      document.body.classList.add("platform-capacitor", "platform-android");
+    } else if (platform === "ios") {
+      document.body.classList.add("platform-capacitor", "platform-ios");
+    } else {
+      document.body.classList.add("platform-web");
+    }
+  });
+})();
+
   function initGoogleAnalytics() {
     const isBrowser = typeof window !== "undefined" && typeof document !== "undefined";
     if (!isBrowser) return;
