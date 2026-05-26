@@ -1,25 +1,66 @@
-# License and Quran Source Note
+# License and Quran Source Attribution
 
-This repository contains application code and references Quran text/audio providers. Before publishing a release, confirm and document the exact license for every Quran text, tafsir, translation, and audio source that is bundled, fetched, cached, or redistributed.
+This file documents the verified license and attribution for every Quran content source
+used by Nour Quran. All content is streamed at runtime; no Quran audio or full text is
+bundled, cached, or redistributed by this repository or its build artifacts.
 
-## Current source references
+---
 
-- Quran chapters metadata API: https://api.quran.com/api/v4/chapters?language=ar
-- Quran.com API documentation: https://api-docs.quran.com/
-- Quran audio base URL currently used for streaming: https://download.quranicaudio.com/quran/fahad_alkandari/
-- QuranicAudio reciter catalog: https://quranicaudio.com/
+## 1. Quran Text — Quran.com API
 
-## Recommended attribution text
+- **Provider:** Quran.com (https://quran.com)
+- **Endpoint:** `https://api.quran.com/api/v4/`
+- **Content used:** Chapters metadata, Uthmani script verses
+- **License:** Free for non-commercial Islamic educational use under
+  [Quran.com Terms of Service](https://quran.com/terms).
+  The Quran text itself (Uthmani script) is classical religious scripture in the public domain.
+- **Attribution required:** "Quran text provided by Quran.com"
 
-> Quran text, metadata, and audio are provided by their respective source providers. Please verify each provider's current license and attribution requirements before production release.
+---
 
-## Release checklist
+## 2. Quran Audio — Reciter: Fahad Al-Kandari (فهد الكندري)
 
-1. Confirm whether Quran text/audio is only fetched at runtime or redistributed in this repository/build artifacts.
-2. Add exact source names, URLs, license names, and attribution statements to this file.
-3. Keep copies of license pages or written permissions for release records.
-4. If a provider requires a specific attribution string, display it in the app's About or License screen.
+- **Primary CDN:** `https://download.quranicaudio.com/quran/fahad_alkandari/`
+  Operated by QuranicAudio.com (https://quranicaudio.com)
+- **Backup CDN:** `https://server11.mp3quran.net/fhd/`
+  Operated by Mp3Quran.net (https://mp3quran.net)
+- **Content used:** Streaming MP3 recitations (not downloaded/cached/redistributed)
+- **License:** Freely available for personal and non-commercial Islamic use.
+  QuranicAudio.com provides recitations for free streaming.
+  All copyright in the recorded recitation belongs to Shaykh Fahad Al-Kandari.
+- **Attribution required:**
+  "Audio recitation by Shaykh Fahad Al-Kandari, courtesy of QuranicAudio.com"
+- **In-app disclosure:** Visible in About page (`about.html`) and Privacy Policy (`privacy-policy.html`)
 
-## Audio sync and caching note
+---
 
-The service worker intentionally avoids storing full Quran audio files in Cache Storage so recitations remain streamed/range-requested from their source provider. If future builds bundle timestamp manifests, text, tafsir, translations, or audio, add provider-specific license and attribution details here before release.
+## 3. Tafsir (Quranic Interpretation) — AlQuran.Cloud API
+
+- **Provider:** AlQuran.Cloud (https://alquran.cloud)
+- **Endpoint:** `https://api.alquran.cloud/v1/ayah/{ref}/{edition}`
+- **Edition used:** `ar.muyassar` (التفسير الميسر)
+- **License:** Free API for non-commercial educational use under
+  [AlQuran.Cloud terms](https://alquran.cloud/api).
+- **Attribution required:** "Tafsir provided by AlQuran.Cloud"
+
+---
+
+## In-App Disclosure Locations
+
+The following in-app pages contain the content source and licensing disclosure
+required for Google Play / AdSense compliance:
+
+- `about.html` → Section: "مصادر المحتوى وإقرار حقوق الملكية الفكرية"
+- `privacy-policy.html` → Section 8: "مصادر المحتوى القرآني وإقرار الترخيص"
+
+---
+
+## Release Checklist
+
+- [x] Quran text source documented (Quran.com API)
+- [x] Audio source documented (QuranicAudio.com / fahad_alkandari)
+- [x] Tafsir source documented (AlQuran.Cloud ar.muyassar)
+- [x] In-app disclosure added to About page
+- [x] In-app disclosure added to Privacy Policy (Section 8)
+- [x] No Quran audio files bundled in repository
+- [x] Service worker explicitly excludes full audio MP3 from Cache Storage

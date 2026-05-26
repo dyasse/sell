@@ -4,10 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>تواصل معنا | نور القرآن</title>
-  <meta name="description" content="تواصل مع فريق نور القرآن للملاحظات أو الاقتراحات أو طلبات الخصوصية." />
+  <meta name="description" content="تواصل مع فريق نور القرآن لأي ملاحظات أو اقتراحات أو طلبات خصوصية عبر نموذج الاتصال المباشر أو البريد الإلكتروني." />
   <link rel="canonical" href="https://nour-quran.com/contact.html" />
   <link rel="icon" href="assets/favicon.png" />
   <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -15,11 +16,131 @@
     <article class="legal-card">
       <span class="legal-badge" data-i18n="contact.badge">تواصل معنا</span>
       <h1 data-i18n="contact.title">تواصل معنا</h1>
-      <p data-i18n="contact.body">راسلنا لأي ملاحظات أو اقتراحات أو طلبات متعلقة بسياسة الخصوصية عبر البريد الإلكتروني: support@nour-quran.com</p>
-      <p class="legal-home-link"><a href="mailto:support@nour-quran.com">support@nour-quran.com</a></p>
+      <p data-i18n="contact.body">يسعدنا استقبال رسائلكم وملاحظاتكم واقتراحاتكم. أكملوا النموذج أدناه أو راسلونا مباشرة على البريد الإلكتروني.</p>
+
+      <section>
+        <h2>نموذج التواصل</h2>
+        <form id="contactForm" class="contact-form" novalidate>
+          <div class="form-group">
+            <label for="contactName">الاسم <span aria-hidden="true" style="color:#c0392b">*</span></label>
+            <input
+              id="contactName"
+              name="name"
+              type="text"
+              placeholder="اسمك الكريم"
+              required
+              minlength="2"
+              autocomplete="name"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="contactEmail">البريد الإلكتروني <span aria-hidden="true" style="color:#c0392b">*</span></label>
+            <input
+              id="contactEmail"
+              name="email"
+              type="email"
+              placeholder="example@email.com"
+              required
+              autocomplete="email"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="contactSubject">الموضوع</label>
+            <select id="contactSubject" name="subject">
+              <option value="general">استفسار عام</option>
+              <option value="privacy">طلب خصوصية / حذف البيانات</option>
+              <option value="bug">إبلاغ عن خطأ أو مشكلة</option>
+              <option value="suggestion">اقتراح لميزة جديدة</option>
+              <option value="other">أخرى</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="contactMessage">الرسالة <span aria-hidden="true" style="color:#c0392b">*</span></label>
+            <textarea
+              id="contactMessage"
+              name="message"
+              rows="5"
+              placeholder="اكتب رسالتك هنا..."
+              required
+              minlength="10"
+            ></textarea>
+          </div>
+
+          <button type="submit" class="contact-submit-btn">
+            <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+            <span>إرسال الرسالة</span>
+          </button>
+
+          <p id="contactFormStatus" class="contact-form-status" aria-live="polite" hidden></p>
+        </form>
+      </section>
+
+      <section>
+        <h2>معلومات التواصل المباشر</h2>
+        <ul>
+          <li><strong>البريد الإلكتروني:</strong> <a href="mailto:support@nour-quran.com">support@nour-quran.com</a></li>
+          <li><strong>الموقع الإلكتروني:</strong> <a href="https://nour-quran.com" target="_blank" rel="noopener noreferrer">nour-quran.com</a></li>
+          <li><strong>وقت الاستجابة المتوقع:</strong> خلال 2–5 أيام عمل.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>طلبات الخصوصية وحذف البيانات</h2>
+        <p>
+          لتقديم طلب حذف بياناتك الشخصية أو الاستفسار عن ممارسات الخصوصية، اختر موضوع
+          <strong>"طلب خصوصية / حذف البيانات"</strong> في النموذج أعلاه. يمكنك أيضاً مراجعة
+          <a href="privacy-policy.html">سياسة الخصوصية</a> للاطلاع على حقوقك كاملة.
+        </p>
+      </section>
+
       <p class="legal-home-link"><a href="index.html" data-i18n="legal.backHome">الرجوع للصفحة الرئيسية</a></p>
     </article>
   </main>
+
+  <script>
+    (function () {
+      var form = document.getElementById('contactForm');
+      var statusEl = document.getElementById('contactFormStatus');
+      if (!form || !statusEl) return;
+
+      var subjectLabels = {
+        general: 'استفسار عام',
+        privacy: 'طلب خصوصية / حذف البيانات',
+        bug: 'إبلاغ عن خطأ أو مشكلة',
+        suggestion: 'اقتراح لميزة جديدة',
+        other: 'أخرى'
+      };
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        var name    = document.getElementById('contactName').value.trim();
+        var email   = document.getElementById('contactEmail').value.trim();
+        var subject = document.getElementById('contactSubject').value;
+        var message = document.getElementById('contactMessage').value.trim();
+
+        if (!name || !email || !message) {
+          statusEl.textContent = 'يرجى ملء جميع الحقول المطلوبة (*).';
+          statusEl.hidden = false;
+          return;
+        }
+
+        var subjectLabel = subjectLabels[subject] || subject;
+        var body = 'الاسم: ' + name + '\n\nالموضوع: ' + subjectLabel + '\n\nالرسالة:\n' + message;
+        var mailto = 'mailto:support@nour-quran.com'
+          + '?subject=' + encodeURIComponent('[نور القرآن] ' + subjectLabel)
+          + '&body='    + encodeURIComponent(body);
+
+        window.location.href = mailto;
+        statusEl.textContent = 'جاري فتح تطبيق البريد الإلكتروني...';
+        statusEl.hidden = false;
+      });
+    })();
+  </script>
+
   <script src="app-shell.js"></script>
   <script src="i18n.js"></script>
 </body>
