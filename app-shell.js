@@ -517,7 +517,6 @@
 
         try {
           stopAndResetCurrentAudio();
-          console.log("FINAL_AUDIO_URL: " + nextUrl);
           audio.src = withFreshQuery(nextUrl);
           audio.load();
 

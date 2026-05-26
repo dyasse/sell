@@ -3,8 +3,9 @@
   const ANDROID_INTERSTITIAL_AD_UNIT_ID = '{{ADMOB_INTERSTITIAL_AD_UNIT_ID}}';
   // Inject real ADMOB_* values from CI/local secrets before Android release.
   const BANNER_BOTTOM_PADDING_PX = 56;
-  const INTERSTITIAL_PAGE_VIEW_INTERVAL = 4;
-  const INTERSTITIAL_COOLDOWN_MS = 3 * 60 * 1000;
+  const INTERSTITIAL_PAGE_VIEW_INTERVAL = 5;
+  const INTERSTITIAL_MIN_VIEWS_BEFORE_FIRST = 3;
+  const INTERSTITIAL_COOLDOWN_MS = 5 * 60 * 1000;
   const INTERSTITIAL_LAST_SHOWN_KEY = 'nour_ads_interstitial_last_shown_at';
   const INTERSTITIAL_PAGE_VIEW_KEY = 'nour_ads_interstitial_page_views';
 
@@ -132,7 +133,10 @@
 
     prepareInterstitialAd();
 
-    if (nextPageViews % INTERSTITIAL_PAGE_VIEW_INTERVAL === 0) {
+    if (
+      nextPageViews > INTERSTITIAL_MIN_VIEWS_BEFORE_FIRST &&
+      nextPageViews % INTERSTITIAL_PAGE_VIEW_INTERVAL === 0
+    ) {
       showInterstitialAd();
     }
   }

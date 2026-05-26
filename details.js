@@ -137,6 +137,18 @@ function getVerseTiming(verse) {
   return { startTime, endTime };
 }
 
+function handleAyahClick(e) {
+  const ayah = e.target.closest(".ayah[data-surah-id]");
+  if (!ayah) return;
+  if (e.type === "keydown" && e.key !== "Enter" && e.key !== " ") return;
+  if (e.type === "keydown") e.preventDefault();
+  saveAndTafsir(
+    Number(ayah.dataset.surahId),
+    Number(ayah.dataset.verseNum),
+    ayah.dataset.surahName || ""
+  );
+}
+
 function createVerseHTML(verse, surahId, surahName) {
   const verseNumber = verse?.verse_key?.split(":")[1];
 
@@ -144,7 +156,6 @@ function createVerseHTML(verse, surahId, surahName) {
     return "";
   }
 
-  const safeSurahName = surahName.replace(/'/g, "\\'");
   const timing = getVerseTiming(verse);
   const timingAttrs = timing
     ? `data-start="${timing.startTime}" data-end="${timing.endTime}"`
@@ -156,8 +167,12 @@ function createVerseHTML(verse, surahId, surahName) {
       class="ayah"
       data-sura="sura_${surahId}"
       data-ayah="${verseNumber}"
+      data-surah-id="${surahId}"
+      data-verse-num="${verseNumber}"
+      data-surah-name="${escapeHtml(surahName)}"
       ${timingAttrs}
-      onclick="saveAndTafsir(${surahId}, ${verseNumber}, '${safeSurahName}')"
+      role="button"
+      tabindex="0"
       title="اضغط لحفظ العلامة وقراءة التفسير"
     >
       ${escapeHtml(verse.text_uthmani)} <span class="ayah-num">${verseNumber}</span>
@@ -258,6 +273,9 @@ async function loadSurah() {
       ${renderSurahNavigation(id)}
     `;
 
+    container.addEventListener("click", handleAyahClick);
+    container.addEventListener("keydown", handleAyahClick);
+
     setupAyahAutoSync({ id, surahName: chapter.name_arabic });
 
     if (ayah) {
@@ -349,4 +367,8 @@ window.addEventListener("click", function (event) {
   }
 });
 
-document.addEventListener("DOMContentLoaded", loadSurah);
+document.addEventListener("DOMContentLoaded", function () {
+  loadSurah();
+  const closeBtn = document.getElementById("tafsirCloseBtn");
+  if (closeBtn) closeBtn.addEventListener("click", closeTafsir);
+});
