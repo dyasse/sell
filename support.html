@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ادعم مشروع نور</title>
   <meta name="description" content="ساهم في دعم مشروع نور الإسلامي" />
+  <meta name="robots" content="noindex,follow" />
   <link rel="canonical" href="https://nour-quran.com/support.html" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="نور" />
@@ -284,7 +285,6 @@
     }
   </style>
 
-  <script src="https://www.paypal.com/sdk/js?client-id={{PAYPAL_CLIENT_ID}}&components=hosted-buttons&disable-funding=venmo&currency=USD"></script>
 </head>
 <body>
   <nav class="navbar">
@@ -323,25 +323,6 @@
     </section>
 
     <section class="support-grid-pro">
-      <article class="support-card-pro">
-        <div class="support-card-head">
-          <div class="support-card-title">
-            <div class="support-card-icon">
-              <i class="fa-brands fa-paypal"></i>
-            </div>
-            <span>PayPal</span>
-          </div>
-        </div>
-
-        <p class="support-card-desc">
-          دعم سريع وآمن من مختلف الدول عبر PayPal.
-        </p>
-
-        <div class="support-actions">
-          <div id="paypal-container-UTDA8HSA6Q2E6"></div>
-        </div>
-      </article>
-
       <article class="support-card-pro">
         <div class="support-card-head">
           <div class="support-card-title">
@@ -428,10 +409,5 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="support.js"></script>
 
-  <script>
-    paypal.HostedButtons({
-      hostedButtonId: "UTDA8HSA6Q2E6",
-    }).render("#paypal-container-UTDA8HSA6Q2E6");
-  </script>
 </body>
 </html>
