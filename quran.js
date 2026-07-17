@@ -138,7 +138,7 @@ function renderChapters(chapters) {
               </div>
             </a>
             <div class="surah-actions">
-              <button class="listen-btn" type="button" data-surah-id="${id}" data-surah-name="${nameArabic}" aria-label="الاستماع إلى ${nameArabic}">
+              <button class="listen-btn android-only" type="button" data-surah-id="${id}" data-surah-name="${nameArabic}" aria-label="الاستماع إلى ${nameArabic}">
                 <span class="listen-spinner" aria-hidden="true"></span>
                 <i class="fa-solid fa-headphones"></i>
               </button>

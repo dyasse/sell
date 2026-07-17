@@ -26,7 +26,9 @@ const excludedFiles = new Set([
   'README.md',
   'SECURITY.md',
   'LICENSE_NOTE.md',
-  'report.json'
+  'report.json',
+  '.env.example',
+  'products.json'
 ]);
 
 const webAssetExtensions = new Set([

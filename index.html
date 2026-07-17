@@ -6,7 +6,6 @@
   <title>نور | القرآن الكريم والأذكار والأدعية ومواقيت الصلاة</title>
   <meta name="description" content="نور: القرآن الكريم كاملًا مع التفسير والأذكار والأدعية ومواقيت الصلاة في تجربة سريعة ومتوافقة مع الجوال." />
   <meta name="keywords" content="القرآن الكريم, تفسير القرآن, الأذكار, الأدعية, مواقيت الصلاة, نور, Quran, Azkar" />
-  <meta name="google-site-verification" content="{{GSC_TOKEN}}" />
   <link rel="canonical" href="https://nour-quran.com/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="نور" />
@@ -15,6 +14,7 @@
   <meta property="og:locale" content="ar_AR" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="theme-color" content="#1f6f50" />
+  <meta name="google-adsense-account" content="ca-pub-2350255696934759" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="نور" />
@@ -24,18 +24,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
-  <!-- Inject AD_CLIENT_ID from CI secrets during deployment; keep placeholders committed. -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{AD_CLIENT_ID}}"
+  <!-- Public AdSense publisher ID. Ad serving remains controlled from the AdSense account. -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2350255696934759"
      crossorigin="anonymous"></script>
-  <!-- Inject GA_MEASUREMENT_ID from CI secrets during deployment. -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id={{GA_MEASUREMENT_ID}}"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', '{{GA_MEASUREMENT_ID}}');
-  </script>
 </head>
 <body>
   <nav class="navbar">
@@ -45,6 +36,14 @@
     <button id="openSettingsBtn" class="settings-trigger" type="button" aria-label="فتح الإعدادات" data-i18n-aria="nav.settingsAria">
       <i class="fa-solid fa-gear"></i>
     </button>
+  </nav>
+  <nav class="site-primary-nav" aria-label="التنقل الرئيسي">
+    <a href="index.html" aria-current="page">الرئيسية</a>
+    <a href="quran.html">القرآن الكريم</a>
+    <a href="adhkar.html">الأذكار</a>
+    <a href="duas.html">الأدعية</a>
+    <a href="articles.html">الأدلة والمقالات</a>
+    <a href="about.html">من نحن</a>
   </nav>
   <div id="settingsBackdrop" class="settings-backdrop" aria-hidden="true"></div>
   <aside id="settingsDrawer" class="settings-drawer" aria-hidden="true">
@@ -109,15 +108,15 @@
     <section class="seo-hero" aria-labelledby="seoHeroTitle">
       <div class="seo-hero-content">
         <span class="seo-hero-kicker" data-i18n="seo.kicker">منصة قرآنية مجانية</span>
-        <h2 id="seoHeroTitle" data-i18n="seo.title">اقرأوا واستمعوا وعيشوا مع القرآن يومياً</h2>
-        <p data-i18n="seo.description">
-          مرحباً بكم في نور القرآن، منصتكم الشاملة والمجانية لقراءة والاستماع للقرآن الكريم. استمتعوا بواجهة سلسة مع التمرير التلقائي، مواقيت الصلاة الدقيقة، وبوصلة القبلة المدمجة. تجربة روحانية محسّنة لجميع الأجهزة، بدون انقطاع.
+        <h2 id="seoHeroTitle">اقرأوا ونظّموا وردكم اليومي بواجهة هادئة</h2>
+        <p>
+          نور منصة عربية تجمع فهرس السور ومجموعة محددة من الأذكار والأدعية وأدوات مساعدة لمواقيت الصلاة والقبلة. بعض البيانات تأتي من خدمات خارجية وقد تحتاج اتصالاً، ونوضح حدود كل ميزة ومصدرها بدل تقديم وعود بالدقة المطلقة.
         </p>
       </div>
       <div class="seo-hero-features" aria-label="الميزات الرئيسية" data-i18n-aria="seo.featuresAria">
         <span><i class="fa-solid fa-book-quran"></i> <span data-i18n="seo.feature.read">قراءة القرآن</span></span>
-        <span><i class="fa-solid fa-headphones"></i> <span data-i18n="seo.feature.listen">الاستماع الصوتي</span></span>
-        <span><i class="fa-solid fa-mosque"></i> <span data-i18n="seo.feature.prayer">الصلاة والقبلة</span></span>
+        <span><i class="fa-solid fa-list"></i> <span>فهرس السور</span></span>
+        <span><i class="fa-solid fa-mosque"></i> <span>الصلاة والقبلة</span></span>
       </div>
     </section>
 
@@ -179,13 +178,41 @@
         <p data-i18n="apps.salat.desc">المواقيت والقبلة</p>
       </a>
 
-      <a class="app-card" href="support.html">
-        <div class="app-icon-wrap app-icon-support">
-          <i class="fa-solid fa-hand-holding-heart"></i>
-        </div>
-        <h3 data-i18n="apps.support.title">ادعمنا</h3>
-        <p data-i18n="apps.support.desc">ساهم في استمرار المشروع</p>
-      </a>
+    </section>
+    <section class="publisher-content" aria-labelledby="publisherContentTitle">
+      <div class="section-heading">
+        <span>محتوى أصلي من فريق نور</span>
+        <h2 id="publisherContentTitle">أدلة عملية لاستخدام المنصة وبناء عادة قراءة واضحة</h2>
+        <p>
+          لا يقتصر نور على عرض أدوات القراءة فقط. نكتب أدلة عربية أصلية تشرح طريقة استخدام الميزات،
+          وكيفية تنظيم ورد يومي واقعي، وفهم اختلاف مواقيت الصلاة، وحماية الخصوصية أثناء استعمال الموقع.
+          هذه المواد إرشادية عامة وليست بديلاً عن سؤال أهل العلم في المسائل الشرعية.
+        </p>
+      </div>
+      <div class="article-preview-grid">
+        <article class="article-preview-card">
+          <span class="article-meta">دليل عملي · 7 دقائق</span>
+          <h3><a href="guide-daily-quran.html">كيف تبدأ ورداً يومياً من القرآن وتستمر عليه؟</a></h3>
+          <p>خطوات مرنة لاختيار وقت مناسب، تحديد مقدار واقعي، وتسجيل موضع التوقف دون ضغط أو مبالغة.</p>
+        </article>
+        <article class="article-preview-card">
+          <span class="article-meta">شرح تقني مبسط · 6 دقائق</span>
+          <h3><a href="guide-prayer-times.html">لماذا قد تختلف مواقيت الصلاة بين تطبيقين؟</a></h3>
+          <p>شرح مبسط للموقع الجغرافي، طرق الحساب، المنطقة الزمنية، والتعديل اليدوي داخل نور.</p>
+        </article>
+        <article class="article-preview-card">
+          <span class="article-meta">استخدام آمن · 5 دقائق</span>
+          <h3><a href="guide-privacy-offline.html">الخصوصية والعمل دون اتصال في نور</a></h3>
+          <p>ما الذي يُحفظ على جهازك، متى نطلب الموقع، وكيف تتحكم في التفضيلات والبيانات.</p>
+        </article>
+      </div>
+      <p class="section-cta"><a href="articles.html">عرض جميع الأدلة والمقالات</a></p>
+    </section>
+
+    <section class="trust-strip" aria-label="منهجية المحتوى">
+      <div><strong>مصادر معلنة</strong><span>نوضح مصدر النصوص والبيانات الخارجية بوضوح.</span></div>
+      <div><strong>مراجعة بشرية</strong><span>نراجع الأدلة الأصلية قبل نشرها ونصحح الأخطاء المبلغ عنها.</span></div>
+      <div><strong>لا ادعاءات مضللة</strong><span>لا نقدم فتاوى ولا نعد بدقة مطلقة لمواقيت تعتمد على إعدادات محلية.</span></div>
     </section>
     <section class="home-footer-card android-only" aria-label="معلومات التطبيق وروابط الدعم">
       <p class="home-footer-vision">نعمل دائماً على تطوير هذا المشروع للأفضل لتلبية تطلعاتكم وتقديم أفضل تجربة إسلامية.</p>
@@ -196,24 +223,14 @@
         <a href="privacy-policy.html">سياسة الخصوصية</a>
       </div>
     </section>
-    <section class="web-adsense-slot" aria-label="Advertisement">
-      <!-- Inject AD_CLIENT_ID and AD_SLOT_ID from CI secrets during deployment. -->
-      <ins class="adsbygoogle"
-           style="display:block;min-height:90px"
-           data-ad-client="{{AD_CLIENT_ID}}"
-           data-ad-slot="{{AD_SLOT_ID}}"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>
-           (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-    </section>
   </main>
   <footer class="bottom-meta-nav" aria-label="روابط قانونية ومعلومات" data-i18n-aria="footer.aria">
     <a href="privacy-policy.html" data-i18n="footer.privacy">سياسة الخصوصية</a>
     <a href="about.html" data-i18n="footer.about">من نحن</a>
     <a href="contact.html" data-i18n="footer.contact">تواصل معنا</a>
     <a href="terms.html" data-i18n="footer.terms">الشروط</a>
+    <a href="editorial-policy.html">سياسة التحرير</a>
+    <a href="support.html">دعم المشروع</a>
   </footer>
   <div class="admob-banner-fixed-slot android-only" aria-hidden="true"></div>
 
@@ -257,47 +274,6 @@
       <button id="logoutBtn" class="auth-link-btn hidden" type="button">تسجيل الخروج</button>
       <p id="authStatus" class="auth-status">مرحبا بك في نور</p>
     </div>
-  </div>
-
-  <div id="supportPopup" class="support-popup" aria-hidden="true">
-    <div class="support-popup-card" role="dialog" aria-modal="true" aria-labelledby="supportPopupTitle">
-      <button id="closeSupportPopupBtn" class="support-popup-close" type="button" aria-label="إغلاق">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-
-      <div class="support-popup-badge">
-        <i class="fa-solid fa-heart-circle-check"></i>
-        <span>تبرع صغير = أثر كبير</span>
-      </div>
-
-      <h2 id="supportPopupTitle">كن شريكًا في أجر هذا المشروع 🤍</h2>
-      <p class="support-popup-text">
-        يستفيد يوميًا كثير من المستخدمين من القرآن والأذكار عبر <strong>نور</strong>. بدعمك البسيط،
-        تساهم في استمرار التطبيق وتطوير محتوى أفضل للجميع.
-      </p>
-
-      <ul class="support-popup-points">
-        <li><i class="fa-solid fa-check"></i> حتى المساهمة الصغيرة تصنع فرقًا كبيرًا</li>
-        <li><i class="fa-solid fa-check"></i> تكون سببًا في أجر كل مستفيد</li>
-        <li><i class="fa-solid fa-check"></i> تدعم تطوير ميزات جديدة للتطبيق</li>
-      </ul>
-
-      <div class="support-popup-actions">
-        <a href="support.html" id="supportPopupDonateBtn" class="support-popup-btn primary">
-          <i class="fa-solid fa-hand-holding-heart"></i>
-          <span>أرغب في الدعم الآن</span>
-        </a>
-        <button id="supportPopupLaterBtn" class="support-popup-btn ghost" type="button">لاحقًا إن شاء الله</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="cookieConsentBanner" class="cookie-consent-banner" role="region" aria-label="إشعار الموافقة على ملفات تعريف الارتباط" data-i18n-aria="cookie.aria" aria-hidden="true">
-    <div class="cookie-consent-copy">
-      <strong data-i18n="cookie.title">ملفات تعريف الارتباط والخصوصية</strong>
-      <p data-i18n="cookie.message">نحن نستخدم ملفات تعريف الارتباط (الكوكيز) لتخصيص المحتوى، تقديم إعلانات مناسبة، وتحليل حركة الزيارات. باستمرارك في تصفح الموقع، فإنك توافق على سياستنا.</p>
-    </div>
-    <button id="acceptCookieConsent" class="cookie-consent-btn" type="button" data-i18n="cookie.accept">موافق</button>
   </div>
 
   <script src="app-shell.js"></script>
