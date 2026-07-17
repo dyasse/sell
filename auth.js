@@ -86,14 +86,19 @@ function setStatus(message, isError = false) {
 
 function showAuthModal() {
   if (!authModal) return;
+  authModal.removeAttribute("inert");
   authModal.classList.add("show");
   authModal.setAttribute("aria-hidden", "false");
+  emailInput?.focus();
 }
 
 function closeAuthModal() {
   if (!authModal) return;
+  const wasOpen = authModal.classList.contains("show");
   authModal.classList.remove("show");
+  if (wasOpen) openAuthBtn?.focus();
   authModal.setAttribute("aria-hidden", "true");
+  authModal.setAttribute("inert", "");
 }
 
 function getCredentials() {
