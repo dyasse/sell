@@ -2570,3 +2570,359 @@ html[dir="ltr"] .cookie-consent-banner {
     white-space: nowrap;
   }
 }
+
+/* === Premium spiritual experience === */
+body.spiritual-page {
+  background:
+    radial-gradient(circle at 85% 8%, rgba(208, 169, 75, 0.12), transparent 24%),
+    radial-gradient(circle at 8% 32%, rgba(31, 111, 80, 0.1), transparent 26%),
+    linear-gradient(180deg, #f8fbf9 0%, #eef4f1 52%, #f7f4ed 100%);
+}
+
+.spiritual-home-hero {
+  min-height: 570px;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #fff;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(224, 190, 107, 0.2), transparent 33%),
+    linear-gradient(145deg, #0b2f26 0%, #124a39 48%, #1c684d 100%);
+  border-color: rgba(222, 194, 128, 0.25);
+  box-shadow: 0 30px 80px rgba(9, 45, 35, 0.22);
+}
+
+.spiritual-home-hero::before,
+.spiritual-home-hero::after {
+  background: rgba(225, 194, 121, 0.1);
+}
+
+.spiritual-home-hero .hero-badge {
+  position: relative;
+  z-index: 2;
+  color: #f8e6b9;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(248, 230, 185, 0.24);
+}
+
+.spiritual-home-hero h1 {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  font-family: "Amiri", "Cairo", serif;
+  font-size: clamp(78px, 13vw, 144px);
+  font-weight: 700;
+  line-height: 0.95;
+  text-shadow: 0 14px 38px rgba(0, 0, 0, 0.22);
+}
+
+.spiritual-home-hero > p {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(16px, 2vw, 20px);
+  line-height: 2;
+}
+
+.home-hero-verse {
+  position: relative;
+  z-index: 2;
+  margin-top: 24px;
+  padding: 15px 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  border-block: 1px solid rgba(248, 230, 185, 0.2);
+}
+
+.home-hero-verse span {
+  color: #fff8e8;
+  font-family: "Uthmani", "Amiri", serif;
+  font-size: clamp(20px, 3vw, 29px);
+}
+
+.home-hero-verse a {
+  color: #e5c779;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.premium-hero-actions {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+.premium-cta {
+  padding: 13px 20px;
+  border-radius: 999px;
+  font-weight: 800;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.premium-cta:hover { transform: translateY(-2px); }
+.premium-cta.primary { color: #173c30; background: linear-gradient(135deg, #f4d98f, #d6ad52); box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18); }
+.premium-cta.secondary { color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.07); }
+
+.spiritual-orbit {
+  position: absolute;
+  z-index: 0;
+  border: 1px solid rgba(238, 211, 146, 0.13);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.orbit-one { width: 420px; height: 420px; top: -190px; left: -100px; }
+.orbit-two { width: 620px; height: 620px; bottom: -440px; right: -120px; }
+
+.home-spiritual-paths,
+.library-section,
+.journey-intro,
+.journey-card-grid,
+.quiet-moment,
+.method-ribbon,
+.library-hero,
+.editorial-promise {
+  width: min(1120px, calc(100% - 32px));
+  margin-inline: auto;
+}
+
+.home-spiritual-paths {
+  margin-top: 28px;
+  padding: clamp(28px, 5vw, 50px);
+  border-radius: 32px;
+  background: linear-gradient(145deg, #fffdf8, #f5f9f7);
+  border: 1px solid rgba(192, 157, 78, 0.2);
+  box-shadow: var(--shadow-md);
+}
+
+.home-paths-heading,
+.library-section-heading {
+  max-width: 760px;
+  margin-bottom: 26px;
+}
+
+.home-paths-heading > span,
+.library-section-heading > span {
+  color: #9a762b;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.home-paths-heading h2,
+.library-section-heading h2 {
+  margin: 7px 0 10px;
+  font-family: "Amiri", "Cairo", serif;
+  font-size: clamp(30px, 5vw, 48px);
+  line-height: 1.35;
+}
+
+.home-paths-heading p,
+.library-section-heading p { color: var(--muted); line-height: 1.9; }
+
+.home-path-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.home-path-card {
+  position: relative;
+  min-height: 240px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  color: #fff;
+  border-radius: 23px;
+  box-shadow: 0 18px 38px rgba(25, 60, 47, 0.13);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.home-path-card:hover { transform: translateY(-5px); box-shadow: 0 24px 48px rgba(25, 60, 47, 0.2); }
+.home-path-card::before { content: ""; position: absolute; width: 160px; height: 160px; border: 1px solid rgba(255,255,255,.14); border-radius: 50%; top: -75px; left: -45px; }
+.home-path-card > * { position: relative; z-index: 1; }
+.home-path-card > i { width: 50px; height: 50px; margin-bottom: auto; display: grid; place-items: center; border-radius: 17px; background: rgba(255,255,255,.14); font-size: 20px; }
+.home-path-card small { color: rgba(255,255,255,.72); font-weight: 800; }
+.home-path-card h3 { margin: 4px 0 7px; font-family: "Amiri", "Cairo", serif; font-size: 26px; }
+.home-path-card p { color: rgba(255,255,255,.78); line-height: 1.8; font-size: 14px; }
+.path-dua { background: linear-gradient(145deg, #234d42, #102e27); }
+.path-dhikr { background: linear-gradient(145deg, #44715c, #24483a); }
+.path-creation { background: linear-gradient(145deg, #415a68, #1c3543); }
+.path-gratitude { background: linear-gradient(145deg, #ab7b31, #614414); }
+
+.all-paths-link {
+  display: inline-flex;
+  gap: 9px;
+  align-items: center;
+  margin-top: 24px;
+  color: var(--primary-dark);
+  font-weight: 800;
+}
+
+.premium-manifesto { border-color: rgba(31,111,80,.16); }
+
+.featured-spiritual-card {
+  background: linear-gradient(145deg, rgba(234,245,240,.7), rgba(255,251,240,.8));
+  border-color: rgba(170, 133, 51, 0.2);
+}
+
+/* Journey hub */
+.spiritual-hero {
+  position: relative;
+  width: min(1120px, calc(100% - 32px));
+  min-height: 520px;
+  margin: 22px auto 0;
+  padding: clamp(38px, 8vw, 90px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 36px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(229, 199, 121, 0.2), transparent 28%),
+    linear-gradient(145deg, #092b23 0%, #154d3c 55%, #1c634a 100%);
+  box-shadow: 0 34px 80px rgba(9, 43, 35, 0.22);
+}
+
+.spiritual-hero > *:not(.spiritual-orbit) { position: relative; z-index: 1; }
+.spiritual-eyebrow { display: inline-flex; gap: 9px; align-items: center; color: #efd797; font-weight: 800; font-size: 13px; }
+.spiritual-hero h1 { margin: 10px 0; font-family: "Amiri", serif; font-size: clamp(66px, 11vw, 120px); line-height: 1; }
+.spiritual-hero > p { max-width: 700px; color: rgba(255,255,255,.78); line-height: 2; font-size: 18px; }
+.hero-verse { margin-top: 28px; padding: 16px 20px; display: grid; gap: 7px; border-right: 3px solid #e5c779; background: rgba(255,255,255,.07); border-radius: 15px; }
+.hero-verse span { font-family: "Uthmani", "Amiri", serif; font-size: clamp(21px, 3vw, 29px); }
+.hero-verse a { color: #e5c779; font-size: 12px; font-weight: 800; }
+
+.journey-intro { margin-top: 50px; display: grid; grid-template-columns: .75fr 1.25fr; gap: 50px; align-items: start; }
+.journey-intro > div { display: flex; gap: 16px; align-items: flex-start; }
+.section-number { color: #b38d3b; font-weight: 800; font-size: 13px; padding-top: 11px; }
+.journey-intro h2 { font-family: "Amiri", serif; font-size: clamp(32px, 5vw, 48px); line-height: 1.35; }
+.journey-intro > p { color: var(--muted); line-height: 2.05; font-size: 17px; }
+
+.journey-card-grid { margin-top: 36px; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; }
+.journey-card { min-height: 330px; padding: 30px; display: flex; flex-direction: column; align-items: flex-start; overflow: hidden; border-radius: 28px; color: #fff; box-shadow: 0 22px 50px rgba(20,50,40,.14); transition: transform .25s ease; }
+.journey-card:hover { transform: translateY(-4px); }
+.journey-card .journey-icon { width: 60px; height: 60px; display: grid; place-items: center; border-radius: 20px; background: rgba(255,255,255,.13); font-size: 23px; }
+.journey-order { margin-top: auto; color: rgba(255,255,255,.64); font-size: 12px; font-weight: 800; }
+.journey-card h2 { margin: 6px 0; font-family: "Amiri", serif; font-size: 38px; }
+.journey-card p { max-width: 500px; color: rgba(255,255,255,.78); line-height: 1.85; }
+.journey-link { margin-top: 18px; display: flex; gap: 9px; color: #ffe7a8; font-weight: 800; }
+.dua-journey { background: linear-gradient(145deg,#173c33,#08231e); }
+.dhikr-journey { background: linear-gradient(145deg,#4a725f,#214234); }
+.creation-journey { background: linear-gradient(145deg,#496474,#1b3442); }
+.gratitude-journey { background: linear-gradient(145deg,#a67932,#5c3e11); }
+
+.quiet-moment,
+.editorial-promise { margin-top: 28px; padding: clamp(28px,5vw,52px); display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: center; border: 1px solid rgba(179,141,59,.2); border-radius: 28px; background: linear-gradient(145deg,#fffdf8,#f2f7f4); }
+.quiet-mark { color: #b38d3b; font-family: "Amiri", serif; font-size: 64px; line-height: 1; }
+.quiet-moment h2,.editorial-promise h2 { margin: 5px 0; font-family: "Amiri",serif; font-size: clamp(28px,4vw,40px); }
+.quiet-moment p,.editorial-promise p { color: var(--muted); line-height: 1.95; }
+.quiet-moment div > span { color:#9a762b;font-size:12px;font-weight:800; }
+.editorial-promise a { display:inline-block;margin-top:12px;color:var(--primary-dark);font-weight:800; }
+
+.method-ribbon { margin-top: 18px; margin-bottom: 42px; display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.method-ribbon > div { padding: 20px; display: grid; grid-template-columns: auto 1fr; column-gap: 12px; border-radius: 18px; border: 1px solid var(--border); background: rgba(255,255,255,.72); }
+.method-ribbon i { grid-row: 1/3; color:#b38d3b; padding-top:4px; }
+.method-ribbon span { color:var(--muted);font-size:13px;line-height:1.7; }
+
+/* Spiritual long-form pages */
+.spiritual-article { position: relative; margin-top: 26px; border-color: rgba(179,141,59,.2); box-shadow: 0 28px 70px rgba(20,50,40,.1); }
+.spiritual-article-header { text-align: center; padding: 20px 4% 34px; }
+.spiritual-article-header h1 { font-family: "Amiri", serif; font-size: clamp(48px,8vw,76px); }
+.spiritual-article-header .article-deck { max-width: 700px; margin-inline:auto; }
+.verse-panel { margin: 0 auto 34px; padding: clamp(24px,5vw,38px); display: grid; gap: 10px; text-align:center; border: 1px solid rgba(179,141,59,.22); border-radius: 24px; background: radial-gradient(circle at top,#fffdf7,#f1f7f3); }
+.verse-label { color:#9a762b;font-size:12px;font-weight:800; }
+.verse-panel p { color:#173c30;font-family:"Uthmani","Amiri",serif;font-size:clamp(25px,4vw,38px);line-height:1.9; }
+.verse-panel a { color:var(--primary-dark);font-size:13px;font-weight:800; }
+.celestial-panel { background:linear-gradient(145deg,#edf4f6,#f9f8f1); }
+.gratitude-panel { background:linear-gradient(145deg,#fff8e8,#f3f8f3); }
+
+.reflection-grid { margin:24px 0;display:grid;grid-template-columns:repeat(2,1fr);gap:14px; }
+.reflection-grid > div { padding:22px;border-radius:19px;border:1px solid rgba(31,111,80,.14);background:var(--surface-2); }
+.reflection-grid span { color:#9a762b;font-size:12px;font-weight:800; }
+.reflection-grid h3 { margin:5px 0!important; }
+.meaning-steps { margin:24px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px; }
+.meaning-steps > div { padding:22px;border-radius:20px;background:linear-gradient(145deg,#f5faf7,#fffaf0);border:1px solid rgba(179,141,59,.18); }
+.meaning-steps b { width:38px;height:38px;display:grid;place-items:center;border-radius:13px;color:#fff;background:var(--primary); }
+.meaning-steps h3 { margin:12px 0 5px!important; }
+.meaning-steps p { font-size:15px!important; }
+.gratitude-steps b { background:#9a762b; }
+.contemplation-list { list-style:none;padding:0!important;display:grid;gap:10px; }
+.contemplation-list li { position:relative;padding:13px 44px 13px 15px;border-radius:14px;background:var(--surface-2); }
+.contemplation-list li::before { content:"؟";position:absolute;right:14px;color:#b38d3b;font-weight:800; }
+.observation-cards { margin:25px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px; }
+.observation-cards > div { min-height:190px;padding:24px;display:flex;flex-direction:column;justify-content:flex-end;border-radius:22px;color:#fff; }
+.observation-cards > div:nth-child(1){background:linear-gradient(145deg,#466979,#1e3a48)}
+.observation-cards > div:nth-child(2){background:linear-gradient(145deg,#b08a3d,#654914)}
+.observation-cards > div:nth-child(3){background:linear-gradient(145deg,#4b735d,#234637)}
+.observation-cards span { color:#f5daa0;font-weight:800; }
+.observation-cards p { color:rgba(255,255,255,.8)!important;font-size:15px!important; }
+.quiet-quote { margin:28px 0;padding:28px;text-align:center;border-block:1px solid rgba(179,141,59,.28); }
+.quiet-quote span { color:#9a762b;font-size:12px;font-weight:800; }
+.quiet-quote p { color:var(--text)!important;font-family:"Amiri",serif;font-size:clamp(23px,4vw,32px)!important; }
+.source-footer strong { color:var(--text); }
+
+/* Editorial library */
+.library-hero { position:relative;margin-top:22px;padding:clamp(42px,8vw,84px);overflow:hidden;color:#fff;border-radius:34px;background:radial-gradient(circle at 85% 20%,rgba(232,202,132,.2),transparent 26%),linear-gradient(145deg,#0b3026,#1b5a45);box-shadow:0 30px 70px rgba(9,43,35,.2); }
+.library-hero h1 { max-width:760px;margin:12px 0;font-family:"Amiri",serif;font-size:clamp(50px,9vw,88px);line-height:1.15; }
+.library-hero > p { max-width:760px;color:rgba(255,255,255,.78);font-size:18px;line-height:2; }
+.library-stats { margin-top:32px;display:flex;gap:12px;flex-wrap:wrap; }
+.library-stats > div { min-width:130px;padding:15px 18px;border-radius:17px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12); }
+.library-stats strong,.library-stats span { display:block; }
+.library-stats strong { color:#efd797;font-size:25px; }
+.library-stats span { color:rgba(255,255,255,.68);font-size:12px; }
+.library-section { margin-top:45px; }
+.library-feature-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:16px; }
+.library-feature { min-height:280px;padding:28px;display:flex;flex-direction:column;align-items:flex-start;border-radius:25px;border:1px solid rgba(179,141,59,.18);background:#fff;box-shadow:var(--shadow-sm); }
+.library-feature-icon { width:54px;height:54px;margin-bottom:auto;display:grid;place-items:center;border-radius:18px;background:var(--primary-soft);color:var(--primary);font-size:20px; }
+.library-feature > span { margin-top:26px;color:#9a762b;font-size:12px;font-weight:800; }
+.library-feature h3 { margin:5px 0;font-family:"Amiri",serif;font-size:31px; }
+.library-feature p { color:var(--muted);line-height:1.8; }
+.read-link { margin-top:15px;display:flex;gap:8px;color:var(--primary-dark);font-weight:800; }
+.creation-feature { background:linear-gradient(145deg,#f5f9fa,#fff); }
+.gratitude-feature { background:linear-gradient(145deg,#fffaf0,#fff); }
+.practical-library { padding-bottom:20px; }
+.editorial-promise { margin-bottom:42px; }
+
+[data-theme="dark"] body.spiritual-page { background:linear-gradient(180deg,#101b18,#16231f); }
+[data-theme="dark"] .home-spiritual-paths,
+[data-theme="dark"] .quiet-moment,
+[data-theme="dark"] .editorial-promise,
+[data-theme="dark"] .library-feature,
+[data-theme="dark"] .verse-panel { background:var(--surface); }
+
+@media (max-width: 920px) {
+  .home-path-grid { grid-template-columns:repeat(2,1fr); }
+  .journey-intro { grid-template-columns:1fr;gap:18px; }
+  .meaning-steps,.observation-cards { grid-template-columns:1fr; }
+}
+
+@media (max-width: 680px) {
+  .spiritual-home-hero { min-height:520px;padding-inline:20px; }
+  .spiritual-home-hero h1 { font-size:76px; }
+  .home-spiritual-paths { width:min(100% - 20px,1120px);padding:25px 17px; }
+  .home-path-grid,.journey-card-grid,.library-feature-grid,.reflection-grid,.method-ribbon { grid-template-columns:1fr; }
+  .home-path-card { min-height:210px; }
+  .spiritual-hero { width:min(100% - 20px,1120px);min-height:480px;border-radius:26px;padding:32px 24px; }
+  .spiritual-hero h1 { font-size:60px; }
+  .journey-card { min-height:300px;padding:24px; }
+  .journey-card h2 { font-size:33px; }
+  .quiet-moment,.editorial-promise { grid-template-columns:1fr;gap:10px; }
+  .library-hero { width:min(100% - 20px,1120px);border-radius:26px;padding:42px 24px; }
+  .library-hero h1 { font-size:50px; }
+  .spiritual-article { width:min(100% - 20px,900px);padding:24px 18px; }
+  .verse-panel { padding:22px 16px; }
+}

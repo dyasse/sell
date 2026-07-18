@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>نور | القرآن الكريم والأذكار والأدعية ومواقيت الصلاة</title>
-  <meta name="description" content="نور: القرآن الكريم كاملًا مع التفسير والأذكار والأدعية ومواقيت الصلاة في تجربة سريعة ومتوافقة مع الجوال." />
+  <title>نور | قرآن ودعاء وذكر ومسارات للتأمل</title>
+  <meta name="description" content="نور مساحة عربية روحانية تجمع القرآن والأذكار والأدعية ومسارات أصلية للتأمل في الدعاء والذكر والخلق والشكر، بتصميم هادئ ومصادر معلنة." />
   <meta name="keywords" content="القرآن الكريم, تفسير القرآن, الأذكار, الأدعية, مواقيت الصلاة, نور, Quran, Azkar" />
   <link rel="canonical" href="https://nour-quran.com/" />
   <meta property="og:type" content="website" />
@@ -29,7 +29,7 @@
      crossorigin="anonymous"></script>
 </head>
 <body>
-  <nav class="navbar">
+  <nav class="navbar" aria-label="شريط التطبيق">
     <a href="index.html" class="brand premium-brand" aria-label="العودة للرئيسية" data-i18n-aria="nav.homeAria">
       <span class="brand-title">Nour</span>
     </a>
@@ -42,11 +42,12 @@
     <a href="quran.html">القرآن الكريم</a>
     <a href="adhkar.html">الأذكار</a>
     <a href="duas.html">الأدعية</a>
-    <a href="articles.html">الأدلة والمقالات</a>
+    <a href="journey.html">مسارات نور</a>
+    <a href="articles.html">المكتبة</a>
     <a href="about.html">من نحن</a>
   </nav>
   <div id="settingsBackdrop" class="settings-backdrop" aria-hidden="true"></div>
-  <aside id="settingsDrawer" class="settings-drawer" aria-hidden="true">
+  <aside id="settingsDrawer" class="settings-drawer" aria-hidden="true" inert>
     <div class="settings-head">
       <h2 data-i18n="settings.title">الإعدادات</h2>
       <button id="closeSettingsBtn" class="settings-close-btn" type="button" aria-label="إغلاق الإعدادات" data-i18n-aria="settings.closeAria">
@@ -89,14 +90,24 @@
   </aside>
 
   <main class="page-shell">
-    <section class="hero-panel">
+    <section class="hero-panel spiritual-home-hero">
+      <div class="spiritual-orbit orbit-one" aria-hidden="true"></div>
+      <div class="spiritual-orbit orbit-two" aria-hidden="true"></div>
       <div class="hero-badge">
-        <i class="fa-solid fa-sparkles"></i>
-        <span data-i18n="hero.badge">تطبيق إسلامي بسيط ومريح</span>
+        <i class="fa-solid fa-star-and-crescent"></i>
+        <span>مساحة هادئة للقراءة والذكر والتأمل</span>
       </div>
 
       <h1>نُور</h1>
-      <p data-i18n="hero.subtitle">رفيقك اليومي للقرآن والأذكار والأدعية ومواقيت الصلاة</p>
+      <p>ادخل بقلبك كما أنت؛ اقرأ آية، افهم دعاءً، استحضر معنى ذكر، أو توقف أمام آيات الله في نفسك والآفاق.</p>
+      <div class="home-hero-verse">
+        <span>﴿ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ ﴾</span>
+        <a href="https://quran.com/13/28" target="_blank" rel="noopener noreferrer">الرعد: 28</a>
+      </div>
+      <div class="premium-hero-actions">
+        <a class="premium-cta primary" href="journey.html">ابدأ مسارك الروحاني <i class="fa-solid fa-arrow-left"></i></a>
+        <a class="premium-cta secondary" href="quran.html">افتح فهرس القرآن</a>
+      </div>
       <div class="hero-cta">
         <button id="installAppBtn" class="install-app-btn hidden" type="button">
           <i class="fa-solid fa-mobile-screen-button"></i>
@@ -105,18 +116,33 @@
       </div>
     </section>
 
-    <section class="seo-hero" aria-labelledby="seoHeroTitle">
+    <section class="home-spiritual-paths" aria-labelledby="homePathsTitle">
+      <div class="home-paths-heading">
+        <span>اختر ما يحتاجه قلبك اليوم</span>
+        <h2 id="homePathsTitle">أربعة أبواب، وكل باب يبدأ بخطوة هادئة</h2>
+        <p>المسارات مكتوبة خصيصاً لنور، وتجمع بين مصدر شرعي واضح وشرح عربي أصلي وأسئلة عملية للتأمل.</p>
+      </div>
+      <div class="home-path-grid">
+        <a href="guide-dua-etiquette.html" class="home-path-card path-dua"><i class="fa-solid fa-hands-praying"></i><small>الدعاء</small><h3>حين ترفع يديك</h3><p>القرب، الخفاء، حضور القلب وعدم الاستعجال.</p></a>
+        <a href="guide-adhkar-meaning.html" class="home-path-card path-dhikr"><i class="fa-solid fa-seedling"></i><small>الذكر</small><h3>ذكر يفهمه القلب</h3><p>من التكرار السريع إلى فهم المعنى وأثره.</p></a>
+        <a href="guide-contemplating-creation.html" class="home-path-card path-creation"><i class="fa-solid fa-mountain-sun"></i><small>التفكر</small><h3>آيات في الأفق</h3><p>نظرة جديدة إلى السماء والأرض وتعاقب الزمن.</p></a>
+        <a href="guide-gratitude.html" class="home-path-card path-gratitude"><i class="fa-solid fa-sun"></i><small>الشكر</small><h3>دفتر النعم</h3><p>أن ترى النعمة وتذكر واهبها وتحسن استعمالها.</p></a>
+      </div>
+      <a href="journey.html" class="all-paths-link">اكتشف مسارات نور كاملة <i class="fa-solid fa-arrow-left"></i></a>
+    </section>
+
+    <section class="seo-hero premium-manifesto" aria-labelledby="seoHeroTitle">
       <div class="seo-hero-content">
-        <span class="seo-hero-kicker" data-i18n="seo.kicker">منصة قرآنية مجانية</span>
-        <h2 id="seoHeroTitle">اقرأوا ونظّموا وردكم اليومي بواجهة هادئة</h2>
+        <span class="seo-hero-kicker">فكرة نور</span>
+        <h2 id="seoHeroTitle">لسنا شاشة تعرض نصوصاً فقط</h2>
         <p>
-          نور منصة عربية تجمع فهرس السور ومجموعة محددة من الأذكار والأدعية وأدوات مساعدة لمواقيت الصلاة والقبلة. بعض البيانات تأتي من خدمات خارجية وقد تحتاج اتصالاً، ونوضح حدود كل ميزة ومصدرها بدل تقديم وعود بالدقة المطلقة.
+          نريد للزائر أن يعرف ماذا يقرأ ولماذا، وأن يخرج من الصفحة بمعنى يحمله إلى يومه. لذلك نفصل بين النص الشرعي المنقول بمصدره، وبين شرح فريق نور وتأملاته الأصلية، ونترك الأسئلة الخاصة لأهل العلم المؤهلين.
         </p>
       </div>
-      <div class="seo-hero-features" aria-label="الميزات الرئيسية" data-i18n-aria="seo.featuresAria">
-        <span><i class="fa-solid fa-book-quran"></i> <span data-i18n="seo.feature.read">قراءة القرآن</span></span>
-        <span><i class="fa-solid fa-list"></i> <span>فهرس السور</span></span>
-        <span><i class="fa-solid fa-mosque"></i> <span>الصلاة والقبلة</span></span>
+      <div class="seo-hero-features">
+        <span><i class="fa-solid fa-link"></i> <span>مصدر مباشر</span></span>
+        <span><i class="fa-solid fa-pen-nib"></i> <span>شرح أصلي</span></span>
+        <span><i class="fa-solid fa-compass"></i> <span>خطوة عملية</span></span>
       </div>
     </section>
 
@@ -182,14 +208,29 @@
     <section class="publisher-content" aria-labelledby="publisherContentTitle">
       <div class="section-heading">
         <span>محتوى أصلي من فريق نور</span>
-        <h2 id="publisherContentTitle">أدلة عملية لاستخدام المنصة وبناء عادة قراءة واضحة</h2>
+        <h2 id="publisherContentTitle">مكتبة تنمو حول القرآن والذكر وحياة القلب</h2>
         <p>
           لا يقتصر نور على عرض أدوات القراءة فقط. نكتب أدلة عربية أصلية تشرح طريقة استخدام الميزات،
-          وكيفية تنظيم ورد يومي واقعي، وفهم اختلاف مواقيت الصلاة، وحماية الخصوصية أثناء استعمال الموقع.
+          وكيفية تنظيم ورد يومي واقعي، وفهم الدعاء والأذكار، والتأمل في الخلق والشكر، إلى جانب شروحات الخصوصية ومواقيت الصلاة.
           هذه المواد إرشادية عامة وليست بديلاً عن سؤال أهل العلم في المسائل الشرعية.
         </p>
       </div>
       <div class="article-preview-grid">
+        <article class="article-preview-card featured-spiritual-card">
+          <span class="article-meta">الدعاء · 9 دقائق</span>
+          <h3><a href="guide-dua-etiquette.html">حين ترفع يديك: معنى الدعاء وآدابه</a></h3>
+          <p>قرب الله، التضرع والخفاء، الجمع بين الدعاء والعمل، وعدم الاستعجال.</p>
+        </article>
+        <article class="article-preview-card featured-spiritual-card">
+          <span class="article-meta">الأذكار · 8 دقائق</span>
+          <h3><a href="guide-adhkar-meaning.html">كيف يصبح الذكر معنى يعيشه القلب؟</a></h3>
+          <p>النص والمصدر والمعنى والأثر، مع وقفة خاصة عند الاستغفار.</p>
+        </article>
+        <article class="article-preview-card featured-spiritual-card">
+          <span class="article-meta">التفكر · 9 دقائق</span>
+          <h3><a href="guide-contemplating-creation.html">آيات في الأفق: انظر إلى الخلق مرة أخرى</a></h3>
+          <p>تأمل أصلي في السماء والأرض والليل والنهار يقود إلى التواضع والمسؤولية.</p>
+        </article>
         <article class="article-preview-card">
           <span class="article-meta">دليل عملي · 7 دقائق</span>
           <h3><a href="guide-daily-quran.html">كيف تبدأ ورداً يومياً من القرآن وتستمر عليه؟</a></h3>
@@ -234,7 +275,7 @@
   </footer>
   <div class="admob-banner-fixed-slot android-only" aria-hidden="true"></div>
 
-  <div id="authModal" class="auth-modal" aria-hidden="true">
+  <div id="authModal" class="auth-modal" aria-hidden="true" inert>
     <div class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="authTitle">
       <button id="closeAuthBtn" class="auth-close-btn" type="button" aria-label="إغلاق">
         <i class="fa-solid fa-xmark"></i>
@@ -249,10 +290,10 @@
       </div>
 
       <label for="authEmailInput">البريد الإلكتروني</label>
-      <input id="authEmailInput" type="email" placeholder="example@email.com" />
+      <input id="authEmailInput" type="email" autocomplete="email" placeholder="example@email.com" />
 
       <label for="authPasswordInput">كلمة السر</label>
-      <input id="authPasswordInput" type="password" placeholder="******" />
+      <input id="authPasswordInput" type="password" autocomplete="current-password" placeholder="******" />
 
       <button id="loginEmailBtn" class="auth-primary-btn" type="button">تسجيل الدخول بالإيميل</button>
       <button id="createAccountBtn" class="auth-primary-btn auth-secondary-btn hidden" type="button">إنشاء حساب جديد</button>

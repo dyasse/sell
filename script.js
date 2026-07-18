@@ -126,16 +126,20 @@ function initSettingsDrawer() {
   const THEME_KEY = "nour_theme";
 
   const openDrawer = () => {
+    drawer.removeAttribute("inert");
     drawer.classList.add("show");
     backdrop.classList.add("show");
     drawer.setAttribute("aria-hidden", "false");
     backdrop.setAttribute("aria-hidden", "false");
+    closeBtn?.focus();
   };
 
   const closeDrawer = () => {
     drawer.classList.remove("show");
     backdrop.classList.remove("show");
+    openBtn.focus();
     drawer.setAttribute("aria-hidden", "true");
+    drawer.setAttribute("inert", "");
     backdrop.setAttribute("aria-hidden", "true");
   };
 
