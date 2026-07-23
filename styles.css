@@ -740,8 +740,7 @@ select {
 
 
 .android-only,
-.home-footer-card.android-only,
-.admob-banner-fixed-slot.android-only {
+.home-footer-card.android-only {
   display: none !important;
 }
 
@@ -752,24 +751,6 @@ body.platform-capacitor.platform-android .android-only {
 
 html.platform-capacitor.platform-android .home-footer-card.android-only {
   display: block !important;
-}
-
-html.platform-capacitor.platform-android .admob-banner-fixed-slot.android-only {
-  display: block !important;
-}
-
-.admob-banner-fixed-slot {
-  position: fixed;
-  inset-inline: 0;
-  bottom: 0;
-  height: 60px;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, 0.96);
-  border-top: 1px solid rgba(230, 236, 232, 0.95);
-  color: #64748b;
-  font-size: 12px;
-  z-index: 150;
 }
 
 .app-card {
@@ -2925,4 +2906,112 @@ body.spiritual-page {
   .library-hero h1 { font-size:50px; }
   .spiritual-article { width:min(100% - 20px,900px);padding:24px 18px; }
   .verse-panel { padding:22px 16px; }
+}
+
+/* === Android 2.0: compact native layout, safe areas and honest ad space === */
+.notification-status {
+  width: fit-content;
+  max-width: 100%;
+  margin: 14px auto 0;
+  padding: 9px 13px;
+  border: 1px solid rgba(31, 111, 80, 0.15);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.68);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.notification-status[data-type="success"] {
+  color: #0d6648;
+  border-color: rgba(13, 102, 72, 0.25);
+  background: rgba(224, 247, 238, 0.9);
+}
+
+.notification-status[data-type="warning"],
+.notification-status[data-type="error"] {
+  color: #8a4b0f;
+  border-color: rgba(180, 105, 28, 0.24);
+  background: rgba(255, 247, 226, 0.92);
+}
+
+.admob-privacy-entry:not(.is-required) {
+  display: none !important;
+}
+
+.hero-cta:has(.install-app-btn.hidden) {
+  display: none;
+}
+
+html.platform-capacitor.platform-android,
+html.platform-capacitor.platform-android body {
+  overscroll-behavior-y: none;
+}
+
+body.platform-capacitor.platform-android {
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+body.platform-capacitor.platform-android.has-audio-player {
+  padding-bottom: calc(var(--audio-player-height) + max(12px, env(safe-area-inset-bottom)));
+}
+
+body.platform-capacitor.platform-android.android-banner-active {
+  padding-bottom: calc(var(--android-banner-space, 56px) + max(8px, env(safe-area-inset-bottom)));
+}
+
+body.platform-capacitor.platform-android .navbar {
+  padding-block: 10px;
+}
+
+body.platform-capacitor.platform-android .site-primary-nav {
+  padding-block: 8px;
+}
+
+body.platform-capacitor.platform-android .page-shell {
+  padding-top: 16px;
+}
+
+body.platform-capacitor.platform-android .bottom-meta-nav {
+  margin: 8px 10px 12px;
+}
+
+body.platform-capacitor.platform-android .web-adsense-slot,
+body.platform-capacitor.platform-android .cookie-consent-banner {
+  display: none !important;
+}
+
+body.platform-capacitor.platform-android .spiritual-home-hero {
+  min-height: auto;
+  padding: 44px 20px 38px;
+  border-radius: 26px;
+}
+
+body.platform-capacitor.platform-android .spiritual-home-hero h1 {
+  font-size: clamp(66px, 22vw, 92px);
+}
+
+body.platform-capacitor.platform-android .home-hero-verse {
+  margin-top: 16px;
+}
+
+body.platform-capacitor.platform-android .home-spiritual-paths,
+body.platform-capacitor.platform-android .library-section,
+body.platform-capacitor.platform-android .journey-intro {
+  margin-top: 24px;
+}
+
+body.platform-capacitor.platform-android .hero-panel,
+body.platform-capacitor.platform-android .qibla-panel,
+body.platform-capacitor.platform-android .publisher-content {
+  margin-bottom: 16px;
+}
+
+body.platform-capacitor.platform-android .prayer-grid {
+  gap: 10px;
+}
+
+body.platform-capacitor.platform-android .prayer-card {
+  min-height: 142px;
+  padding: 16px 12px;
 }
