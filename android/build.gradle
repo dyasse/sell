@@ -13,6 +13,7 @@ ext {
     minSdkVersion = 24
     compileSdkVersion = 36
     targetSdkVersion = 36
+    kotlin_version = '2.3.20'
     playServicesAdsVersion = '25.4.0'
     userMessagingPlatformVersion = '4.0.0'
     firebaseBomVersion = '34.16.0'
