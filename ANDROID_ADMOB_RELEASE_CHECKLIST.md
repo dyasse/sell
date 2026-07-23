@@ -25,9 +25,8 @@ existing AdSense implementation.
 
 ## Required before Play/AdMob submission
 
-1. In Firebase Console, register Android package `com.dyasse.nourquran`, download
-   its `google-services.json`, and place it at
-   `android/app/google-services.json`. Gradle rejects a file for another package.
+1. Confirm that the committed Firebase configuration remains registered for the
+   Google Play package `com.nour.el.quran`. Gradle rejects a file for another package.
 2. In AdMob **Privacy & messaging**, publish the required EEA/UK/Switzerland
    consent message and configure U.S. state-regulation messages as applicable.
 3. Link the AdMob app to the exact Google Play listing and verify the developer

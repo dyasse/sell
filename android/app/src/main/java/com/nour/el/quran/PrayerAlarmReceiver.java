@@ -1,4 +1,4 @@
-package com.dyasse.nourquran;
+package com.nour.el.quran;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;

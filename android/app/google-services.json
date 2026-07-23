@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "201692380927",
+    "project_id": "nour-quran-6b808",
+    "storage_bucket": "nour-quran-6b808.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:201692380927:android:b044f1046db8c2544c16ca",
+        "android_client_info": {
+          "package_name": "com.nour.el.quran"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoFlcRBpJzD77nFvu6EHgX5sjJ92Mzrbw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

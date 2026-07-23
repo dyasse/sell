@@ -1,4 +1,4 @@
-package com.dyasse.nourquran;
+package com.nour.el.quran;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;

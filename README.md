@@ -60,9 +60,9 @@ npm run cap:sync
 npm run android:open
 ```
 
-`npm run cap:sync` creates an Android-only web bundle, removes the website AdSense loader from the WebView, links AdMob/local notifications, and copies the latest UI into Android Studio. The Android app is version `2.0.0` (`versionCode 2`) and targets/compiles against API 36.
+`npm run cap:sync` creates an Android-only web bundle, removes the website AdSense loader from the WebView, links AdMob/local notifications, and copies the latest UI into Android Studio. The Android app is version `5.5.1` (`versionCode 551`) and targets/compiles against API 36.
 
-After opening Android Studio, wait for Gradle sync and select **Build > Generate Signed Bundle / APK** for the Play release. Keep the package id `com.dyasse.nourquran` and increment `versionCode` for every later upload.
+After opening Android Studio, wait for Gradle sync and select **Build > Generate Signed Bundle / APK** for the Play release. Keep the Play package id `com.nour.el.quran` and increment `versionCode` for every later upload.
 
 Optional device/emulator run:
 
@@ -160,7 +160,7 @@ env:
 - Android AdMob IDs are native Android build configuration. Debug builds use Google's official test IDs automatically; release builds use the Nour App ID, banner ID, and interstitial ID. The IDs are not injected into the website bundle.
 - The AdMob plugin is pinned in `package-lock.json`. The app refreshes Google's UMP consent state before requesting ads, requests ads only when allowed, exposes privacy options when required, uses a General content rating, and reserves banner space only after a banner is shown.
 - Banners are excluded from Quran reading, prayer, adhkar, duas, and audio-focused screens. Interstitials are limited to user-selected guide transitions after three minutes, every fourth qualified transition, with a 30-minute cooldown, and only when already loaded.
-- Firebase Analytics is Android-native and records generic screen names only. Add `android/app/google-services.json` for the exact package `com.dyasse.nourquran`; Gradle rejects a Firebase file registered for a different package.
+- Firebase Analytics is Android-native and records generic screen names only. The committed `android/app/google-services.json` is registered for the Play package `com.nour.el.quran`; Gradle rejects a Firebase file registered for a different package.
 - See `ANDROID_ADMOB_RELEASE_CHECKLIST.md` before creating the signed Play release.
 - Google Analytics uses `GA_MEASUREMENT_ID`; keep placeholders in committed code.
 
