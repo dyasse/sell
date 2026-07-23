@@ -1,4 +1,4 @@
-package com.dyasse.nourquran;
+package com.nour.el.quran;
 
 import android.content.Intent;
 import android.net.Uri;

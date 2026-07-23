@@ -1,4 +1,4 @@
-package com.dyasse.nourquran;
+package com.nour.el.quran;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 final class PrayerAlarmScheduler {
-    static final String ACTION_PRAYER_ALARM = "com.dyasse.nourquran.PRAYER_ALARM";
+    static final String ACTION_PRAYER_ALARM = "com.nour.el.quran.PRAYER_ALARM";
     static final String EXTRA_ID = "prayer_alarm_id";
     static final String EXTRA_AT = "prayer_alarm_at";
     static final String EXTRA_TITLE = "prayer_alarm_title";

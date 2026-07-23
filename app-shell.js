@@ -1,5 +1,13 @@
 (function () {
-(function applyPlatformClasses() {
+  function getRuntimePlatform() {
+    try {
+      return window.Capacitor?.getPlatform?.() || "web";
+    } catch (_) {
+      return "web";
+    }
+  }
+
+  (function applyPlatformClasses() {
   function getPlatform() {
     try {
       if (window.Capacitor && typeof window.Capacitor.getPlatform === "function") {
@@ -38,7 +46,7 @@
 
   function initGoogleAnalytics() {
     const isBrowser = typeof window !== "undefined" && typeof document !== "undefined";
-    if (!isBrowser) return;
+    if (!isBrowser || getRuntimePlatform() !== "web") return;
 
     const host = window.location.hostname;
     const isLocalHost =
@@ -69,7 +77,7 @@
 
   function initVercelAnalytics() {
     const isBrowser = typeof window !== "undefined" && typeof document !== "undefined";
-    if (!isBrowser) return;
+    if (!isBrowser || getRuntimePlatform() !== "web") return;
 
     const host = window.location.hostname;
     const isLocalHost =
@@ -90,6 +98,52 @@
 
   initGoogleAnalytics();
   initVercelAnalytics();
+
+  async function loadAndroidScript(src, marker) {
+    const existing = document.querySelector(`script[${marker}="true"]`);
+    if (existing) {
+      if (existing.dataset.loaded === "true") return;
+      await new Promise((resolve, reject) => {
+        existing.addEventListener("load", resolve, { once: true });
+        existing.addEventListener("error", reject, { once: true });
+      });
+      return;
+    }
+
+    await new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.setAttribute(marker, "true");
+      script.addEventListener("load", () => {
+        script.dataset.loaded = "true";
+        resolve();
+      }, { once: true });
+      script.addEventListener("error", reject, { once: true });
+      document.head.appendChild(script);
+    });
+  }
+
+  async function initAndroidServices() {
+    if (getRuntimePlatform() !== "android") return;
+
+    try {
+      const analytics = window.Capacitor?.Plugins?.NourAnalytics;
+      if (analytics?.logScreen) {
+        const rawName = window.location.pathname.split("/").pop() || "index.html";
+        const screenName = rawName.replace(/\.html$/i, "") || "home";
+        await analytics.logScreen({ screenName });
+      }
+    } catch (error) {
+      console.warn("Firebase screen analytics is unavailable:", error);
+    }
+
+    try {
+      await loadAndroidScript("ad-policy.js", "data-nour-ad-policy");
+      await loadAndroidScript("monetization.js", "data-nour-admob");
+    } catch (error) {
+      console.error("Android monetization scripts failed to load:", error);
+    }
+  }
 
   const THEME_KEY = "nour_theme_mode";
   const AUDIO_KEY = "nour_audio_player_state";
@@ -711,6 +765,7 @@
     await initAudioState();
     const player = buildAudioPlayer();
     bindAudioPlayer(player);
+    await initAndroidServices();
   }
 
   document.addEventListener("DOMContentLoaded", initAppShell);
