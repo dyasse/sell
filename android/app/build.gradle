@@ -1,33 +1,59 @@
+import groovy.json.JsonSlurper
+
 plugins {
     id 'com.android.application'
 }
 
-def admobAppIdProvider = providers.gradleProperty('ADMOB_APP_ID')
-        .orElse(providers.environmentVariable('ADMOB_APP_ID'))
-def admobAppId = admobAppIdProvider.getOrElse('ca-app-pub-3940256099942544~3347511713')
+def androidApplicationId = 'com.dyasse.nourquran'
+def hasFirebaseConfig = file('google-services.json').exists()
+if (hasFirebaseConfig) {
+    def firebaseConfig = new JsonSlurper().parse(file('google-services.json'))
+    def hasMatchingFirebaseClient = firebaseConfig.client?.any { client ->
+        client.client_info?.android_client_info?.package_name == androidApplicationId
+    }
+    if (!hasMatchingFirebaseClient) {
+        throw new GradleException(
+            "Firebase config does not contain Android package ${androidApplicationId}. " +
+            "Download a matching google-services.json from Firebase Console."
+        )
+    }
+    apply plugin: 'com.google.gms.google-services'
+} else {
+    logger.lifecycle('Firebase Analytics disabled: android/app/google-services.json is missing.')
+}
 
 android {
     namespace 'com.dyasse.nourquran'
     compileSdk 36
 
     defaultConfig {
-        applicationId 'com.dyasse.nourquran'
+        applicationId androidApplicationId
         minSdk 24
         targetSdk 36
         versionCode 2
         versionName '2.0.0'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-        resValue 'string', 'admob_app_id', admobAppId
     }
 
+    buildFeatures {
+        buildConfig true
+    }
 
     buildTypes {
         debug {
             debuggable true
+            resValue 'string', 'admob_app_id', 'ca-app-pub-3940256099942544~3347511713'
+            buildConfigField 'String', 'ADMOB_BANNER_AD_UNIT_ID', '"ca-app-pub-3940256099942544/6300978111"'
+            buildConfigField 'String', 'ADMOB_INTERSTITIAL_AD_UNIT_ID', '"ca-app-pub-3940256099942544/1033173712"'
+            buildConfigField 'boolean', 'ADMOB_IS_TESTING', 'true'
         }
         release {
             minifyEnabled false
             shrinkResources false
+            resValue 'string', 'admob_app_id', 'ca-app-pub-2350255696934759~9159110229'
+            buildConfigField 'String', 'ADMOB_BANNER_AD_UNIT_ID', '"ca-app-pub-2350255696934759/2768258392"'
+            buildConfigField 'String', 'ADMOB_INTERSTITIAL_AD_UNIT_ID', '"ca-app-pub-2350255696934759/1798671511"'
+            buildConfigField 'boolean', 'ADMOB_IS_TESTING', 'false'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -39,15 +65,6 @@ android {
 }
 
 
-gradle.taskGraph.whenReady { taskGraph ->
-    def isReleaseBuild = taskGraph.allTasks.any { task ->
-        task.path == ':app:assembleRelease' || task.path == ':app:bundleRelease'
-    }
-    if (isReleaseBuild && !admobAppIdProvider.isPresent()) {
-        throw new GradleException('ADMOB_APP_ID must be supplied as a Gradle property or environment variable for release builds.')
-    }
-}
-
 dependencies {
     if (findProject(':capacitor-android') != null) {
         implementation project(':capacitor-android')
@@ -58,6 +75,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
     implementation 'androidx.core:core-splashscreen:1.0.1'
+    implementation platform("com.google.firebase:firebase-bom:${rootProject.ext.firebaseBomVersion}")
+    implementation 'com.google.firebase:firebase-analytics'
 
     if (findProject(':capacitor-local-notifications') != null) {
         implementation project(':capacitor-local-notifications')

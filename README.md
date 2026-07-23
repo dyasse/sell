@@ -153,13 +153,15 @@ env:
   GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}
 ```
 
-## Ads and analytics placeholders
+## Ads and analytics
 
 - Web AdSense placeholders live in `index.html` and are replaced by `AD_CLIENT_ID` / `AD_SLOT_ID` during deployment.
 - App ads authorization files use `ADS_PUBLISHER_ID` placeholders.
-- Android AdMob uses `ADMOB_APP_ID` in Android resources and `ADMOB_BANNER_AD_UNIT_ID` / `ADMOB_INTERSTITIAL_AD_UNIT_ID` in `monetization.js`; inject real values before a release build. Release Android builds fail if `ADMOB_APP_ID` is missing.
-- The AdMob plugin is pinned in `package-lock.json`. The app runs Google's UMP consent flow before requesting an ad, provides a privacy-options button, uses a General content rating, and reserves banner space only after an ad loads.
-- Interstitial ads are not launched automatically on startup, page-view counts, prayer screens, or Quran audio. If used later, call them only at a clear, user-initiated transition.
+- Android AdMob IDs are native Android build configuration. Debug builds use Google's official test IDs automatically; release builds use the Nour App ID, banner ID, and interstitial ID. The IDs are not injected into the website bundle.
+- The AdMob plugin is pinned in `package-lock.json`. The app refreshes Google's UMP consent state before requesting ads, requests ads only when allowed, exposes privacy options when required, uses a General content rating, and reserves banner space only after a banner is shown.
+- Banners are excluded from Quran reading, prayer, adhkar, duas, and audio-focused screens. Interstitials are limited to user-selected guide transitions after three minutes, every fourth qualified transition, with a 30-minute cooldown, and only when already loaded.
+- Firebase Analytics is Android-native and records generic screen names only. Add `android/app/google-services.json` for the exact package `com.dyasse.nourquran`; Gradle rejects a Firebase file registered for a different package.
+- See `ANDROID_ADMOB_RELEASE_CHECKLIST.md` before creating the signed Play release.
 - Google Analytics uses `GA_MEASUREMENT_ID`; keep placeholders in committed code.
 
 ## Exact prayer notifications
