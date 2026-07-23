@@ -23,6 +23,12 @@ android/local.properties
 android/captures/
 android/app/build/
 android/build/
+android/app/src/main/assets/public/*
+!android/app/src/main/assets/public/.gitkeep
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
+android/app/src/main/res/xml/config.xml
+android/capacitor-cordova-android-plugins/
 android/keystore*
 *.keystore
 *.jks
@@ -41,4 +47,3 @@ google-services.json
 
 # Local reports and caches
 .cache/
-

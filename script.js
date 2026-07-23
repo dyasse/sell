@@ -159,7 +159,7 @@ function initSettingsDrawer() {
     applyTheme(event.target.checked ? "dark" : "light");
   });
 
-  let offset = Number(localStorage.getItem(OFFSET_KEY) || 0);
+  let offset = Math.max(-60, Math.min(60, Number(localStorage.getItem(OFFSET_KEY) || 0)));
   const renderOffset = () => {
     if (offsetValue) offsetValue.textContent = `${offset} min`;
     localStorage.setItem(OFFSET_KEY, String(offset));
@@ -167,11 +167,11 @@ function initSettingsDrawer() {
   renderOffset();
 
   decreaseOffsetBtn?.addEventListener("click", () => {
-    offset -= 1;
+    offset = Math.max(-60, offset - 1);
     renderOffset();
   });
   increaseOffsetBtn?.addEventListener("click", () => {
-    offset += 1;
+    offset = Math.min(60, offset + 1);
     renderOffset();
   });
 

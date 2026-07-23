@@ -8,14 +8,14 @@ def admobAppId = admobAppIdProvider.getOrElse('ca-app-pub-3940256099942544~33475
 
 android {
     namespace 'com.dyasse.nourquran'
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId 'com.dyasse.nourquran'
         minSdk 24
-        targetSdk 35
-        versionCode 1
-        versionName '1.0.0'
+        targetSdk 36
+        versionCode 2
+        versionName '2.0.0'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         resValue 'string', 'admob_app_id', admobAppId
     }
@@ -52,7 +52,7 @@ dependencies {
     if (findProject(':capacitor-android') != null) {
         implementation project(':capacitor-android')
     } else {
-        implementation 'com.capacitorjs:capacitor-android:7.4.3'
+        implementation 'com.capacitorjs:capacitor-android:7.6.2'
     }
 
     implementation 'androidx.appcompat:appcompat:1.7.1'

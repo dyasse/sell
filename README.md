@@ -15,7 +15,7 @@ Nour Quran is a mobile-friendly Islamic web app with Quran browsing, audio playb
 
 - Node.js 18+ recommended.
 - npm.
-- Android Studio only if you build/run the Capacitor Android project.
+- Android Studio with JDK 21 and Android SDK 36 if you build/run the Capacitor Android project.
 
 ## Install
 
@@ -60,6 +60,10 @@ npm run cap:sync
 npm run android:open
 ```
 
+`npm run cap:sync` creates an Android-only web bundle, removes the website AdSense loader from the WebView, links AdMob/local notifications, and copies the latest UI into Android Studio. The Android app is version `2.0.0` (`versionCode 2`) and targets/compiles against API 36.
+
+After opening Android Studio, wait for Gradle sync and select **Build > Generate Signed Bundle / APK** for the Play release. Keep the package id `com.dyasse.nourquran` and increment `versionCode` for every later upload.
+
 Optional device/emulator run:
 
 ```bash
@@ -99,7 +103,7 @@ Timestamp sources can be generated from a trusted verse-timing manifest, forced-
 
 ### Android background audio testing
 
-The Android manifest includes wake-lock/foreground-service permissions and a placeholder media service entry. For reliable Android 8+ background playback, install a Capacitor Background Audio or Media plugin, or implement a native foreground service with a notification and Android MediaSession. Example lifecycle save hook is included in `app-shell.js` and `src/quran-sync.js`:
+For reliable Android 8+ background playback, install a reviewed Capacitor Background Audio or Media plugin, or implement a native foreground service with a notification and Android MediaSession. Example lifecycle save hook is included in `app-shell.js` and `src/quran-sync.js`:
 
 ```js
 const { App } = Capacitor.Plugins;
@@ -154,8 +158,18 @@ env:
 - Web AdSense placeholders live in `index.html` and are replaced by `AD_CLIENT_ID` / `AD_SLOT_ID` during deployment.
 - App ads authorization files use `ADS_PUBLISHER_ID` placeholders.
 - Android AdMob uses `ADMOB_APP_ID` in Android resources and `ADMOB_BANNER_AD_UNIT_ID` / `ADMOB_INTERSTITIAL_AD_UNIT_ID` in `monetization.js`; inject real values before a release build. Release Android builds fail if `ADMOB_APP_ID` is missing.
-- Install the native AdMob plugin before building Android ads: `npm install @capacitor-community/admob && npm run cap:sync`. The committed Gradle settings auto-link the plugin project when it exists in `node_modules`.
+- The AdMob plugin is pinned in `package-lock.json`. The app runs Google's UMP consent flow before requesting an ad, provides a privacy-options button, uses a General content rating, and reserves banner space only after an ad loads.
+- Interstitial ads are not launched automatically on startup, page-view counts, prayer screens, or Quran audio. If used later, call them only at a clear, user-initiated transition.
 - Google Analytics uses `GA_MEASUREMENT_ID`; keep placeholders in committed code.
+
+## Exact prayer notifications
+
+- The prayer screen fetches 30 days of prayer times and schedules only future alarms.
+- Android's exact-alarm special access is requested from the user; the app does not use the restricted `USE_EXACT_ALARM` permission.
+- Stored alarms are restored after reboot/time changes. A timezone change clears stale alarms; opening the app fetches the new local schedule.
+- A native receiver drops a prayer notification if Android delivers it more than 90 seconds late, so an old prayer alert does not appear much later.
+- Prayer-time adjustment is limited to `-60` through `+60` minutes and is applied consistently to the displayed and scheduled times.
+- This release uses a high-priority notification with the device's notification sound. A full Adhan audio file should only be added after confirming its redistribution license and implementing user-controlled sound settings.
 
 ## Quran text/audio license
 

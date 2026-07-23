@@ -3,6 +3,7 @@ import { basename, dirname, extname, join } from 'node:path';
 
 const rootDir = process.cwd();
 const outDir = join(rootDir, 'dist');
+const isAndroidBuild = process.argv.includes('--android');
 
 const excludedRoots = new Set([
   '.git',
@@ -119,11 +120,32 @@ async function injectPlaceholders(dir) {
   }
 }
 
+async function stripWebAdsFromAndroid(dir) {
+  if (!isAndroidBuild) return;
+
+  for (const entry of await readdir(dir)) {
+    const filePath = join(dir, entry);
+    const info = await stat(filePath);
+    if (info.isDirectory()) {
+      await stripWebAdsFromAndroid(filePath);
+      continue;
+    }
+    if (extname(filePath) !== '.html') continue;
+
+    const contents = await readFile(filePath, 'utf8');
+    const cleaned = contents
+      .replace(/\s*<meta\s+name=["']google-adsense-account["'][^>]*>\s*/gi, '\n')
+      .replace(/\s*<script\s+async\s+src=["'][^"']*pagead2\.googlesyndication\.com[^>]*><\/script>\s*/gi, '\n');
+    if (cleaned !== contents) await writeFile(filePath, cleaned);
+  }
+}
+
 await rm(outDir, { recursive: true, force: true });
 await mkdir(outDir, { recursive: true });
 
 await copyWebAssets(rootDir, outDir);
 await injectPlaceholders(outDir);
+await stripWebAdsFromAndroid(outDir);
 
 for (const file of requiredDistFiles) {
   try {
@@ -133,4 +155,4 @@ for (const file of requiredDistFiles) {
   }
 }
 
-console.log('Web build completed: dist/');
+console.log(`Web build completed: dist/ (${isAndroidBuild ? 'Android' : 'website'})`);
