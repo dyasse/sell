@@ -5,7 +5,9 @@ Nour Quran is a mobile-friendly Islamic web app with Quran browsing, audio playb
 ## Project structure
 
 - Root web files: `index.html`, `quran.html`, `styles.css`, and browser scripts.
-- `scripts/build-web.mjs`: builds a deployable `dist/` folder and injects CI-provided placeholders when matching environment variables exist.
+- `content/library-data.mjs`: reviewed source data for the website-only religious library.
+- `scripts/generate-library.mjs`: generates article pages, category hubs, structured data, internal links, the methodology page, and sitemap entries.
+- `scripts/build-web.mjs`: builds a deployable `dist/` folder, generates the website library, and injects CI-provided placeholders when matching environment variables exist.
 - `android/`: Capacitor Android project using bundled `dist/` assets.
 - `tests/`: Node unit tests for Quran parsing/search helpers.
 - `.github/workflows/ci.yml`: CI for lint, tests, web build, and a deploy placeholder.
@@ -51,6 +53,15 @@ npm run build:web
 ```
 
 The build output is written to `dist/`.
+
+The website build adds 33 Arabic library articles across Quran stories, seerah/history, Quran-reading foundations, and faith/character. It also generates four category hubs, `sources.html`, Article/Breadcrumb structured data, and 38 additional sitemap entries. The generator is intentionally skipped by `npm run build:android:web`, so the expanded editorial website does not increase the bundled Android app.
+
+When editing the library:
+
+1. Keep Quran locations explicit and verify them against an institutional mushaf.
+2. Keep editorial explanation separate from Quran text and from legal rulings.
+3. Declare at least two sources and a review date for every article.
+4. Run `npm test`; the library tests reject missing references, thin sections, duplicate slugs, incomplete sitemap output, and Android leakage.
 
 ## Capacitor Android workflow
 
