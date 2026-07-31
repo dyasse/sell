@@ -1,5 +1,6 @@
 import { cp, mkdir, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { basename, dirname, extname, join } from 'node:path';
+import { generateLibrary } from './generate-library.mjs';
 
 const rootDir = process.cwd();
 const outDir = join(rootDir, 'dist');
@@ -13,6 +14,7 @@ const excludedRoots = new Set([
   'android',
   'ci',
   'coverage',
+  'content',
   'dist',
   'node_modules',
   'scripts',
@@ -144,6 +146,9 @@ await rm(outDir, { recursive: true, force: true });
 await mkdir(outDir, { recursive: true });
 
 await copyWebAssets(rootDir, outDir);
+if (!isAndroidBuild) {
+  await generateLibrary(outDir);
+}
 await injectPlaceholders(outDir);
 await stripWebAdsFromAndroid(outDir);
 
