@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import {
   SITE_URL,
+  PUBLISH_DATE,
   REVIEW_DATE,
   articles,
   articlesForCategory,
@@ -9,6 +10,33 @@ import {
   categoryFor,
   sources
 } from '../content/library-data.mjs';
+
+const EDITORIAL_TEAM_URL = `${SITE_URL}/authors/editorial-team.html`;
+
+const categoryGuides = {
+  'quran-stories': {
+    scope: 'نقرأ القصة من مواضعها المتعددة، ثم نميز بين الخبر القرآني، وما يشرحه المفسر، والدروس التربوية التي يصوغها المحرر.',
+    caution: 'لا نكمل الفراغات بحكايات مشهورة لمجرد انسجامها مع القصة، ولا نحول العبرة العامة إلى حكم على أشخاص معاصرين.',
+    practice: 'اقرأ المواضع بالترتيب، واكتب التحول الرئيس في القصة، ثم اختر خلقاً واحداً يظهر في قرار عملي هذا الأسبوع.'
+  },
+  'seerah-history': {
+    scope: 'نجمع الآيات المتصلة بالحدث مع الروايات التي يمكن تتبع مصدرها، ونفصل بين الثابت، والاستنتاج التاريخي، والدرس المعاصر.',
+    caution: 'لا ندمج روايات متفرقة في خطاب واحد، ولا ننسب عبارة شائعة إلى النبي ﷺ قبل التحقق من مصدرها وحكم أهل الحديث.',
+    practice: 'حدد القرار الذي واجهه أصحاب الحدث، والخيارات المتاحة لهم، ثم دوّن مبدأً يمكن تطبيقه من غير إسقاط متكلف.'
+  },
+  'quran-sciences': {
+    scope: 'نقدم مدخلاً تعليمياً يشرح المصطلح ووظيفته وحدوده، مع إحالة القارئ إلى منصات تفسير وعلوم قرآن ذات منهجية معلنة.',
+    caution: 'المقالة المختصرة لا تصنع متخصصاً، ولا يجوز بناء فتوى أو ترجيح دقيق على ملخص عام أو نتيجة بحث منفردة.',
+    practice: 'طبّق القاعدة على مقطع قصير، ثم قارن فهمك بتفسيرين معروفين وسجل موضع الاتفاق وموضع السؤال.'
+  },
+  'faith-character': {
+    scope: 'نربط المعنى الإيماني بالسلوك اليومي مع إبقاء الفرق واضحاً بين التوجيه التربوي العام والحكم الشرعي الخاص.',
+    caution: 'لا نستخدم النصوص لإسكات الألم أو لوم المتضرر، ولا نجعل الخطوة الروحية بديلاً عن علاج أو حماية أو استشارة متخصصة عند الحاجة.',
+    practice: 'اختر سلوكاً صغيراً قابلاً للملاحظة، وحدد متى ستفعله وما العلامة التي تدل على أنك التزمت به.'
+  }
+};
+
+const wordCountOf = (value = '') => String(value).trim().split(/\s+/).filter(Boolean).length;
 
 const escapeHtml = (value = '') => String(value)
   .replaceAll('&', '&amp;')
@@ -87,24 +115,55 @@ function articleCard(article, relative = '.') {
     <span class="knowledge-card__category">${escapeHtml(category.name)}</span>
     <h3><a href="${relative}/library/${article.slug}.html">${escapeHtml(article.title)}</a></h3>
     <p>${escapeHtml(article.description)}</p>
-    <div class="knowledge-card__meta"><span>${article.quranRefs.length} مواضع قرآنية</span><span>مراجَع ${formatDate(article.reviewedAt)}</span></div>
+    <div class="knowledge-card__meta"><span>${article.quranRefs.length} مواضع قرآنية</span><span>${article.sourceKeys.length} مراجع</span><span>تدقيق ${formatDate(article.reviewedAt)}</span></div>
     <a class="knowledge-card__link" href="${relative}/library/${article.slug}.html">اقرأ المقالة <span aria-hidden="true">←</span></a>
   </article>`;
 }
 
 function renderArticle(article) {
   const category = categoryFor(article.category);
+  const guide = categoryGuides[article.category];
   const canonical = `${SITE_URL}/library/${article.slug}.html`;
   const categoryArticles = articlesForCategory(article.category);
   const currentIndex = categoryArticles.findIndex((item) => item.slug === article.slug);
   const related = [1, 2, 3].map((offset) =>
     categoryArticles[(currentIndex + offset) % categoryArticles.length]).filter((item) => item.slug !== article.slug);
-  const usedSources = article.sourceKeys.map((key) => sources[key]);
-  const wordCount = [
+  const usedSources = [...new Set(article.sourceKeys)].map((key, index) => ({
+    ...sources[key],
+    key,
+    number: index + 1
+  }));
+  const sourceLinks = usedSources.map((source) => source.url);
+  const practicalSteps = [
+    `اقرأ المواضع القرآنية المذكورة كاملة، ولا تكتف بالآية المنفردة أو المقتطف المتداول.`,
+    `لخّص بعبارتك الفرق بين «${article.sections[0][0]}» و«${article.sections[1][0]}».`,
+    guide.practice,
+    `إذا تعلق السؤال بفتوى أو حق شخصي أو نزاع، توقف عند الفهم العام واسأل مختصاً مؤهلاً يعرف تفاصيل الحالة.`
+  ];
+  const faq = [
+    {
+      question: `ما الفكرة الأساسية في «${article.title}»؟`,
+      answer: article.description
+    },
+    {
+      question: 'ما المصادر التي بُنيت عليها هذه الصفحة؟',
+      answer: `تبدأ الصفحة من المواضع القرآنية: ${article.quranRefs.join('، ')}، ثم تقارن الشرح بمراجع مؤسسية معلنة في أسفل المقالة. الروابط وسيلة للتثبت وليست تزكية للموقع.`
+    },
+    {
+      question: 'هل يمكن اعتماد هذه المقالة فتوى أو حكماً خاصاً؟',
+      answer: 'لا. هذه مادة تعليمية عامة تشرح المعنى وتفتح طريق البحث. الفتوى والنوازل والحقوق الخاصة تحتاج عالماً أو جهة مختصة تعرف الواقعة وتفاصيلها.'
+    }
+  ];
+  const renderedWordCount = wordCountOf([
     article.description,
-    ...article.sections.flatMap((section) => section)
-  ].join(' ').split(/\s+/).length;
-  const readingTime = Math.max(5, Math.ceil(wordCount / 110));
+    ...article.sections.flatMap((section) => section),
+    guide.scope,
+    guide.caution,
+    ...practicalSteps,
+    ...faq.flatMap((item) => [item.question, item.answer]),
+    ...usedSources.flatMap((source) => [source.name, source.detail])
+  ].join(' '));
+  const readingTime = Math.max(6, Math.ceil(renderedWordCount / 105));
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -112,12 +171,16 @@ function renderArticle(article) {
     headline: article.title,
     description: article.description,
     inLanguage: 'ar',
-    datePublished: REVIEW_DATE,
+    datePublished: article.publishedAt || PUBLISH_DATE,
     dateModified: article.reviewedAt,
-    author: { '@type': 'Organization', name: 'فريق نور', url: `${SITE_URL}/about.html` },
+    author: { '@type': 'Organization', name: 'فريق تحرير نور', url: EDITORIAL_TEAM_URL },
+    editor: { '@type': 'Organization', name: 'فريق تحرير نور', url: EDITORIAL_TEAM_URL },
     publisher: { '@type': 'Organization', name: 'نور', url: SITE_URL },
     mainEntityOfPage: canonical,
-    articleSection: category.name
+    articleSection: category.name,
+    wordCount: renderedWordCount,
+    citation: sourceLinks,
+    isAccessibleForFree: true
   };
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -129,13 +192,22 @@ function renderArticle(article) {
       { '@type': 'ListItem', position: 4, name: article.title, item: canonical }
     ]
   };
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer }
+    }))
+  };
 
   return `${head({
     title: `${article.title} | مكتبة نور`,
     description: article.description,
     canonical,
     type: 'article',
-    schema: [articleSchema, breadcrumbSchema]
+    schema: [articleSchema, breadcrumbSchema, faqSchema]
   })}
 <body class="knowledge-page">
   ${nav('..', 'library')}
@@ -151,33 +223,68 @@ function renderArticle(article) {
         <h1>${escapeHtml(article.title)}</h1>
         <p class="knowledge-deck">${escapeHtml(article.description)}</p>
         <div class="knowledge-byline">
-          <span>إعداد ومراجعة: فريق نور</span><span>آخر مراجعة: ${formatDate(article.reviewedAt)}</span><span>${readingTime} دقائق</span>
+          <span>إعداد: <a href="../authors/editorial-team.html" rel="author">فريق تحرير نور</a></span>
+          <span>آخر تدقيق للمصادر: <time datetime="${article.reviewedAt}">${formatDate(article.reviewedAt)}</time></span>
+          <span>${readingTime} دقائق · نحو ${renderedWordCount} كلمة</span>
         </div>
       </header>
       <aside class="source-boundary" aria-label="حدود المقالة">
-        <strong>كيف تقرأ هذه الصفحة؟</strong>
-        <p>مواضع القرآن أدناه هي المصدر الأول. أما العناوين والشرح والدروس فهي صياغة تحريرية تعليمية من فريق نور، وليست نصاً من القرآن ولا فتوى شخصية.</p>
+        <strong>حالة المراجعة بشفافية</strong>
+        <p>${escapeHtml(article.reviewLevel)}. مواضع القرآن هي المصدر الأول، أما الشرح والدروس فصياغة تعليمية أصلية من فريق نور وليست نصاً من القرآن ولا فتوى.</p>
       </aside>
+      <nav class="article-toc" aria-label="فهرس المقالة">
+        <strong>في هذه الصفحة</strong>
+        <ol>
+          <li><a href="#summary">الخلاصة</a></li>
+          <li><a href="#quranRefs">المواضع القرآنية</a></li>
+          ${article.sections.map((section, index) => `<li><a href="#section-${index + 1}">${escapeHtml(section[0])}</a></li>`).join('')}
+          <li><a href="#practice">خطة تطبيق</a></li>
+          <li><a href="#questions">أسئلة شائعة</a></li>
+          <li><a href="#articleSources">المراجع</a></li>
+        </ol>
+      </nav>
+      <section class="article-summary" id="summary" aria-labelledby="summaryTitle">
+        <span>الخلاصة في دقيقة</span>
+        <h2 id="summaryTitle">ماذا ستخرج به؟</h2>
+        <ul>${article.sections.map(([heading]) => `<li>${escapeHtml(heading)}</li>`).join('')}</ul>
+      </section>
       <section class="quran-reference-box" aria-labelledby="quranRefs">
         <h2 id="quranRefs">مواضع القصة أو الموضوع في القرآن</h2>
         <ul>${article.quranRefs.map((ref) => `<li>${escapeHtml(ref)}</li>`).join('')}</ul>
         <p>يُنصح بقراءة المقطع كاملاً من <a href="../quran.html">مصحف نور</a> أو من مصحف موثوق قبل قراءة الشرح.</p>
       </section>
       <div class="knowledge-article__body">
-        ${article.sections.map(([heading, paragraph]) =>
-          `<section><h2>${escapeHtml(heading)}</h2><p>${escapeHtml(paragraph)}</p></section>`).join('')}
-        <section>
-          <h2>وقفة عملية</h2>
-          <p>بعد قراءة المواضع، اكتب بجملة واحدة المعنى الذي يراجع سلوكاً واقعياً لديك، ثم اختر عملاً صغيراً قابلاً للقياس. لا تستخرج حكماً شرعياً جديداً من الخاطر الشخصي، وارجع إلى عالم مؤهل في الفتوى والنوازل.</p>
+        ${article.sections.map(([heading, paragraph], index) => {
+          const cited = usedSources[index % usedSources.length];
+          return `<section id="section-${index + 1}"><h2>${escapeHtml(heading)}</h2><p>${escapeHtml(paragraph)} <a class="inline-citation" href="#ref-${cited.key}" aria-label="انظر المرجع ${cited.number}">[${cited.number}]</a></p></section>`;
+        }).join('')}
+        <section class="reading-method">
+          <h2>كيف بُني هذا الفهم؟</h2>
+          <p>${escapeHtml(guide.scope)}</p>
+          <p><strong>حد مهم:</strong> ${escapeHtml(guide.caution)}</p>
         </section>
       </div>
+      <section class="practice-plan" id="practice" aria-labelledby="practiceTitle">
+        <span>من المعرفة إلى العمل</span>
+        <h2 id="practiceTitle">خطة تطبيق من أربع خطوات</h2>
+        <ol>${practicalSteps.map((step) => `<li>${escapeHtml(step)}</li>`).join('')}</ol>
+      </section>
+      <section class="article-faq" id="questions" aria-labelledby="faqTitle">
+        <h2 id="faqTitle">أسئلة شائعة</h2>
+        ${faq.map((item) => `<details><summary>${escapeHtml(item.question)}</summary><p>${escapeHtml(item.answer)}</p></details>`).join('')}
+      </section>
       <section class="article-sources" aria-labelledby="articleSources">
         <h2 id="articleSources">المراجع المستخدمة</h2>
-        <p>هذه الروابط للتثبت والتوسع. لا يعني ذكر المرجع أن مؤسسة خارجية راجعت مقالة نور أو تزكي جميع محتواها.</p>
-        <ul>${usedSources.map((source) =>
-          `<li><a href="${source.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(source.name)}</a><span>${escapeHtml(source.detail)}</span></li>`).join('')}</ul>
+        <p>رُوجعت الروابط بتاريخ <time datetime="${REVIEW_DATE}">${formatDate(REVIEW_DATE)}</time>. ذكر المرجع لا يعني أن المؤسسة راجعت مقالة نور أو تزكيها.</p>
+        <ol>${usedSources.map((source) =>
+          `<li id="ref-${source.key}"><a href="${source.url}" target="_blank" rel="noopener noreferrer external">${escapeHtml(source.name)}</a><span>${escapeHtml(source.detail)}</span><small>تم الوصول: ${formatDate(REVIEW_DATE)}</small></li>`).join('')}</ol>
         <a class="method-link" href="../sources.html">اطلع على منهجية التوثيق كاملة</a>
       </section>
+      <aside class="correction-inline">
+        <strong>التوثيق قابل للتصحيح</strong>
+        <p>إذا وجدت خطأ في آية أو نسبة أو رابط، أرسل عنوان الصفحة والموضع والمصدر المقترح.</p>
+        <a href="../contact.html">أبلغ فريق التحرير</a>
+      </aside>
       <section class="related-knowledge" aria-labelledby="relatedTitle">
         <h2 id="relatedTitle">اقرأ بعد ذلك</h2>
         <div class="related-grid">${related.map((item) =>
@@ -247,7 +354,17 @@ function renderIndex() {
     name: 'مكتبة نور الدينية',
     description: 'موسوعة عربية موثقة في قصص القرآن والسيرة ومفاتيح القرآن والإيمان والأخلاق.',
     url: canonical,
-    inLanguage: 'ar'
+    inLanguage: 'ar',
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: articles.length,
+      itemListElement: articles.map((article, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        url: `${SITE_URL}/library/${article.slug}.html`,
+        name: article.title
+      }))
+    }
   };
 
   return `${head({
@@ -262,15 +379,15 @@ function renderIndex() {
   <main class="knowledge-shell">
     <header class="library-mega-hero">
       <div>
-        <span class="knowledge-eyebrow">موسوعة نور الدينية</span>
-        <h1>معرفة موثقة تقرّب المعنى إلى الحياة</h1>
-        <p>قصص من القرآن، محطات من السيرة، مفاتيح للفهم، وأدلة تربوية أصلية. نعلن المصدر، ونفصل بين النص والشرح، ونراجع الصفحات بتاريخ واضح.</p>
+        <span class="knowledge-eyebrow">موسوعة نور العربية</span>
+        <h1>اقرأ المعنى من مصدره، ثم حوّله إلى عمل</h1>
+        <p>مقالات أصلية في قصص القرآن والسيرة ومفاتيح الفهم والإيمان والأخلاق. كل صفحة تعلن مواضع القرآن، وحدود التحرير، ومستوى المراجعة، والمراجع وتاريخ الوصول إليها.</p>
         <div class="library-search"><label for="librarySearch">ابحث في المكتبة</label><input id="librarySearch" type="search" placeholder="مثال: يوسف، التوبة، التفسير…" autocomplete="off" /></div>
       </div>
       <dl class="library-metrics">
-        <div><dt>${articles.length}</dt><dd>مقالة جديدة</dd></div>
+        <div><dt>${articles.length}</dt><dd>مقالة أصلية منشورة</dd></div>
         <div><dt>${categories.length}</dt><dd>أبواب رئيسية</dd></div>
-        <div><dt>100%</dt><dd>مراجع معلنة</dd></div>
+        <div><dt>${Object.keys(sources).length}</dt><dd>مراجع مؤسسية معلنة</dd></div>
       </dl>
     </header>
     <section class="category-door-grid" aria-label="أبواب المكتبة">
@@ -286,7 +403,7 @@ function renderIndex() {
     </section>
     <aside class="editorial-callout">
       <h2>الثقة تبدأ من معرفة المصدر</h2>
-      <p>لكل مقالة مواضع قرآنية محددة، ومراجع خارجية معلنة، وتاريخ مراجعة. نستقبل التصحيحات ولا نقدم المقالات العامة بوصفها فتوى.</p>
+      <p>لكل مقالة مواضع قرآنية محددة، ومراجع خارجية معلنة، وتاريخ تدقيق، ووصف صريح لمستوى المراجعة. نستقبل التصحيحات ولا نقدم المقالات العامة بوصفها فتوى.</p>
       <a href="sources.html">المراجع ومنهجية التحرير</a>
     </aside>
   </main>
@@ -348,14 +465,14 @@ function renderSources() {
       <article><span>02</span><h2>تفسير معروف</h2><p>عند شرح معنى نعتمد كتب التفسير المعروفة أو المنصات المؤسسية التي تجمعها، ونبتعد عن الحسابات المجهولة والاقتباسات التي لا يمكن تتبعها.</p></article>
       <article><span>03</span><h2>تحقق الحديث</h2><p>لا ننسب كلاماً إلى النبي ﷺ لمجرد انتشاره. نراجع المصدر والتخريج وحكم المحدثين، ونترك النص إذا لم نستطع إثبات نسبته.</p></article>
       <article><span>04</span><h2>لا فتوى شخصية</h2><p>مقالاتنا تعليمية عامة. المسائل الفقهية الخاصة والنوازل والحقوق المتنازع فيها تحتاج عالماً مؤهلاً يعرف تفاصيل الحالة.</p></article>
-      <article><span>05</span><h2>مراجعة وتصحيح</h2><p>تحمل كل صفحة تاريخ مراجعة. عند ثبوت خطأ نصححه ونراجع الصفحات المرتبطة به، ويمكن الإبلاغ عبر صفحة التواصل.</p></article>
+      <article><span>05</span><h2>مستوى مراجعة معلن</h2><p>نعلن إن كانت المراجعة تحريرية ومقارنة مصادر فقط، ولا ننسب مراجعة شرعية إلى عالم أو مؤسسة لم تشارك فعلياً. عند ثبوت خطأ نصححه ونراجع الصفحات المرتبطة به.</p></article>
       <article><span>06</span><h2>روابط آمنة</h2><p>الروابط الخارجية تفتح بشكل منفصل مع حماية تقنية، ونصف سبب استخدامها. ذكر المصدر لا يعني أنه راجع منصة نور أو يزكيها.</p></article>
     </section>
     <section class="reference-directory" aria-labelledby="referenceTitle">
       <h2 id="referenceTitle">دليل المراجع الأساسية</h2>
       <div>${Object.values(sources).filter((source, index, all) =>
         all.findIndex((item) => item.url === source.url && item.name === source.name) === index).map((source) =>
-          `<article><h3><a href="${source.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(source.name)}</a></h3><p>${escapeHtml(source.detail)}</p><span>مرجع خارجي موثوق للتثبت والتوسع</span></article>`).join('')}</div>
+          `<article><h3><a href="${source.url}" target="_blank" rel="noopener noreferrer external">${escapeHtml(source.name)}</a></h3><p>${escapeHtml(source.detail)}</p><span>آخر تحقق من الرابط: ${formatDate(REVIEW_DATE)}</span></article>`).join('')}</div>
     </section>
     <section class="correction-box">
       <h2>وجدت خطأ أو مرجعاً يحتاج تحديثاً؟</h2>
@@ -365,6 +482,69 @@ function renderSources() {
   </main>
   ${footer('.')}
   <script src="app-shell.js"></script>
+</body>
+</html>`;
+}
+
+function renderEditorialTeam() {
+  const canonical = EDITORIAL_TEAM_URL;
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'فريق تحرير نور',
+    url: canonical,
+    parentOrganization: { '@type': 'Organization', name: 'نور', url: SITE_URL },
+    description: 'هيئة تحرير داخلية تُعد المقالات التعليمية في نور وتوثق مصادرها وحدود مراجعتها.'
+  };
+
+  return `${head({
+    title: 'فريق تحرير نور | من يكتب الموسوعة؟',
+    description: 'تعرف إلى مسؤولية فريق تحرير نور، مراحل إعداد المقالة، حدود المراجعة، وكيف نتعامل مع المصادر والتصحيحات.',
+    canonical,
+    relative: '..',
+    schema: [schema]
+  })}
+<body class="knowledge-page">
+  ${nav('..', 'library')}
+  <main class="knowledge-shell methodology-shell">
+    <nav class="breadcrumbs" aria-label="مسار الصفحة"><a href="../index.html">الرئيسية</a><span>/</span><a href="../articles.html">المكتبة</a><span>/</span><span>فريق التحرير</span></nav>
+    <header class="collection-hero">
+      <span class="knowledge-eyebrow">الاسم لا يكفي؛ المنهج هو الدليل</span>
+      <h1>من يكتب موسوعة نور؟</h1>
+      <p>تُنشر المقالات باسم فريق تحرير نور: هيئة داخلية مسؤولة عن الصياغة العربية، وربط الادعاءات بالمصادر، وإعلان حدود كل صفحة، واستقبال التصحيح.</p>
+      <div class="collection-count">لا ندّعي مراجعة شرعية خارجية غير موجودة</div>
+    </header>
+    <section class="editorial-profile" aria-labelledby="responsibilityTitle">
+      <article>
+        <h2 id="responsibilityTitle">مسؤوليتنا التحريرية</h2>
+        <p>نكتب الشرح والدروس بصياغة مخصصة لنور، ولا ننسخ مقالات الجهات المرجعية. نعود إلى القرآن والتفسير والموسوعات الحديثية، ثم نضع روابطها حتى يستطيع القارئ التثبت بنفسه.</p>
+        <p>قد تساعد أدوات رقمية في التنظيم والبحث اللغوي، لكنها لا تتحول إلى اسم خبير ولا تمنح المادة مراجعة شرعية. المسؤولية النهائية عن النص المنشور والتصحيح تقع على إدارة نور.</p>
+      </article>
+      <article>
+        <h2>ما الذي لا ندعيه؟</h2>
+        <p>فريق التحرير ليس دار إفتاء، ولا ينسب الاعتماد إلى مجمع أو جامعة أو عالم لم يراجع النص فعلياً. ذكر مؤسسة في المراجع يعني أننا أحلنا إلى مادتها للتثبت، وليس أنها تزكي نور.</p>
+        <p>عندما تحتاج المسألة معرفة حال شخص أو حقوقاً متنازعاً فيها أو ترجيحاً فقهياً متخصصاً، نحيل إلى أهل العلم والجهة المختصة بدلاً من إعطاء جواب عام بثقة زائدة.</p>
+      </article>
+    </section>
+    <section class="review-pipeline" aria-labelledby="pipelineTitle">
+      <span class="knowledge-eyebrow">مسار النشر</span>
+      <h2 id="pipelineTitle">خمس بوابات قبل الفهرسة</h2>
+      <ol>
+        <li><strong>تحديد السؤال:</strong><span>موضوع واحد ونية تعليمية واضحة، لا عنوان مصنوع لجلب النقرات.</span></li>
+        <li><strong>خريطة المصادر:</strong><span>مواضع القرآن أولاً، ثم تفسير أو حديث أو مرجع مؤسسي بحسب الادعاء.</span></li>
+        <li><strong>صياغة أصلية:</strong><span>شرح يضيف تنظيماً وسياقاً وتطبيقاً، لا إعادة ترتيب لعبارات المصدر.</span></li>
+        <li><strong>فحص الحدود:</strong><span>تمييز النص عن الشرح، وحذف الادعاء الذي لا نستطيع توثيقه، وإعلان مستوى المراجعة.</span></li>
+        <li><strong>تصحيح مستمر:</strong><span>تاريخ واضح، وفحص للروابط، وقناة للإبلاغ، وتحديث الصفحة المرتبطة عند تغير المرجع.</span></li>
+      </ol>
+    </section>
+    <section class="correction-box">
+      <h2>ساعدنا على رفع الدقة</h2>
+      <p>أرسل رابط الصفحة والعبارة والمصدر الذي يوضح التصحيح. نراجع البلاغ ولا نطلب بيانات شخصية لا يحتاجها التحقيق.</p>
+      <a href="../contact.html">تواصل مع فريق التحرير</a>
+    </section>
+  </main>
+  ${footer('..')}
+  <script src="../app-shell.js"></script>
 </body>
 </html>`;
 }
@@ -379,9 +559,9 @@ function renderHomeLibrarySection() {
 
   return `<section class="publisher-content library-home-expansion" aria-labelledby="publisherContentTitle">
       <div class="section-heading">
-        <span>موسوعة دينية بمراجع معلنة</span>
-        <h2 id="publisherContentTitle">33 مقالة جديدة تقودك من القصة إلى المعنى والعمل</h2>
-        <p>تصفّح قصص القرآن والسيرة ومفاتيح الفهم والإيمان والأخلاق. لكل صفحة مواضع قرآنية، وحدود تحريرية، ومراجع، وروابط للقراءة التالية.</p>
+        <span>موسوعة عربية بمراجع معلنة</span>
+        <h2 id="publisherContentTitle">${articles.length} مقالة أصلية تقودك من المصدر إلى المعنى والعمل</h2>
+        <p>تصفّح قصص القرآن والسيرة ومفاتيح الفهم والإيمان والأخلاق. لكل صفحة مواضع قرآنية، وحدود تحريرية، ومستوى مراجعة معلن، ومراجع بتاريخ وصول واضح.</p>
       </div>
       <div class="home-category-links">
         ${categories.map((category) => `<a href="library/${category.slug}.html"><strong>${escapeHtml(category.name)}</strong><span>${articlesForCategory(category.slug).length} مقالة</span></a>`).join('')}
@@ -399,13 +579,18 @@ function renderHomeLibrarySection() {
 
 export async function generateLibrary(outDir) {
   const libraryDir = join(outDir, 'library');
-  await mkdir(libraryDir, { recursive: true });
+  const authorsDir = join(outDir, 'authors');
+  await Promise.all([
+    mkdir(libraryDir, { recursive: true }),
+    mkdir(authorsDir, { recursive: true })
+  ]);
 
   await Promise.all([
     ...articles.map((article) => writeFile(join(libraryDir, `${article.slug}.html`), renderArticle(article))),
     ...categories.map((category) => writeFile(join(libraryDir, `${category.slug}.html`), renderCategory(category))),
     writeFile(join(outDir, 'articles.html'), renderIndex()),
-    writeFile(join(outDir, 'sources.html'), renderSources())
+    writeFile(join(outDir, 'sources.html'), renderSources()),
+    writeFile(join(authorsDir, 'editorial-team.html'), renderEditorialTeam())
   ]);
 
   const homePath = join(outDir, 'index.html');
@@ -426,6 +611,7 @@ export async function generateLibrary(outDir) {
   const currentSitemap = await readFile(sitemapPath, 'utf8');
   const generatedUrls = [
     `${SITE_URL}/sources.html`,
+    `${SITE_URL}/authors/editorial-team.html`,
     ...categories.map((category) => `${SITE_URL}/library/${category.slug}.html`),
     ...articles.map((article) => `${SITE_URL}/library/${article.slug}.html`)
   ];
@@ -437,5 +623,5 @@ export async function generateLibrary(outDir) {
   </url>`).join('\n');
   await writeFile(sitemapPath, currentSitemap.replace('</urlset>', `${entries}\n</urlset>`));
 
-  console.log(`Generated ${articles.length} library articles, ${categories.length} category hubs, and the methodology page.`);
+  console.log(`Generated ${articles.length} library articles, ${categories.length} category hubs, the author profile, and the methodology page.`);
 }
