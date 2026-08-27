@@ -315,6 +315,54 @@
   color: #426158;
   font-size: .84rem;
 }
+.knowledge-byline a {
+  color: var(--knowledge-green-dark);
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.article-toc {
+  margin: 28px 0;
+  padding: 22px 24px;
+  border: 1px solid var(--knowledge-line);
+  border-radius: 18px;
+  background: rgba(255,255,255,.86);
+  box-shadow: 0 12px 34px rgba(26,78,59,.05);
+}
+.article-toc strong { display: block; margin-bottom: 10px; color: var(--knowledge-green-dark); }
+.article-toc ol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px 26px;
+  margin: 0;
+  padding-inline-start: 22px;
+}
+.article-toc a { color: #405f54; line-height: 1.65; }
+.article-toc a:hover { color: var(--knowledge-green); text-decoration: underline; }
+
+.article-summary,
+.practice-plan {
+  margin: 28px 0;
+  padding: clamp(24px, 4vw, 34px);
+  border-radius: 22px;
+}
+.article-summary {
+  border: 1px solid rgba(31,111,80,.18);
+  background: linear-gradient(135deg, #eff9f4, #fff);
+}
+.article-summary > span,
+.practice-plan > span { color: var(--knowledge-green); font-weight: 800; }
+.article-summary h2,
+.practice-plan h2,
+.article-faq h2 {
+  margin: 6px 0 12px;
+  font-family: Amiri, serif;
+  color: var(--knowledge-ink);
+  font-size: clamp(1.75rem, 3.5vw, 2.4rem);
+}
+.article-summary ul { display: grid; gap: 9px; margin: 0; padding-inline-start: 22px; }
+.article-summary li { line-height: 1.8; }
 
 .source-boundary,
 .quran-reference-box {
@@ -359,6 +407,43 @@
   font-size: 1.05rem;
   line-height: 2.15;
 }
+.inline-citation {
+  display: inline-flex;
+  margin-inline-start: 3px;
+  color: var(--knowledge-green-dark);
+  font-size: .78em;
+  font-weight: 800;
+  vertical-align: super;
+}
+.reading-method {
+  margin: 18px 0;
+  padding: 6px 24px 6px 0;
+  border-inline-start: 4px solid var(--knowledge-green);
+}
+
+.practice-plan {
+  background: var(--knowledge-green-dark);
+  color: #fff;
+}
+.practice-plan > span { color: #b9ebd3; }
+.practice-plan h2 { color: #fff; }
+.practice-plan ol { display: grid; gap: 12px; margin: 0; padding-inline-start: 24px; }
+.practice-plan li { padding-inline-start: 7px; color: #e7f4ee; line-height: 1.9; }
+
+.article-faq { margin: 42px 0 0; }
+.article-faq details {
+  margin-bottom: 10px;
+  border: 1px solid var(--knowledge-line);
+  border-radius: 15px;
+  background: #fff;
+}
+.article-faq summary {
+  padding: 17px 19px;
+  color: var(--knowledge-ink);
+  font-weight: 800;
+  cursor: pointer;
+}
+.article-faq details p { margin: 0; padding: 0 19px 18px; color: #536a61; line-height: 1.9; }
 
 .article-sources {
   margin-top: 30px;
@@ -367,17 +452,32 @@
   border-radius: 22px;
   background: #fff;
 }
-.article-sources ul { display: grid; gap: 12px; padding: 0; list-style: none; }
+.article-sources ol { display: grid; gap: 12px; padding: 0; list-style: none; counter-reset: references; }
 .article-sources li {
+  counter-increment: references;
   display: grid;
   gap: 4px;
   padding: 14px;
   border-radius: 12px;
   background: #f7faf8;
 }
+.article-sources li::before { content: "[" counter(references) "]"; color: var(--knowledge-gold); font-weight: 800; }
 .article-sources li a { color: var(--knowledge-green-dark); font-weight: 800; }
 .article-sources li span { color: #667970; font-size: .9rem; }
+.article-sources li small { color: #819088; }
 .method-link { display: inline-block; margin-top: 12px; color: var(--knowledge-green-dark); font-weight: 800; }
+
+.correction-inline {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
+  padding: 18px 20px;
+  border-radius: 15px;
+  background: var(--knowledge-sand);
+}
+.correction-inline p { flex: 1; margin: 0; color: #655d50; line-height: 1.7; }
+.correction-inline a { color: var(--knowledge-green-dark); font-weight: 800; white-space: nowrap; }
 
 .related-knowledge { margin-top: 42px; }
 .related-grid {
@@ -427,6 +527,40 @@
 .reference-directory p { color: #536a61; line-height: 1.8; }
 .reference-directory span { color: #74867e; font-size: .82rem; }
 
+.editorial-profile {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.editorial-profile article {
+  padding: 28px;
+  border: 1px solid var(--knowledge-line);
+  border-radius: 22px;
+  background: #fff;
+}
+.editorial-profile h2,
+.review-pipeline h2 { font-family: Amiri, serif; font-size: clamp(2rem, 4vw, 3rem); }
+.editorial-profile p { color: #536a61; line-height: 2; }
+.review-pipeline { margin-top: 50px; }
+.review-pipeline ol { display: grid; gap: 12px; margin: 18px 0 0; padding: 0; list-style: none; counter-reset: pipeline; }
+.review-pipeline li {
+  counter-increment: pipeline;
+  display: grid;
+  grid-template-columns: 44px minmax(150px, .42fr) 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 17px 20px;
+  border: 1px solid var(--knowledge-line);
+  border-radius: 16px;
+  background: #fff;
+}
+.review-pipeline li::before {
+  content: counter(pipeline, decimal-leading-zero);
+  color: var(--knowledge-gold);
+  font-weight: 800;
+}
+.review-pipeline li span { color: #60736b; line-height: 1.75; }
+
 .library-footer { margin-top: 0; }
 .home-category-links {
   display: grid;
@@ -473,6 +607,11 @@
   .catalog-heading { align-items: start; }
   .knowledge-byline { display: grid; }
   .quran-reference-box ul { display: grid; }
+  .article-toc ol,
+  .editorial-profile { grid-template-columns: 1fr; }
+  .correction-inline { align-items: start; flex-direction: column; }
+  .review-pipeline li { grid-template-columns: 38px 1fr; }
+  .review-pipeline li span { grid-column: 2; }
 }
 
 @media (prefers-reduced-motion: reduce) {
