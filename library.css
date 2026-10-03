@@ -388,6 +388,36 @@
   color: var(--knowledge-green-dark);
   font-weight: 800;
 }
+
+.verse-source-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.55rem;
+}
+
+.verse-source-links a {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(31, 111, 80, 0.22);
+  border-radius: 999px;
+  padding: 0.32rem 0.7rem;
+  color: var(--knowledge-green, #1f6f50);
+  background: rgba(31, 111, 80, 0.06);
+  font-family: "Cairo", sans-serif;
+  font-size: 0.78rem;
+  text-decoration: none;
+}
+
+.briefs-catalog {
+  margin-top: 3.5rem;
+  padding-top: 2.25rem;
+  border-top: 1px solid rgba(31, 111, 80, 0.16);
+}
+
+.briefs-catalog .knowledge-card {
+  background: color-mix(in srgb, var(--card-bg, #fff) 92%, #eef7f2);
+}
 .quran-reference-box p { margin-bottom: 0; line-height: 1.8; }
 
 .knowledge-article__body section {
