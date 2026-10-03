@@ -1,6 +1,8 @@
+import { enhanceArticles } from './pillar-data.mjs';
+
 export const SITE_URL = 'https://nour-quran.com';
 export const PUBLISH_DATE = '2026-07-30';
-export const REVIEW_DATE = '2026-08-27';
+export const REVIEW_DATE = '2026-10-03';
 
 export const sources = {
   quran: {
@@ -27,11 +29,6 @@ export const sources = {
     name: 'موسوعة القرآن الكريم',
     detail: 'للتثبت من المعاني الميسرة والتراجم والمواد القرآنية الصادرة عن جهات علمية معلنة.',
     url: 'https://quranenc.com/ar/home'
-  },
-  alifta: {
-    name: 'الرئاسة العامة للبحوث العلمية والإفتاء',
-    detail: 'مرجع مؤسسي للمسائل التي تحتاج فتوى منشورة، مع بقاء النوازل الخاصة لأهل العلم المؤهلين.',
-    url: 'https://alifta.gov.sa/'
   }
 };
 
@@ -75,7 +72,7 @@ const A = (slug, title, category, description, quranRefs, sections, sourceKeys =
   reviewLevel: 'تحرير ومقارنة مصادر — لا تُعد مراجعة شرعية متخصصة'
 });
 
-export const articles = [
+const baseArticles = [
   A('adam-beginning-responsibility', 'آدم عليه السلام: البداية والمسؤولية والعودة', 'quran-stories',
     'قصة البداية كما يعرضها القرآن: تكريم الإنسان، امتحان الاختيار، وخط الرجوع إلى الله بعد الخطأ.',
     ['البقرة 30–39', 'الأعراف 11–27', 'طه 115–123'], [
@@ -439,7 +436,7 @@ export const articles = [
       ['المشاعر ليست الحكم', 'قد يكون للغضب سبب معتبر، لكنه لا يمنح كل رد فعل شرعية. نفرق بين الإحساس الذي يحدث، والقرار الذي يمكن تأجيله ومراجعته.'],
       ['اصنع مسافة قصيرة', 'أوقف الرسالة أو النقاش، وغير الوضع أو المكان إن كان آمناً، واكتب الوقائع دون أوصاف جارحة. هذه الخطوات لا تحل المشكلة لكنها تمنع إضافة ضرر جديد.'],
       ['العدل مع الخصومة', 'نهى القرآن أن يجر البغض إلى ترك العدل. إذا كان هناك عنف أو تهديد، الأولوية للأمان وطلب جهة حماية؛ النصيحة الروحية العامة لا تعوض التدخل المتخصص.']
-    ], ['quran', 'dorar', 'alifta']),
+    ], ['quran', 'dorar', 'tafsir']),
   A('good-expectation-with-verification', 'حسن الظن: قلب سليم لا يعطل التثبت', 'faith-character',
     'توازن بين ترك اتهام النيات والتحقق من الوقائع وحماية الحقوق عند وجود مؤشرات حقيقية.',
     ['الحجرات 6 و12', 'النور 12–16', 'الإسراء 36'], [
@@ -448,6 +445,8 @@ export const articles = [
       ['الثقة درجات', 'قد تحب الخير لشخص وتضع في الوقت نفسه ضوابط مالية أو مهنية. بناء الثقة تدريجياً لا يناقض صفاء القلب؛ إنه يحمي الطرفين ويقلل مساحة النزاع.']
     ], ['quran', 'tafsir', 'quranEnc'])
 ];
+
+export const articles = enhanceArticles(baseArticles);
 
 export function categoryFor(slug) {
   return categories.find((category) => category.slug === slug);

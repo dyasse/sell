@@ -12,7 +12,7 @@
     "android:run": "npx cap run android",
     "dev": "python3 -m http.server 5173",
     "lint": "node scripts/lint-js.mjs",
-    "audit:content": "node scripts/audit-library.mjs",
+    "audit:content": "npm run build:web && node scripts/audit-library.mjs",
     "check:links": "node scripts/check-external-links.mjs",
     "test": "node --test tests/*.test.js"
   },

@@ -32,6 +32,10 @@ test('every article declares Quran locations, references, review date, and subst
     assert.match(article.reviewedAt, /^\d{4}-\d{2}-\d{2}$/);
     assert.match(article.publishedAt, /^\d{4}-\d{2}-\d{2}$/);
     assert.match(article.reviewLevel, /لا تُعد مراجعة شرعية متخصصة/);
+    assert.ok(['pillar', 'brief'].includes(article.qualityTier));
+    if (article.qualityTier === 'pillar') {
+      assert.ok(article.sections.length >= 9, `${article.slug}: pillar is not deep enough`);
+    }
   }
 });
 
@@ -53,9 +57,13 @@ test('website build generates discoverable pages, structured data, and a complet
   assert.equal(result.status, 0, result.stderr || result.stdout);
 
   const { articles, categories } = await import('../content/library-data.mjs');
-  const samplePath = join(rootDir, 'dist', 'library', `${articles[0].slug}.html`);
+  const pillar = articles.find((article) => article.qualityTier === 'pillar');
+  const brief = articles.find((article) => article.qualityTier === 'brief');
+  const samplePath = join(rootDir, 'dist', 'library', `${pillar.slug}.html`);
   const sample = await readFile(samplePath, 'utf8');
   const sitemap = await readFile(join(rootDir, 'dist', 'sitemap.xml'), 'utf8');
+  const encyclopediaSitemap = await readFile(join(rootDir, 'dist', 'sitemaps', 'encyclopedia.xml'), 'utf8');
+  const briefPage = await readFile(join(rootDir, 'dist', 'library', `${brief.slug}.html`), 'utf8');
   const index = await readFile(join(rootDir, 'dist', 'articles.html'), 'utf8');
   const home = await readFile(join(rootDir, 'dist', 'index.html'), 'utf8');
   const author = await readFile(join(rootDir, 'dist', 'authors', 'editorial-team.html'), 'utf8');
@@ -68,11 +76,13 @@ test('website build generates discoverable pages, structured data, and a complet
   assert.match(sample, /class="inline-citation"/);
   assert.match(sample, /فريق تحرير نور/);
   assert.match(index, /data-library-card/);
-  assert.match(index, new RegExp(`${articles.length}.*مقالة أصلية منشورة`, 's'));
+  assert.match(index, new RegExp(`${articles.filter((article) => article.qualityTier === 'pillar').length}.*ملفاً معمّقاً مفهرساً`, 's'));
   assert.match(home, /library-home-expansion/);
   assert.match(home, /href="library\.css"/);
   assert.match(author, /لا ندّعي مراجعة شرعية خارجية غير موجودة/);
-  assert.match(sitemap, /\/authors\/editorial-team\.html/);
+  assert.match(sitemap, /<sitemapindex/);
+  assert.match(briefPage, /noindex,follow/);
+  assert.doesNotMatch(briefPage, /pagead2\.googlesyndication\.com/);
 
   const visibleText = sample
     .replace(/<script[\s\S]*?<\/script>/g, ' ')
@@ -81,14 +91,18 @@ test('website build generates discoverable pages, structured data, and a complet
     .replace(/&[^;]+;/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
-  assert.ok(visibleText.split(/\s+/).length >= 500, 'generated article is still too thin');
+  assert.ok(visibleText.split(/\s+/).length >= 800, 'generated pillar is still too thin');
 
   for (const article of articles) {
-    assert.match(sitemap, new RegExp(`/library/${article.slug}\\.html`));
+    if (article.qualityTier === 'pillar') {
+      assert.match(encyclopediaSitemap, new RegExp(`/library/${article.slug}\\.html`));
+    } else {
+      assert.doesNotMatch(encyclopediaSitemap, new RegExp(`/library/${article.slug}\\.html`));
+    }
     await stat(join(rootDir, 'dist', 'library', `${article.slug}.html`));
   }
   for (const category of categories) {
-    assert.match(sitemap, new RegExp(`/library/${category.slug}\\.html`));
+    assert.match(encyclopediaSitemap, new RegExp(`/library/${category.slug}\\.html`));
   }
 });
 

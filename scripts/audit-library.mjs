@@ -22,6 +22,8 @@ const exists = async (path) => {
 };
 
 const articleSlugs = new Set(articles.map((article) => article.slug));
+const pillarArticles = articles.filter((article) => article.qualityTier === 'pillar');
+const briefArticles = articles.filter((article) => article.qualityTier !== 'pillar');
 const categorySlugs = new Set(categories.map((category) => category.slug));
 const encyclopediaFiles = [
   join(dist, 'articles.html'),
@@ -71,11 +73,37 @@ for (const file of encyclopediaFiles) {
       .replace(/\s+/g, ' ')
       .trim();
     const count = text.split(/\s+/).length;
-    if (count < 500) failures.push(`${label}: thin rendered page (${count} words)`);
-    if (!html.includes('"@type":"Article"')) failures.push(`${label}: missing Article schema`);
-    if (!html.includes('"@type":"FAQPage"')) failures.push(`${label}: missing FAQ schema`);
+    const article = articles.find((item) => item.slug === label.replace(/^library\//, '').replace(/\.html$/, ''));
+    if (article?.qualityTier === 'pillar') {
+      if (article.sections.length < 9) failures.push(`${label}: pillar has fewer than nine substantive sections`);
+      // Guardrail only; Google has no preferred word count. Nine distinct sections and
+      // claim-level citations are the primary publication gate.
+      if (count < 750) failures.push(`${label}: pillar is unexpectedly thin (${count} rendered words)`);
+      if (!html.includes('"@type":"Article"')) failures.push(`${label}: missing Article schema`);
+      if (!html.includes('"@type":"FAQPage"')) failures.push(`${label}: missing FAQ schema`);
+      if (!html.includes('index,follow,max-image-preview:large')) failures.push(`${label}: pillar is not explicitly indexable`);
+      if (!html.includes('quranenc.com/ar/browse/arabic_moyassar/')) failures.push(`${label}: missing exact QuranEnc citation`);
+      if (!html.includes('quran.ksu.edu.sa/tafseer/saadi/')) failures.push(`${label}: missing exact KSU tafsir citation`);
+    } else if (article) {
+      if (!html.includes('name="robots" content="noindex,follow"')) failures.push(`${label}: brief must be noindex`);
+      if (html.includes('pagead2.googlesyndication.com')) failures.push(`${label}: brief must be ad-free`);
+      if (html.includes('"@type":"Article"')) failures.push(`${label}: brief must not claim indexable Article schema`);
+    }
     if (!html.includes('حالة المراجعة بشفافية')) failures.push(`${label}: missing review disclosure`);
   }
+}
+
+const sitemapIndex = await readFile(join(dist, 'sitemap.xml'), 'utf8');
+const encyclopediaSitemap = await readFile(join(dist, 'sitemaps', 'encyclopedia.xml'), 'utf8');
+if (!sitemapIndex.includes('<sitemapindex')) failures.push('sitemap.xml: expected a sitemap index');
+for (const article of pillarArticles) {
+  if (!encyclopediaSitemap.includes(`/library/${article.slug}.html`)) failures.push(`sitemap: missing pillar ${article.slug}`);
+}
+for (const article of briefArticles) {
+  if (encyclopediaSitemap.includes(`/library/${article.slug}.html`)) failures.push(`sitemap: noindex brief leaked ${article.slug}`);
+}
+for (const required of ['corrections.html', 'sitemap.html', 'feed.xml', '404.html']) {
+  if (!await exists(join(dist, required))) failures.push(`missing generated trust/discovery file: ${required}`);
 }
 
 for (const topic of editorialRoadmap) {
@@ -88,6 +116,5 @@ if (failures.length) {
   console.error(failures.join('\n'));
   process.exitCode = 1;
 } else {
-  console.log(`Library audit passed: ${articles.length} articles, ${categories.length} hubs, ${encyclopediaFiles.length} HTML pages, ${editorialRoadmap.length} gated topics.`);
+  console.log(`Library audit passed: ${pillarArticles.length} indexed pillars, ${briefArticles.length} noindex/ad-free briefs, ${categories.length} hubs, split sitemaps, ${editorialRoadmap.length} gated topics.`);
 }
-

@@ -12,6 +12,44 @@ import {
 } from '../content/library-data.mjs';
 
 const EDITORIAL_TEAM_URL = `${SITE_URL}/authors/editorial-team.html`;
+const indexableArticles = articles.filter((article) => article.qualityTier === 'pillar');
+
+const surahNumbers = new Map(Object.entries({
+  'الفاتحة': 1, 'البقرة': 2, 'آل عمران': 3, 'النساء': 4, 'المائدة': 5, 'الأنعام': 6,
+  'الأعراف': 7, 'الأنفال': 8, 'التوبة': 9, 'يونس': 10, 'هود': 11, 'يوسف': 12,
+  'الرعد': 13, 'إبراهيم': 14, 'الحجر': 15, 'النحل': 16, 'الإسراء': 17, 'الكهف': 18,
+  'مريم': 19, 'طه': 20, 'الأنبياء': 21, 'الحج': 22, 'المؤمنون': 23, 'النور': 24,
+  'الفرقان': 25, 'الشعراء': 26, 'النمل': 27, 'القصص': 28, 'العنكبوت': 29, 'الروم': 30,
+  'لقمان': 31, 'السجدة': 32, 'الأحزاب': 33, 'سبأ': 34, 'فاطر': 35, 'يس': 36,
+  'الصافات': 37, 'ص': 38, 'الزمر': 39, 'غافر': 40, 'فصلت': 41, 'الشورى': 42,
+  'الزخرف': 43, 'الدخان': 44, 'الجاثية': 45, 'الأحقاف': 46, 'محمد': 47, 'الفتح': 48,
+  'الحجرات': 49, 'ق': 50, 'الذاريات': 51, 'الطور': 52, 'النجم': 53, 'القمر': 54,
+  'الرحمن': 55, 'الواقعة': 56, 'الحديد': 57, 'المجادلة': 58, 'الحشر': 59, 'الممتحنة': 60,
+  'الصف': 61, 'الجمعة': 62, 'المنافقون': 63, 'التغابن': 64, 'الطلاق': 65, 'التحريم': 66,
+  'الملك': 67, 'القلم': 68, 'الحاقة': 69, 'المعارج': 70, 'نوح': 71, 'الجن': 72,
+  'المزمل': 73, 'المدثر': 74, 'القيامة': 75, 'الإنسان': 76, 'المرسلات': 77, 'النبأ': 78,
+  'النازعات': 79, 'عبس': 80, 'التكوير': 81, 'الانفطار': 82, 'المطففين': 83, 'الانشقاق': 84,
+  'البروج': 85, 'الطارق': 86, 'الأعلى': 87, 'الغاشية': 88, 'الفجر': 89, 'البلد': 90,
+  'الشمس': 91, 'الليل': 92, 'الضحى': 93, 'الشرح': 94, 'التين': 95, 'العلق': 96,
+  'القدر': 97, 'البينة': 98, 'الزلزلة': 99, 'العاديات': 100, 'القارعة': 101, 'التكاثر': 102,
+  'العصر': 103, 'الهمزة': 104, 'الفيل': 105, 'قريش': 106, 'الماعون': 107, 'الكوثر': 108,
+  'الكافرون': 109, 'النصر': 110, 'المسد': 111, 'الإخلاص': 112, 'الفلق': 113, 'الناس': 114
+}));
+
+function quranReference(ref) {
+  const match = String(ref).match(/^(.+?)\s+(\d+)/);
+  if (!match) return { label: ref, links: [] };
+  const surah = surahNumbers.get(match[1].trim());
+  const ayah = Number(match[2]);
+  if (!surah || !ayah) return { label: ref, links: [] };
+  return {
+    label: ref,
+    links: [
+      { label: 'التفسير الميسر', url: `https://quranenc.com/ar/browse/arabic_moyassar/${surah}/${ayah}` },
+      { label: 'تفسير السعدي', url: `https://quran.ksu.edu.sa/tafseer/saadi/sura${surah}-aya${ayah}.html` }
+    ]
+  };
+}
 
 const categoryGuides = {
   'quran-stories': {
@@ -53,7 +91,7 @@ const formatDate = (date) => new Intl.DateTimeFormat('ar-MA', {
 
 const jsonLd = (data) => JSON.stringify(data).replaceAll('<', '\\u003c');
 
-function head({ title, description, canonical, relative = '..', type = 'website', schema = [] }) {
+function head({ title, description, canonical, relative = '..', type = 'website', schema = [], indexable = true, ads = true }) {
   const schemaMarkup = schema.map((item) =>
     `<script type="application/ld+json">${jsonLd(item)}</script>`).join('\n  ');
 
@@ -64,6 +102,7 @@ function head({ title, description, canonical, relative = '..', type = 'website'
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(description)}" />
+  <meta name="robots" content="${indexable ? 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1' : 'noindex,follow'}" />
   <link rel="canonical" href="${canonical}" />
   <meta property="og:type" content="${type}" />
   <meta property="og:site_name" content="نور" />
@@ -71,14 +110,16 @@ function head({ title, description, canonical, relative = '..', type = 'website'
   <meta property="og:url" content="${canonical}" />
   <meta property="og:title" content="${escapeHtml(title)}" />
   <meta property="og:description" content="${escapeHtml(description)}" />
+  <meta property="og:image" content="${SITE_URL}/assets/images/nour-logo.png" />
   <meta name="twitter:card" content="summary" />
   <meta name="theme-color" content="#1f6f50" />
-  <meta name="google-adsense-account" content="ca-pub-2350255696934759" />
+  ${ads ? '<meta name="google-adsense-account" content="ca-pub-2350255696934759" />' : ''}
   <link rel="icon" href="${relative}/assets/favicon.png" />
+  <link rel="alternate" type="application/rss+xml" title="موسوعة نور" href="${SITE_URL}/feed.xml" />
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="${relative}/styles.css" />
   <link rel="stylesheet" href="${relative}/library.css" />
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2350255696934759" crossorigin="anonymous"></script>
+  ${ads ? '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2350255696934759" crossorigin="anonymous"></script>' : ''}
   ${schemaMarkup}
 </head>`;
 }
@@ -105,35 +146,48 @@ function footer(relative = '..') {
     <a href="${relative}/editorial-policy.html">سياسة التحرير</a>
     <a href="${relative}/sources.html">المراجع والمنهجية</a>
     <a href="${relative}/contact.html">الإبلاغ عن خطأ</a>
+    <a href="${relative}/corrections.html">سجل التصحيحات</a>
+    <a href="${relative}/sitemap.html">خريطة الموقع</a>
     <a href="${relative}/privacy-policy.html">الخصوصية</a>
   </footer>`;
 }
 
 function articleCard(article, relative = '.') {
   const category = categoryFor(article.category);
+  const isPillar = article.qualityTier === 'pillar';
   return `<article class="knowledge-card" data-library-card data-search="${escapeHtml(`${article.title} ${article.description} ${category.name}`)}">
-    <span class="knowledge-card__category">${escapeHtml(category.name)}</span>
+    <span class="knowledge-card__category">${escapeHtml(category.name)} · ${isPillar ? 'ملف معمّق' : 'موجز'}</span>
     <h3><a href="${relative}/library/${article.slug}.html">${escapeHtml(article.title)}</a></h3>
     <p>${escapeHtml(article.description)}</p>
-    <div class="knowledge-card__meta"><span>${article.quranRefs.length} مواضع قرآنية</span><span>${article.sourceKeys.length} مراجع</span><span>تدقيق ${formatDate(article.reviewedAt)}</span></div>
+    <div class="knowledge-card__meta"><span>${article.quranRefs.length} مواضع قرآنية</span><span>${article.sections.length} محاور</span><span>${isPillar ? 'مفهرس' : 'قيد التوسعة'}</span></div>
     <a class="knowledge-card__link" href="${relative}/library/${article.slug}.html">اقرأ المقالة <span aria-hidden="true">←</span></a>
   </article>`;
 }
 
 function renderArticle(article) {
+  const isPillar = article.qualityTier === 'pillar';
   const category = categoryFor(article.category);
   const guide = categoryGuides[article.category];
   const canonical = `${SITE_URL}/library/${article.slug}.html`;
-  const categoryArticles = articlesForCategory(article.category);
+  const allCategoryArticles = articlesForCategory(article.category);
+  const categoryArticles = isPillar
+    ? allCategoryArticles.filter((item) => item.qualityTier === 'pillar')
+    : allCategoryArticles;
   const currentIndex = categoryArticles.findIndex((item) => item.slug === article.slug);
   const related = [1, 2, 3].map((offset) =>
     categoryArticles[(currentIndex + offset) % categoryArticles.length]).filter((item) => item.slug !== article.slug);
-  const usedSources = [...new Set(article.sourceKeys)].map((key, index) => ({
-    ...sources[key],
-    key,
-    number: index + 1
-  }));
-  const sourceLinks = usedSources.map((source) => source.url);
+  const seenSourceUrls = new Set();
+  const usedSources = [...new Set(article.sourceKeys)]
+    .filter((key) => {
+      const url = sources[key]?.url;
+      if (!url || seenSourceUrls.has(url)) return false;
+      seenSourceUrls.add(url);
+      return true;
+    })
+    .map((key, index) => ({ ...sources[key], key, number: index + 1 }));
+  const quranReferences = article.quranRefs.map(quranReference);
+  const exactQuranLinks = quranReferences.flatMap((reference) => reference.links.map((link) => link.url));
+  const sourceLinks = [...new Set([...exactQuranLinks, ...usedSources.map((source) => source.url)])];
   const practicalSteps = [
     `اقرأ المواضع القرآنية المذكورة كاملة، ولا تكتف بالآية المنفردة أو المقتطف المتداول.`,
     `لخّص بعبارتك الفرق بين «${article.sections[0][0]}» و«${article.sections[1][0]}».`,
@@ -207,7 +261,9 @@ function renderArticle(article) {
     description: article.description,
     canonical,
     type: 'article',
-    schema: [articleSchema, breadcrumbSchema, faqSchema]
+    schema: isPillar ? [articleSchema, breadcrumbSchema, faqSchema] : [breadcrumbSchema],
+    indexable: isPillar,
+    ads: isPillar
   })}
 <body class="knowledge-page">
   ${nav('..', 'library')}
@@ -225,12 +281,12 @@ function renderArticle(article) {
         <div class="knowledge-byline">
           <span>إعداد: <a href="../authors/editorial-team.html" rel="author">فريق تحرير نور</a></span>
           <span>آخر تدقيق للمصادر: <time datetime="${article.reviewedAt}">${formatDate(article.reviewedAt)}</time></span>
-          <span>${readingTime} دقائق · نحو ${renderedWordCount} كلمة</span>
+          <span>${readingTime} دقائق · ${isPillar ? 'ملف مرجعي معمّق' : 'موجز قيد التوسعة'}</span>
         </div>
       </header>
       <aside class="source-boundary" aria-label="حدود المقالة">
         <strong>حالة المراجعة بشفافية</strong>
-        <p>${escapeHtml(article.reviewLevel)}. مواضع القرآن هي المصدر الأول، أما الشرح والدروس فصياغة تعليمية أصلية من فريق نور وليست نصاً من القرآن ولا فتوى.</p>
+        <p>${escapeHtml(article.reviewLevel)}. مواضع القرآن هي المصدر الأول، أما الشرح والدروس فصياغة تعليمية أصلية من فريق نور وليست نصاً من القرآن ولا فتوى. ${isPillar ? 'اجتازت هذه الصفحة بوابة النشر المعمّق وتدخل في خريطة Google.' : 'هذه نسخة موجزة غير مفهرسة وغير معروضة للإعلانات حتى تستكمل التوسعة والمراجعة.'}</p>
       </aside>
       <nav class="article-toc" aria-label="فهرس المقالة">
         <strong>في هذه الصفحة</strong>
@@ -250,7 +306,7 @@ function renderArticle(article) {
       </section>
       <section class="quran-reference-box" aria-labelledby="quranRefs">
         <h2 id="quranRefs">مواضع القصة أو الموضوع في القرآن</h2>
-        <ul>${article.quranRefs.map((ref) => `<li>${escapeHtml(ref)}</li>`).join('')}</ul>
+        <ul>${quranReferences.map((reference) => `<li><strong>${escapeHtml(reference.label)}</strong>${reference.links.length ? `<span class="verse-source-links">${reference.links.map((link) => `<a href="${link.url}" target="_blank" rel="noopener noreferrer external">${link.label}</a>`).join('')}</span>` : ''}</li>`).join('')}</ul>
         <p>يُنصح بقراءة المقطع كاملاً من <a href="../quran.html">مصحف نور</a> أو من مصحف موثوق قبل قراءة الشرح.</p>
       </section>
       <div class="knowledge-article__body">
@@ -275,7 +331,7 @@ function renderArticle(article) {
       </section>
       <section class="article-sources" aria-labelledby="articleSources">
         <h2 id="articleSources">المراجع المستخدمة</h2>
-        <p>رُوجعت الروابط بتاريخ <time datetime="${REVIEW_DATE}">${formatDate(REVIEW_DATE)}</time>. ذكر المرجع لا يعني أن المؤسسة راجعت مقالة نور أو تزكيها.</p>
+        <p>روابط الآيات أعلاه تقود إلى موضع محدد، ورُوجعت الروابط المؤسسية بتاريخ <time datetime="${REVIEW_DATE}">${formatDate(REVIEW_DATE)}</time>. ذكر المرجع لا يعني أن المؤسسة راجعت مقالة نور أو تزكيها.</p>
         <ol>${usedSources.map((source) =>
           `<li id="ref-${source.key}"><a href="${source.url}" target="_blank" rel="noopener noreferrer external">${escapeHtml(source.name)}</a><span>${escapeHtml(source.detail)}</span><small>تم الوصول: ${formatDate(REVIEW_DATE)}</small></li>`).join('')}</ol>
         <a class="method-link" href="../sources.html">اطلع على منهجية التوثيق كاملة</a>
@@ -300,6 +356,8 @@ function renderArticle(article) {
 
 function renderCategory(category) {
   const categoryArticles = articlesForCategory(category.slug);
+  const pillarArticles = categoryArticles.filter((article) => article.qualityTier === 'pillar');
+  const briefArticles = categoryArticles.filter((article) => article.qualityTier !== 'pillar');
   const canonical = `${SITE_URL}/library/${category.slug}.html`;
   const schema = {
     '@context': 'https://schema.org',
@@ -308,7 +366,7 @@ function renderCategory(category) {
     description: category.description,
     url: canonical,
     inLanguage: 'ar',
-    hasPart: categoryArticles.map((article) => ({
+    hasPart: pillarArticles.map((article) => ({
       '@type': 'Article',
       name: article.title,
       url: `${SITE_URL}/library/${article.slug}.html`
@@ -329,10 +387,15 @@ function renderCategory(category) {
       <span class="knowledge-eyebrow">${escapeHtml(category.eyebrow)}</span>
       <h1>${escapeHtml(category.name)}</h1>
       <p>${escapeHtml(category.description)}</p>
-      <div class="collection-count">${categoryArticles.length} مقالة موثقة</div>
+      <div class="collection-count">${pillarArticles.length} ملفات معمّقة مفهرسة · ${briefArticles.length} موجزات قيد التوسعة</div>
     </header>
-    <section class="knowledge-grid" aria-label="مقالات ${escapeHtml(category.name)}">
-      ${categoryArticles.map((article) => articleCard(article, '..')).join('')}
+    <section class="library-catalog" aria-labelledby="pillarCategoryTitle">
+      <div class="catalog-heading"><div><span>النسخة المرجعية</span><h2 id="pillarCategoryTitle">ملفات اجتازت بوابة النشر</h2></div></div>
+      <div class="knowledge-grid">${pillarArticles.map((article) => articleCard(article, '..')).join('')}</div>
+    </section>
+    <section class="library-catalog briefs-catalog" aria-labelledby="briefCategoryTitle">
+      <div class="catalog-heading"><div><span>مسار التطوير</span><h2 id="briefCategoryTitle">موجزات متاحة وغير مفهرسة</h2></div><p>لا إعلانات داخلها حتى تكتمل</p></div>
+      <div class="knowledge-grid">${briefArticles.map((article) => articleCard(article, '..')).join('')}</div>
     </section>
     <aside class="editorial-callout">
       <h2>منهج واحد في جميع الصفحات</h2>
@@ -357,8 +420,8 @@ function renderIndex() {
     inLanguage: 'ar',
     mainEntity: {
       '@type': 'ItemList',
-      numberOfItems: articles.length,
-      itemListElement: articles.map((article, index) => ({
+      numberOfItems: indexableArticles.length,
+      itemListElement: indexableArticles.map((article, index) => ({
         '@type': 'ListItem',
         position: index + 1,
         url: `${SITE_URL}/library/${article.slug}.html`,
@@ -385,9 +448,9 @@ function renderIndex() {
         <div class="library-search"><label for="librarySearch">ابحث في المكتبة</label><input id="librarySearch" type="search" placeholder="مثال: يوسف، التوبة، التفسير…" autocomplete="off" /></div>
       </div>
       <dl class="library-metrics">
-        <div><dt>${articles.length}</dt><dd>مقالة أصلية منشورة</dd></div>
+        <div><dt>${indexableArticles.length}</dt><dd>ملفاً معمّقاً مفهرساً</dd></div>
         <div><dt>${categories.length}</dt><dd>أبواب رئيسية</dd></div>
-        <div><dt>${Object.keys(sources).length}</dt><dd>مراجع مؤسسية معلنة</dd></div>
+        <div><dt>${articles.length - indexableArticles.length}</dt><dd>موجزاً في مسار التوسعة</dd></div>
       </dl>
     </header>
     <section class="category-door-grid" aria-label="أبواب المكتبة">
@@ -549,6 +612,65 @@ function renderEditorialTeam() {
 </html>`;
 }
 
+function renderCorrections() {
+  const canonical = `${SITE_URL}/corrections.html`;
+  return `${head({
+    title: 'سجل التصحيحات والتحديثات | نور',
+    description: 'سجل علني يوضح التصحيحات الجوهرية والتحديثات المنهجية في موسوعة نور.',
+    canonical,
+    relative: '.',
+    ads: false,
+    schema: [{ '@context': 'https://schema.org', '@type': 'WebPage', name: 'سجل التصحيحات والتحديثات', url: canonical, dateModified: REVIEW_DATE, inLanguage: 'ar' }]
+  })}
+<body class="knowledge-page">
+  ${nav('.', 'sources')}
+  <main class="knowledge-shell methodology-shell">
+    <header class="collection-hero"><span class="knowledge-eyebrow">الثقة تقبل التصحيح</span><h1>سجل التصحيحات والتحديثات</h1><p>نعلن هنا التغييرات التي تمس معنى المادة أو مصدرها أو مستوى مراجعتها. تصحيح الإملاء والتنسيق لا يُسجل كتغيير جوهري.</p><div class="collection-count">آخر تحديث: ${formatDate(REVIEW_DATE)}</div></header>
+    <section class="review-pipeline" aria-labelledby="changeLogTitle"><h2 id="changeLogTitle">آخر التغييرات المنهجية</h2><ol>
+      <li><strong>${formatDate(REVIEW_DATE)}</strong><span>اعتماد 16 ملفاً معمقاً فقط للفهرسة، وتحويل الموجزات غير المكتملة إلى صفحات noindex وبلا إعلانات.</span></li>
+      <li><strong>${formatDate(REVIEW_DATE)}</strong><span>إضافة روابط مباشرة لكل موضع قرآني إلى التفسير الميسر وتفسير السعدي، وتقسيم خريطة الموقع حسب نوع الصفحة.</span></li>
+      <li><strong>27 أغسطس 2026</strong><span>إطلاق سياسة التحرير وصفحة فريق نور ومنهجية التوثيق وقناة الإبلاغ عن الخطأ.</span></li>
+    </ol></section>
+    <section class="correction-box"><h2>كيف ترسل تصحيحاً؟</h2><p>أرسل رابط الصفحة، والعبارة المعنية، وسبب الاعتراض، ورابطاً إلى مصدر يمكن تتبعه. نراجع البلاغ ونحدث السجل إذا تغير المعنى أو المصدر.</p><a href="contact.html">أرسل بلاغاً تحريرياً</a></section>
+  </main>${footer('.')}<script src="app-shell.js"></script>
+</body></html>`;
+}
+
+function renderHtmlSitemap() {
+  const canonical = `${SITE_URL}/sitemap.html`;
+  return `${head({
+    title: 'خريطة موقع نور | جميع الأقسام المعتمدة',
+    description: 'خريطة بشرية لأقسام نور وملفات الموسوعة المعمقة وصفحات المنهجية والسياسات.',
+    canonical,
+    relative: '.',
+    ads: false
+  })}
+<body class="knowledge-page">
+  ${nav('.', 'library')}
+  <main class="knowledge-shell methodology-shell"><header class="collection-hero"><span class="knowledge-eyebrow">وصول واضح بلا صفحات يتيمة</span><h1>خريطة موقع نور</h1><p>هذه الخريطة تعرض الصفحات المعتمدة للفهرسة. الموجزات قيد التوسعة تبقى متاحة من داخل أبواب المكتبة ولا تدخل خريطة Google.</p></header>
+    <section class="methodology-grid"><article><h2>الأقسام الرئيسية</h2><ul><li><a href="index.html">الرئيسية</a></li><li><a href="quran.html">القرآن الكريم</a></li><li><a href="adhkar.html">الأذكار</a></li><li><a href="duas.html">الأدعية</a></li><li><a href="salat.html">مواقيت الصلاة</a></li><li><a href="articles.html">الموسوعة</a></li></ul></article>
+    <article><h2>الثقة والسياسات</h2><ul><li><a href="about.html">من نحن</a></li><li><a href="authors/editorial-team.html">فريق التحرير</a></li><li><a href="sources.html">المراجع والمنهجية</a></li><li><a href="editorial-policy.html">سياسة التحرير</a></li><li><a href="corrections.html">سجل التصحيحات</a></li><li><a href="privacy-policy.html">الخصوصية</a></li></ul></article></section>
+    ${categories.map((category) => `<section class="reference-directory"><h2><a href="library/${category.slug}.html">${escapeHtml(category.name)}</a></h2><div>${indexableArticles.filter((article) => article.category === category.slug).map((article) => `<article><h3><a href="library/${article.slug}.html">${escapeHtml(article.title)}</a></h3><p>${escapeHtml(article.description)}</p></article>`).join('')}</div></section>`).join('')}
+  </main>${footer('.')}<script src="app-shell.js"></script>
+</body></html>`;
+}
+
+function render404() {
+  return `${head({ title: 'الصفحة غير موجودة | نور', description: 'تعذر العثور على الصفحة المطلوبة.', canonical: `${SITE_URL}/404.html`, relative: '.', indexable: false, ads: false })}
+<body class="knowledge-page"><main class="knowledge-shell methodology-shell"><header class="collection-hero"><span class="knowledge-eyebrow">خطأ 404</span><h1>هذه الصفحة غير موجودة</h1><p>قد يكون الرابط قديماً أو غير مكتمل. ارجع إلى الموسوعة أو استعمل البحث للوصول إلى الموضوع.</p><p><a class="method-link" href="articles.html">افتح موسوعة نور</a> <a class="method-link" href="index.html">العودة للرئيسية</a></p></header></main></body></html>`;
+}
+
+const xmlEscape = (value = '') => escapeHtml(value).replaceAll('&#039;', '&apos;');
+
+function urlSet(entries) {
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries.map(({ url, lastmod }) => `  <url><loc>${xmlEscape(url)}</loc><lastmod>${lastmod}</lastmod></url>`).join('\n')}\n</urlset>\n`;
+}
+
+function renderFeed() {
+  const items = indexableArticles.map((article) => `<item><title>${xmlEscape(article.title)}</title><link>${SITE_URL}/library/${article.slug}.html</link><guid isPermaLink="true">${SITE_URL}/library/${article.slug}.html</guid><pubDate>${new Date(`${article.reviewedAt}T12:00:00Z`).toUTCString()}</pubDate><description>${xmlEscape(article.description)}</description></item>`).join('');
+  return `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>موسوعة نور</title><link>${SITE_URL}/articles.html</link><description>الملفات المعمقة الجديدة والمحدثة في موسوعة نور</description><language>ar</language><lastBuildDate>${new Date(`${REVIEW_DATE}T12:00:00Z`).toUTCString()}</lastBuildDate>${items}</channel></rss>`;
+}
+
 function renderHomeLibrarySection() {
   const featured = [
     articles.find((article) => article.slug === 'yusuf-from-trial-to-trust'),
@@ -560,11 +682,11 @@ function renderHomeLibrarySection() {
   return `<section class="publisher-content library-home-expansion" aria-labelledby="publisherContentTitle">
       <div class="section-heading">
         <span>موسوعة عربية بمراجع معلنة</span>
-        <h2 id="publisherContentTitle">${articles.length} مقالة أصلية تقودك من المصدر إلى المعنى والعمل</h2>
-        <p>تصفّح قصص القرآن والسيرة ومفاتيح الفهم والإيمان والأخلاق. لكل صفحة مواضع قرآنية، وحدود تحريرية، ومستوى مراجعة معلن، ومراجع بتاريخ وصول واضح.</p>
+        <h2 id="publisherContentTitle">${indexableArticles.length} ملفاً معمّقاً يقودك من المصدر إلى المعنى والعمل</h2>
+        <p>نعرض الملفات التي اجتازت بوابة النشر بوضوح، ونبقي ${articles.length - indexableArticles.length} موجزاً خارج الفهرسة والإعلانات إلى أن تكتمل توسعتها. لكل ملف مواضع قرآنية مباشرة وحدود تحريرية ومستوى مراجعة معلن.</p>
       </div>
       <div class="home-category-links">
-        ${categories.map((category) => `<a href="library/${category.slug}.html"><strong>${escapeHtml(category.name)}</strong><span>${articlesForCategory(category.slug).length} مقالة</span></a>`).join('')}
+        ${categories.map((category) => `<a href="library/${category.slug}.html"><strong>${escapeHtml(category.name)}</strong><span>${articlesForCategory(category.slug).filter((article) => article.qualityTier === 'pillar').length} ملفات معمّقة</span></a>`).join('')}
       </div>
       <div class="article-preview-grid">
         ${featured.map((article) => `<article class="article-preview-card featured-spiritual-card">
@@ -580,9 +702,11 @@ function renderHomeLibrarySection() {
 export async function generateLibrary(outDir) {
   const libraryDir = join(outDir, 'library');
   const authorsDir = join(outDir, 'authors');
+  const sitemapsDir = join(outDir, 'sitemaps');
   await Promise.all([
     mkdir(libraryDir, { recursive: true }),
-    mkdir(authorsDir, { recursive: true })
+    mkdir(authorsDir, { recursive: true }),
+    mkdir(sitemapsDir, { recursive: true })
   ]);
 
   await Promise.all([
@@ -590,7 +714,11 @@ export async function generateLibrary(outDir) {
     ...categories.map((category) => writeFile(join(libraryDir, `${category.slug}.html`), renderCategory(category))),
     writeFile(join(outDir, 'articles.html'), renderIndex()),
     writeFile(join(outDir, 'sources.html'), renderSources()),
-    writeFile(join(authorsDir, 'editorial-team.html'), renderEditorialTeam())
+    writeFile(join(authorsDir, 'editorial-team.html'), renderEditorialTeam()),
+    writeFile(join(outDir, 'corrections.html'), renderCorrections()),
+    writeFile(join(outDir, 'sitemap.html'), renderHtmlSitemap()),
+    writeFile(join(outDir, '404.html'), render404()),
+    writeFile(join(outDir, 'feed.xml'), renderFeed())
   ]);
 
   const homePath = join(outDir, 'index.html');
@@ -607,21 +735,23 @@ export async function generateLibrary(outDir) {
   }
   await writeFile(homePath, expandedHome);
 
-  const sitemapPath = join(outDir, 'sitemap.xml');
-  const currentSitemap = await readFile(sitemapPath, 'utf8');
-  const generatedUrls = [
-    `${SITE_URL}/sources.html`,
-    `${SITE_URL}/authors/editorial-team.html`,
-    ...categories.map((category) => `${SITE_URL}/library/${category.slug}.html`),
-    ...articles.map((article) => `${SITE_URL}/library/${article.slug}.html`)
+  const corePaths = [
+    '', 'quran.html', 'adhkar.html', 'duas.html', 'salat.html', 'articles.html', 'journey.html',
+    'guide-dua-etiquette.html', 'guide-adhkar-meaning.html', 'guide-contemplating-creation.html',
+    'guide-gratitude.html', 'guide-daily-quran.html', 'guide-prayer-times.html', 'guide-privacy-offline.html',
+    'editorial-policy.html', 'about.html', 'contact.html', 'privacy-policy.html', 'terms.html',
+    'sources.html', 'authors/editorial-team.html', 'corrections.html', 'sitemap.html'
   ];
-  const entries = generatedUrls.map((url) => `  <url>
-    <loc>${url}</loc>
-    <lastmod>${REVIEW_DATE}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>${url.includes('/library/') ? '0.72' : '0.70'}</priority>
-  </url>`).join('\n');
-  await writeFile(sitemapPath, currentSitemap.replace('</urlset>', `${entries}\n</urlset>`));
+  const coreEntries = corePaths.map((path) => ({ url: `${SITE_URL}/${path}`, lastmod: REVIEW_DATE }));
+  const encyclopediaEntries = [
+    ...categories.map((category) => ({ url: `${SITE_URL}/library/${category.slug}.html`, lastmod: REVIEW_DATE })),
+    ...indexableArticles.map((article) => ({ url: `${SITE_URL}/library/${article.slug}.html`, lastmod: article.reviewedAt }))
+  ];
+  await Promise.all([
+    writeFile(join(sitemapsDir, 'core.xml'), urlSet(coreEntries)),
+    writeFile(join(sitemapsDir, 'encyclopedia.xml'), urlSet(encyclopediaEntries)),
+    writeFile(join(outDir, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <sitemap><loc>${SITE_URL}/sitemaps/core.xml</loc><lastmod>${REVIEW_DATE}</lastmod></sitemap>\n  <sitemap><loc>${SITE_URL}/sitemaps/encyclopedia.xml</loc><lastmod>${REVIEW_DATE}</lastmod></sitemap>\n</sitemapindex>\n`)
+  ]);
 
-  console.log(`Generated ${articles.length} library articles, ${categories.length} category hubs, the author profile, and the methodology page.`);
+  console.log(`Generated ${indexableArticles.length} indexed pillar files, ${articles.length - indexableArticles.length} noindex briefs, ${categories.length} hubs, and split sitemaps.`);
 }
