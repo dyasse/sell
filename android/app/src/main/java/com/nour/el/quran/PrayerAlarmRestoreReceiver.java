@@ -1,4 +1,4 @@
-package com.dyasse.nourquran;
+package com.nour.el.quran;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
