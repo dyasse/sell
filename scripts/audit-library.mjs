@@ -75,8 +75,8 @@ for (const file of encyclopediaFiles) {
     const count = text.split(/\s+/).length;
     const article = articles.find((item) => item.slug === label.replace(/^library\//, '').replace(/\.html$/, ''));
     if (article?.qualityTier === 'pillar') {
-      if (article.sections.length < 5) failures.push(`${label}: pillar has fewer than five substantive sections`);
-      // Guardrail only; Google has no preferred word count. Six distinct sections and
+      if (article.sections.length < 9) failures.push(`${label}: pillar has fewer than nine substantive sections`);
+      // Guardrail only; Google has no preferred word count. Nine distinct sections and
       // claim-level citations are the primary publication gate.
       if (count < 750) failures.push(`${label}: pillar is unexpectedly thin (${count} rendered words)`);
       if (!html.includes('"@type":"Article"')) failures.push(`${label}: missing Article schema`);
