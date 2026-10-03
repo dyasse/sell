@@ -34,7 +34,7 @@ test('every article declares Quran locations, references, review date, and subst
     assert.match(article.reviewLevel, /لا تُعد مراجعة شرعية متخصصة/);
     assert.ok(['pillar', 'brief'].includes(article.qualityTier));
     if (article.qualityTier === 'pillar') {
-      assert.ok(article.sections.length >= 5, `${article.slug}: pillar is not deep enough`);
+      assert.ok(article.sections.length >= 9, `${article.slug}: pillar is not deep enough`);
     }
   }
 });
