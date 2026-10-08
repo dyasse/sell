@@ -5,9 +5,7 @@ Nour Quran is a mobile-friendly Islamic web app with Quran browsing, audio playb
 ## Project structure
 
 - Root web files: `index.html`, `quran.html`, `styles.css`, and browser scripts.
-- `content/library-data.mjs`: reviewed source data for the website-only religious library.
-- `scripts/generate-library.mjs`: generates article pages, category hubs, structured data, internal links, the methodology page, and sitemap entries.
-- `scripts/build-web.mjs`: builds a deployable `dist/` folder, generates the website library, and injects CI-provided placeholders when matching environment variables exist.
+- `scripts/build-web.mjs`: builds a deployable `dist/` folder and injects CI-provided placeholders when matching environment variables exist.
 - `android/`: Capacitor Android project using bundled `dist/` assets.
 - `tests/`: Node unit tests for Quran parsing/search helpers.
 - `.github/workflows/ci.yml`: CI for lint, tests, web build, and a deploy placeholder.
@@ -54,15 +52,6 @@ npm run build:web
 
 The build output is written to `dist/`.
 
-The website build adds 33 Arabic library articles across Quran stories, seerah/history, Quran-reading foundations, and faith/character. It also generates four category hubs, `sources.html`, Article/Breadcrumb structured data, and 38 additional sitemap entries. The generator is intentionally skipped by `npm run build:android:web`, so the expanded editorial website does not increase the bundled Android app.
-
-When editing the library:
-
-1. Keep Quran locations explicit and verify them against an institutional mushaf.
-2. Keep editorial explanation separate from Quran text and from legal rulings.
-3. Declare at least two sources and a review date for every article.
-4. Run `npm test`; the library tests reject missing references, thin sections, duplicate slugs, incomplete sitemap output, and Android leakage.
-
 ## Capacitor Android workflow
 
 ```bash
@@ -71,9 +60,9 @@ npm run cap:sync
 npm run android:open
 ```
 
-`npm run cap:sync` creates an Android-only web bundle, removes the website AdSense loader from the WebView, links AdMob/local notifications, and copies the latest UI into Android Studio. The Android app is version `2.0.0` (`versionCode 2`) and targets/compiles against API 36.
+`npm run cap:sync` creates an Android-only web bundle, removes the website AdSense loader from the WebView, links AdMob/local notifications, and copies the latest UI into Android Studio. The Android app is version `5.5.1` (`versionCode 551`) and targets/compiles against API 36.
 
-After opening Android Studio, wait for Gradle sync and select **Build > Generate Signed Bundle / APK** for the Play release. Keep the package id `com.dyasse.nourquran` and increment `versionCode` for every later upload.
+After opening Android Studio, wait for Gradle sync and select **Build > Generate Signed Bundle / APK** for the Play release. Keep the Play package id `com.nour.el.quran` and increment `versionCode` for every later upload.
 
 Optional device/emulator run:
 
@@ -164,13 +153,15 @@ env:
   GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}
 ```
 
-## Ads and analytics placeholders
+## Ads and analytics
 
 - Web AdSense placeholders live in `index.html` and are replaced by `AD_CLIENT_ID` / `AD_SLOT_ID` during deployment.
 - App ads authorization files use `ADS_PUBLISHER_ID` placeholders.
-- Android AdMob uses `ADMOB_APP_ID` in Android resources and `ADMOB_BANNER_AD_UNIT_ID` / `ADMOB_INTERSTITIAL_AD_UNIT_ID` in `monetization.js`; inject real values before a release build. Release Android builds fail if `ADMOB_APP_ID` is missing.
-- The AdMob plugin is pinned in `package-lock.json`. The app runs Google's UMP consent flow before requesting an ad, provides a privacy-options button, uses a General content rating, and reserves banner space only after an ad loads.
-- Interstitial ads are not launched automatically on startup, page-view counts, prayer screens, or Quran audio. If used later, call them only at a clear, user-initiated transition.
+- Android AdMob IDs are native Android build configuration. Debug builds use Google's official test IDs automatically; release builds use the Nour App ID, banner ID, and interstitial ID. The IDs are not injected into the website bundle.
+- The AdMob plugin is pinned in `package-lock.json`. The app refreshes Google's UMP consent state before requesting ads, requests ads only when allowed, exposes privacy options when required, uses a General content rating, and reserves banner space only after a banner is shown.
+- Banners are excluded from Quran reading, prayer, adhkar, duas, and audio-focused screens. Interstitials are limited to user-selected guide transitions after three minutes, every fourth qualified transition, with a 30-minute cooldown, and only when already loaded.
+- Firebase Analytics is Android-native and records generic screen names only. The committed `android/app/google-services.json` is registered for the Play package `com.nour.el.quran`; Gradle rejects a Firebase file registered for a different package.
+- See `ANDROID_ADMOB_RELEASE_CHECKLIST.md` before creating the signed Play release.
 - Google Analytics uses `GA_MEASUREMENT_ID`; keep placeholders in committed code.
 
 ## Exact prayer notifications
