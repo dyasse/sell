@@ -1,5 +1,5 @@
 import { cp, mkdir, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
-import { basename, dirname, extname, join } from 'node:path';
+import { basename, dirname, extname, join, relative } from 'node:path';
 import { generateLibrary } from './generate-library.mjs';
 
 const rootDir = process.cwd();
@@ -142,6 +142,36 @@ async function stripWebAdsFromAndroid(dir) {
   }
 }
 
+async function injectAndroidNativeRuntime(dir) {
+  if (!isAndroidBuild) return;
+
+  for (const entry of await readdir(dir)) {
+    const filePath = join(dir, entry);
+    const info = await stat(filePath);
+    if (info.isDirectory()) {
+      await injectAndroidNativeRuntime(filePath);
+      continue;
+    }
+    if (extname(filePath) !== '.html') continue;
+
+    let contents = await readFile(filePath, 'utf8');
+    contents = contents
+      .replace(/\s*<script[^>]+src=["'][^"']*ad-policy\.js["'][^>]*><\/script>\s*/gi, '\n')
+      .replace(/\s*<script[^>]+src=["'][^"']*monetization\.js["'][^>]*><\/script>\s*/gi, '\n');
+
+    const policyPath = relative(dirname(filePath), join(outDir, 'ad-policy.js')).replaceAll('\\', '/');
+    const monetizationPath = relative(dirname(filePath), join(outDir, 'monetization.js')).replaceAll('\\', '/');
+    const runtimeScripts =
+      `  <script src="${policyPath}"></script>\n` +
+      `  <script src="${monetizationPath}"></script>\n`;
+
+    if (contents.includes('</body>')) {
+      contents = contents.replace('</body>', `${runtimeScripts}</body>`);
+      await writeFile(filePath, contents);
+    }
+  }
+}
+
 await rm(outDir, { recursive: true, force: true });
 await mkdir(outDir, { recursive: true });
 
@@ -151,6 +181,7 @@ if (!isAndroidBuild) {
 }
 await injectPlaceholders(outDir);
 await stripWebAdsFromAndroid(outDir);
+await injectAndroidNativeRuntime(outDir);
 
 for (const file of requiredDistFiles) {
   try {
