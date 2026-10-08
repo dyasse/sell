@@ -17,7 +17,7 @@ test("Android release keeps the published Play identity and Firebase client", as
   assert.match(gradle, /applicationId androidApplicationId/);
   assert.match(gradle, /def androidApplicationId = 'com\.nour\.el\.quran'/);
   assert.match(gradle, /namespace 'com\.nour\.el\.quran'/);
-  assert.match(gradle, /versionCode 551/);
+  assert.match(gradle, /versionCode 552/);
   assert.match(gradle, /versionName '5\.5\.1'/);
   assert.equal(JSON.parse(capacitor).appId, "com.nour.el.quran");
   assert.match(strings, /com\.nour\.el\.quran/);
