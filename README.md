@@ -60,7 +60,7 @@ npm run cap:sync
 npm run android:open
 ```
 
-`npm run cap:sync` creates an Android-only web bundle, removes the website AdSense loader from the WebView, links AdMob/local notifications, and copies the latest UI into Android Studio. The Android app is version `5.5.1` (`versionCode 551`) and targets/compiles against API 36.
+`npm run cap:sync` creates an Android-only web bundle, removes the website AdSense loader from the WebView, links AdMob/local notifications, and copies the latest UI into Android Studio. The Android app is version `5.5.2` (`versionCode 552`) and targets/compiles against API 36.
 
 After opening Android Studio, wait for Gradle sync and select **Build > Generate Signed Bundle / APK** for the Play release. Keep the Play package id `com.nour.el.quran` and increment `versionCode` for every later upload.
 
