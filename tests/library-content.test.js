@@ -119,6 +119,13 @@ test('Android web build keeps the original compact library and excludes generate
   assert.equal(result.status, 0, result.stderr || result.stdout);
 
   const androidLibrary = await readFile(join(rootDir, 'dist', 'articles.html'), 'utf8');
+  const androidQuran = await readFile(join(rootDir, 'dist', 'quran.html'), 'utf8');
+  const nativeRuntime = /<script src="ad-policy\.js"><\/script>\s*<script src="monetization\.js"><\/script>/;
+
   assert.match(androidLibrary, /7<\/strong><span>أدلة أصلية/);
+  assert.match(androidLibrary, nativeRuntime);
+  assert.match(androidQuran, nativeRuntime);
+  assert.doesNotMatch(androidLibrary, /pagead2\.googlesyndication\.com/);
+  assert.doesNotMatch(androidQuran, /pagead2\.googlesyndication\.com/);
   await assert.rejects(stat(join(rootDir, 'dist', 'library', 'quran-stories.html')));
 });
