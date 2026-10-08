@@ -14,6 +14,7 @@
     "favorites.html",
     "settings.html",
     "support.html",
+    "app.html",
     "about.html",
     "contact.html",
     "privacy-policy.html",
