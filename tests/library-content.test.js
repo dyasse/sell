@@ -63,10 +63,12 @@ test('website build generates discoverable pages, structured data, and a complet
   const sample = await readFile(samplePath, 'utf8');
   const sitemap = await readFile(join(rootDir, 'dist', 'sitemap.xml'), 'utf8');
   const encyclopediaSitemap = await readFile(join(rootDir, 'dist', 'sitemaps', 'encyclopedia.xml'), 'utf8');
+  const coreSitemap = await readFile(join(rootDir, 'dist', 'sitemaps', 'core.xml'), 'utf8');
   const briefPage = await readFile(join(rootDir, 'dist', 'library', `${brief.slug}.html`), 'utf8');
   const index = await readFile(join(rootDir, 'dist', 'articles.html'), 'utf8');
   const home = await readFile(join(rootDir, 'dist', 'index.html'), 'utf8');
   const author = await readFile(join(rootDir, 'dist', 'authors', 'editorial-team.html'), 'utf8');
+  const appPage = await readFile(join(rootDir, 'dist', 'app.html'), 'utf8');
 
   assert.match(sample, /"@type":"Article"/);
   assert.match(sample, /المراجع المستخدمة/);
@@ -81,6 +83,9 @@ test('website build generates discoverable pages, structured data, and a complet
   assert.match(home, /href="library\.css"/);
   assert.match(author, /لا ندّعي مراجعة شرعية خارجية غير موجودة/);
   assert.match(sitemap, /<sitemapindex/);
+  assert.match(coreSitemap, /https:\/\/nour-quran\.com\/app\.html/);
+  assert.match(appPage, /"@type":"SoftwareApplication"/);
+  assert.match(appPage, /com\.nour\.el\.quran/);
   assert.match(briefPage, /noindex,follow/);
   assert.doesNotMatch(briefPage, /pagead2\.googlesyndication\.com/);
 
@@ -114,6 +119,13 @@ test('Android web build keeps the original compact library and excludes generate
   assert.equal(result.status, 0, result.stderr || result.stdout);
 
   const androidLibrary = await readFile(join(rootDir, 'dist', 'articles.html'), 'utf8');
+  const androidQuran = await readFile(join(rootDir, 'dist', 'quran.html'), 'utf8');
+  const nativeRuntime = /<script src="ad-policy\.js"><\/script>\s*<script src="monetization\.js"><\/script>/;
+
   assert.match(androidLibrary, /7<\/strong><span>أدلة أصلية/);
+  assert.match(androidLibrary, nativeRuntime);
+  assert.match(androidQuran, nativeRuntime);
+  assert.doesNotMatch(androidLibrary, /pagead2\.googlesyndication\.com/);
+  assert.doesNotMatch(androidQuran, /pagead2\.googlesyndication\.com/);
   await assert.rejects(stat(join(rootDir, 'dist', 'library', 'quran-stories.html')));
 });

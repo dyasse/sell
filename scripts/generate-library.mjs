@@ -131,6 +131,7 @@ function nav(relative = '..', current = 'library') {
     ['adhkar', `${relative}/adhkar.html`, 'الأذكار'],
     ['duas', `${relative}/duas.html`, 'الأدعية'],
     ['library', `${relative}/articles.html`, 'المكتبة'],
+    ['app', `${relative}/app.html`, 'تطبيق Android'],
     ['sources', `${relative}/sources.html`, 'المراجع والمنهجية']
   ];
 
@@ -148,7 +149,7 @@ function footer(relative = '..') {
     <a href="${relative}/contact.html">الإبلاغ عن خطأ</a>
     <a href="${relative}/corrections.html">سجل التصحيحات</a>
     <a href="${relative}/sitemap.html">خريطة الموقع</a>
-    <a href="${relative}/privacy-policy.html">الخصوصية</a>
+    <a href="${relative}/app.html">تطبيق Android</a>\n    <a href="${relative}/privacy-policy.html">الخصوصية</a>
   </footer>`;
 }
 
@@ -648,7 +649,7 @@ function renderHtmlSitemap() {
 <body class="knowledge-page">
   ${nav('.', 'library')}
   <main class="knowledge-shell methodology-shell"><header class="collection-hero"><span class="knowledge-eyebrow">وصول واضح بلا صفحات يتيمة</span><h1>خريطة موقع نور</h1><p>هذه الخريطة تعرض الصفحات المعتمدة للفهرسة. الموجزات قيد التوسعة تبقى متاحة من داخل أبواب المكتبة ولا تدخل خريطة Google.</p></header>
-    <section class="methodology-grid"><article><h2>الأقسام الرئيسية</h2><ul><li><a href="index.html">الرئيسية</a></li><li><a href="quran.html">القرآن الكريم</a></li><li><a href="adhkar.html">الأذكار</a></li><li><a href="duas.html">الأدعية</a></li><li><a href="salat.html">مواقيت الصلاة</a></li><li><a href="articles.html">الموسوعة</a></li></ul></article>
+    <section class="methodology-grid"><article><h2>الأقسام الرئيسية</h2><ul><li><a href="index.html">الرئيسية</a></li><li><a href="quran.html">القرآن الكريم</a></li><li><a href="adhkar.html">الأذكار</a></li><li><a href="duas.html">الأدعية</a></li><li><a href="salat.html">مواقيت الصلاة</a></li><li><a href="articles.html">الموسوعة</a></li><li><a href="app.html">تطبيق Android</a></li></ul></article>
     <article><h2>الثقة والسياسات</h2><ul><li><a href="about.html">من نحن</a></li><li><a href="authors/editorial-team.html">فريق التحرير</a></li><li><a href="sources.html">المراجع والمنهجية</a></li><li><a href="editorial-policy.html">سياسة التحرير</a></li><li><a href="corrections.html">سجل التصحيحات</a></li><li><a href="privacy-policy.html">الخصوصية</a></li></ul></article></section>
     ${categories.map((category) => `<section class="reference-directory"><h2><a href="library/${category.slug}.html">${escapeHtml(category.name)}</a></h2><div>${indexableArticles.filter((article) => article.category === category.slug).map((article) => `<article><h3><a href="library/${article.slug}.html">${escapeHtml(article.title)}</a></h3><p>${escapeHtml(article.description)}</p></article>`).join('')}</div></section>`).join('')}
   </main>${footer('.')}<script src="app-shell.js"></script>
@@ -739,7 +740,7 @@ export async function generateLibrary(outDir) {
     '', 'quran.html', 'adhkar.html', 'duas.html', 'salat.html', 'articles.html', 'journey.html',
     'guide-dua-etiquette.html', 'guide-adhkar-meaning.html', 'guide-contemplating-creation.html',
     'guide-gratitude.html', 'guide-daily-quran.html', 'guide-prayer-times.html', 'guide-privacy-offline.html',
-    'editorial-policy.html', 'about.html', 'contact.html', 'privacy-policy.html', 'terms.html',
+    'editorial-policy.html', 'about.html', 'app.html', 'contact.html', 'privacy-policy.html', 'terms.html',
     'sources.html', 'authors/editorial-team.html', 'corrections.html', 'sitemap.html'
   ];
   const coreEntries = corePaths.map((path) => ({ url: `${SITE_URL}/${path}`, lastmod: REVIEW_DATE }));
