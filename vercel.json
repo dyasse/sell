@@ -4,6 +4,13 @@
   "buildCommand": "npm run build:web",
   "outputDirectory": "dist",
   "cleanUrls": false,
+  "redirects": [
+    {
+      "source": "/privacy.html",
+      "destination": "/privacy-policy.html",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
