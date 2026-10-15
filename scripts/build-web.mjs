@@ -1,6 +1,7 @@
 import { cp, mkdir, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { basename, dirname, extname, join, relative } from 'node:path';
 import { generateLibrary } from './generate-library.mjs';
+import { enhanceStaticSeo } from './enhance-static-seo.mjs';
 
 const rootDir = process.cwd();
 const outDir = join(rootDir, 'dist');
@@ -142,6 +143,24 @@ async function stripWebAdsFromAndroid(dir) {
   }
 }
 
+async function stripWebsiteSeoContentFromAndroid(dir) {
+  if (!isAndroidBuild) return;
+
+  for (const entry of await readdir(dir)) {
+    const filePath = join(dir, entry);
+    const info = await stat(filePath);
+    if (info.isDirectory()) {
+      await stripWebsiteSeoContentFromAndroid(filePath);
+      continue;
+    }
+    if (extname(filePath) !== '.html') continue;
+
+    const contents = await readFile(filePath, 'utf8');
+    const cleaned = contents.replace(/\s*<section\b[^>]*\bdata-web-seo-content\b[^>]*>[\s\S]*?<\/section>\s*/gi, '\n');
+    if (cleaned !== contents) await writeFile(filePath, cleaned);
+  }
+}
+
 async function injectAndroidNativeRuntime(dir) {
   if (!isAndroidBuild) return;
 
@@ -178,9 +197,11 @@ await mkdir(outDir, { recursive: true });
 await copyWebAssets(rootDir, outDir);
 if (!isAndroidBuild) {
   await generateLibrary(outDir);
+  await enhanceStaticSeo(outDir);
 }
 await injectPlaceholders(outDir);
 await stripWebAdsFromAndroid(outDir);
+await stripWebsiteSeoContentFromAndroid(outDir);
 await injectAndroidNativeRuntime(outDir);
 
 for (const file of requiredDistFiles) {

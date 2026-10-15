@@ -13,6 +13,7 @@
     "dev": "python3 -m http.server 5173",
     "lint": "node scripts/lint-js.mjs",
     "audit:content": "npm run build:web && node scripts/audit-library.mjs",
+    "audit:seo": "npm run build:web && node scripts/audit-seo.mjs",
     "check:links": "node scripts/check-external-links.mjs",
     "test": "node --test tests/*.test.js"
   },

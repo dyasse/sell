@@ -69,6 +69,8 @@ jobs:
           QURAN_RECITER_ID: ${{ secrets.QURAN_RECITER_ID }}
           QURAN_ARTWORK_URL: ${{ secrets.QURAN_ARTWORK_URL }}
         run: npm run build:web
+      - name: Audit SEO output
+        run: node scripts/audit-seo.mjs
 
   android-build:
     name: Build Android API 36

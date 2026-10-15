@@ -69,6 +69,8 @@ test('website build generates discoverable pages, structured data, and a complet
   const home = await readFile(join(rootDir, 'dist', 'index.html'), 'utf8');
   const author = await readFile(join(rootDir, 'dist', 'authors', 'editorial-team.html'), 'utf8');
   const appPage = await readFile(join(rootDir, 'dist', 'app.html'), 'utf8');
+  const quranPage = await readFile(join(rootDir, 'dist', 'quran.html'), 'utf8');
+  const guidePage = await readFile(join(rootDir, 'dist', 'guide-dua-etiquette.html'), 'utf8');
 
   assert.match(sample, /"@type":"Article"/);
   assert.match(sample, /المراجع المستخدمة/);
@@ -84,8 +86,17 @@ test('website build generates discoverable pages, structured data, and a complet
   assert.match(author, /لا ندّعي مراجعة شرعية خارجية غير موجودة/);
   assert.match(sitemap, /<sitemapindex/);
   assert.match(coreSitemap, /https:\/\/nour-quran\.com\/app\.html/);
+  assert.match(coreSitemap, /https:\/\/nour-quran\.com\/app\.html<\/loc><lastmod>2026-10-14<\/lastmod>/);
   assert.match(appPage, /"@type":"SoftwareApplication"/);
+  assert.match(appPage, /"@type":"BreadcrumbList"/);
+  assert.match(appPage, /https:\/\/nour-quran\.com\/assets\/images\/nour-logo\.png/);
   assert.match(appPage, /com\.nour\.el\.quran/);
+  assert.match(quranPage, /<title>فهرس سور القرآن الكريم والبحث في السور \| نور<\/title>/);
+  assert.match(quranPage, /"@type":"CollectionPage"/);
+  assert.match(quranPage, /"@type":"BreadcrumbList"/);
+  assert.match(guidePage, /"@type":"Article"/);
+  assert.match(guidePage, /"dateModified":"2026-10-14"/);
+  assert.match(guidePage, /property="article:published_time"/);
   assert.match(briefPage, /noindex,follow/);
   assert.doesNotMatch(briefPage, /pagead2\.googlesyndication\.com/);
 
@@ -127,5 +138,7 @@ test('Android web build keeps the original compact library and excludes generate
   assert.match(androidQuran, nativeRuntime);
   assert.doesNotMatch(androidLibrary, /pagead2\.googlesyndication\.com/);
   assert.doesNotMatch(androidQuran, /pagead2\.googlesyndication\.com/);
+  assert.doesNotMatch(androidQuran, /data-web-seo-content/);
+  assert.doesNotMatch(androidQuran, /كيف تستعمل فهرس القرآن من غير أن تفصل الآية عن سياقها/);
   await assert.rejects(stat(join(rootDir, 'dist', 'library', 'quran-stories.html')));
 });
