@@ -10,6 +10,7 @@ import {
   categoryFor,
   sources
 } from '../content/library-data.mjs';
+import { SEO_RELEASE_DATE, coreSeoPages } from '../content/seo-pages.mjs';
 
 const EDITORIAL_TEAM_URL = `${SITE_URL}/authors/editorial-team.html`;
 const indexableArticles = articles.filter((article) => article.qualityTier === 'pillar');
@@ -736,14 +737,7 @@ export async function generateLibrary(outDir) {
   }
   await writeFile(homePath, expandedHome);
 
-  const corePaths = [
-    '', 'quran.html', 'adhkar.html', 'duas.html', 'salat.html', 'articles.html', 'journey.html',
-    'guide-dua-etiquette.html', 'guide-adhkar-meaning.html', 'guide-contemplating-creation.html',
-    'guide-gratitude.html', 'guide-daily-quran.html', 'guide-prayer-times.html', 'guide-privacy-offline.html',
-    'editorial-policy.html', 'about.html', 'app.html', 'contact.html', 'privacy-policy.html', 'terms.html',
-    'sources.html', 'authors/editorial-team.html', 'corrections.html', 'sitemap.html'
-  ];
-  const coreEntries = corePaths.map((path) => ({ url: `${SITE_URL}/${path}`, lastmod: REVIEW_DATE }));
+  const coreEntries = coreSeoPages.map((page) => ({ url: page.canonical, lastmod: page.modified }));
   const encyclopediaEntries = [
     ...categories.map((category) => ({ url: `${SITE_URL}/library/${category.slug}.html`, lastmod: REVIEW_DATE })),
     ...indexableArticles.map((article) => ({ url: `${SITE_URL}/library/${article.slug}.html`, lastmod: article.reviewedAt }))
@@ -751,7 +745,7 @@ export async function generateLibrary(outDir) {
   await Promise.all([
     writeFile(join(sitemapsDir, 'core.xml'), urlSet(coreEntries)),
     writeFile(join(sitemapsDir, 'encyclopedia.xml'), urlSet(encyclopediaEntries)),
-    writeFile(join(outDir, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <sitemap><loc>${SITE_URL}/sitemaps/core.xml</loc><lastmod>${REVIEW_DATE}</lastmod></sitemap>\n  <sitemap><loc>${SITE_URL}/sitemaps/encyclopedia.xml</loc><lastmod>${REVIEW_DATE}</lastmod></sitemap>\n</sitemapindex>\n`)
+    writeFile(join(outDir, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <sitemap><loc>${SITE_URL}/sitemaps/core.xml</loc><lastmod>${SEO_RELEASE_DATE}</lastmod></sitemap>\n  <sitemap><loc>${SITE_URL}/sitemaps/encyclopedia.xml</loc><lastmod>${REVIEW_DATE}</lastmod></sitemap>\n</sitemapindex>\n`)
   ]);
 
   console.log(`Generated ${indexableArticles.length} indexed pillar files, ${articles.length - indexableArticles.length} noindex briefs, ${categories.length} hubs, and split sitemaps.`);
