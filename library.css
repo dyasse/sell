@@ -420,6 +420,30 @@
 }
 .quran-reference-box p { margin-bottom: 0; line-height: 1.8; }
 
+.hadith-reference-box {
+  border-color: rgba(159, 112, 46, 0.28);
+  background: linear-gradient(135deg, #fffaf0, #f5fbf7);
+}
+.hadith-reference-box blockquote {
+  margin: 0 0 16px;
+  padding: 18px;
+  border-inline-start: 4px solid var(--knowledge-gold);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--knowledge-ink);
+  font-family: Amiri, serif;
+  font-size: 1.25rem;
+}
+.hadith-reference-box blockquote p { margin: 0; }
+.hadith-reference-box dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 8px 14px;
+  margin: 0 0 14px;
+}
+.hadith-reference-box dt { font-weight: 800; color: var(--knowledge-green-dark); }
+.hadith-reference-box dd { margin: 0; }
+
 .knowledge-article__body section {
   padding: 16px 0;
 }

@@ -58,7 +58,7 @@ for (const file of encyclopediaFiles) {
     if (/^(https?:|mailto:|tel:|#)/.test(href)) continue;
     const clean = href.split(/[?#]/)[0];
     if (!clean) continue;
-    const target = clean.endsWith('/') ? join(dist, clean, 'index.html') : resolve(dirname(file), clean);
+    const target = clean.endsWith('/') ? resolve(dirname(file), clean, 'index.html') : resolve(dirname(file), clean);
     if (!normalize(target).startsWith(normalize(dist)) || !await exists(target)) {
       failures.push(`${label}: broken internal link ${href}`);
     }
@@ -84,6 +84,13 @@ for (const file of encyclopediaFiles) {
       if (!html.includes('index,follow,max-image-preview:large')) failures.push(`${label}: pillar is not explicitly indexable`);
       if (!html.includes('quranenc.com/ar/browse/arabic_moyassar/')) failures.push(`${label}: missing exact QuranEnc citation`);
       if (!html.includes('quran.ksu.edu.sa/tafseer/saadi/')) failures.push(`${label}: missing exact KSU tafsir citation`);
+      if (article.category === 'prophetic-hadith') {
+        if (!article.hadithRefs?.length) failures.push(`${label}: missing structured hadith reference`);
+        if (!html.includes('نص الحديث وتخريجه')) failures.push(`${label}: missing visible hadith verification block`);
+        if (!article.hadithRefs?.every((reference) => /^https:\/\/hadeethenc\.com\/ar\/browse\/hadith\/\d+$/.test(reference.url))) {
+          failures.push(`${label}: hadith source must be a direct HadeethEnc record`);
+        }
+      }
     } else if (article) {
       if (!html.includes('name="robots" content="noindex,follow"')) failures.push(`${label}: brief must be noindex`);
       if (html.includes('pagead2.googlesyndication.com')) failures.push(`${label}: brief must be ad-free`);
