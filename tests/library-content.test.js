@@ -137,6 +137,41 @@ test('website build generates discoverable pages, structured data, and a complet
   }
 });
 
+test('website build connects AdSense only to approved editorial surfaces', async () => {
+  const result = spawnSync(process.execPath, ['scripts/build-web.mjs'], {
+    cwd: rootDir,
+    encoding: 'utf8'
+  });
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+
+  const accountMeta = /name="google-adsense-account" content="ca-pub-2350255696934759"/;
+  const adsenseScript = /pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js\?client=ca-pub-2350255696934759/;
+  const monetized = ['index.html', 'articles.html', 'journey.html', 'guide-daily-quran.html'];
+  const protectedPages = [
+    'quran.html',
+    'adhkar.html',
+    'duas.html',
+    'salat.html',
+    'privacy-policy.html',
+    'terms.html'
+  ];
+
+  for (const file of monetized) {
+    const html = await readFile(join(rootDir, 'dist', file), 'utf8');
+    assert.match(html, accountMeta, `${file}: missing AdSense account meta`);
+    assert.match(html, adsenseScript, `${file}: missing AdSense loader`);
+  }
+
+  for (const file of protectedPages) {
+    const html = await readFile(join(rootDir, 'dist', file), 'utf8');
+    assert.match(html, accountMeta, `${file}: missing ownership meta`);
+    assert.doesNotMatch(html, adsenseScript, `${file}: must remain ad-free`);
+  }
+
+  assert.equal((await readFile(join(rootDir, 'dist', 'ads.txt'), 'utf8')).trim(),
+    'google.com, pub-2350255696934759, DIRECT, f08c47fec0942fa0');
+});
+
 test('Android web build keeps the original compact library and excludes generated website pages', async () => {
   const result = spawnSync(process.execPath, ['scripts/build-web.mjs', '--android'], {
     cwd: rootDir,

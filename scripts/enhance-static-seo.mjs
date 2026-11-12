@@ -12,6 +12,21 @@ import {
 
 const jsonLd = (value) => JSON.stringify(value).replaceAll('<', '\\u003c');
 
+const ADSENSE_CLIENT = 'ca-pub-2350255696934759';
+const ADSENSE_SCRIPT = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
+const MONETIZABLE_CORE_PAGES = new Set([
+  'index.html',
+  'articles.html',
+  'journey.html',
+  'guide-dua-etiquette.html',
+  'guide-adhkar-meaning.html',
+  'guide-contemplating-creation.html',
+  'guide-gratitude.html',
+  'guide-daily-quran.html',
+  'guide-prayer-times.html',
+  'guide-privacy-offline.html'
+]);
+
 function escapeAttribute(value) {
   return String(value)
     .replaceAll('&', '&amp;')
@@ -26,6 +41,18 @@ function stripSeoTags(html) {
     .replace(/\s*<meta\s+property=["'](?:og:type|og:locale|og:site_name|og:title|og:description|og:url|og:image|og:image:alt|article:published_time|article:modified_time|article:section)["'][^>]*\/?>/gi, '')
     .replace(/\s*<link\s+rel=["']canonical["'][^>]*\/?>/gi, '')
     .replace(/\s*<link\s+rel=["']alternate["']\s+type=["']application\/rss\+xml["'][^>]*\/?>/gi, '');
+}
+
+function stripAdsenseVerification(html) {
+  return html
+    .replace(/\s*<meta\s+name=["']google-adsense-account["'][^>]*\/?>/gi, '')
+    .replace(/\s*<script\s+async\s+src=["'][^"']*pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js[^"']*["'][^>]*><\/script>/gi, '');
+}
+
+function adsenseBlock(page) {
+  const verification = `  <meta name="google-adsense-account" content="${ADSENSE_CLIENT}" />`;
+  if (!MONETIZABLE_CORE_PAGES.has(page.path)) return verification;
+  return `${verification}\n  <script async src="${ADSENSE_SCRIPT}" crossorigin="anonymous" data-nour-adsense></script>`;
 }
 
 function schemaFor(page) {
@@ -109,6 +136,7 @@ function seoBlock(page) {
     .join('\n');
 
   return `
+${adsenseBlock(page)}
   <meta name="description" content="${description}" />
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
   <meta name="author" content="فريق تحرير نور" />
@@ -133,7 +161,7 @@ export async function enhanceStaticSeo(outDir) {
   for (const page of coreSeoPages) {
     const filePath = join(outDir, page.path);
     let html = await readFile(filePath, 'utf8');
-    html = stripSeoTags(html)
+    html = stripAdsenseVerification(stripSeoTags(html))
       .replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeAttribute(page.title)}</title>`)
       .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+data-nour-seo[^>]*>[\s\S]*?<\/script>/gi, '')
       .replace(/href=(["'])index\.html\1/gi, 'href=$1./$1')
