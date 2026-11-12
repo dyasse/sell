@@ -135,7 +135,9 @@ export async function enhanceStaticSeo(outDir) {
     let html = await readFile(filePath, 'utf8');
     html = stripSeoTags(html)
       .replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeAttribute(page.title)}</title>`)
-      .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+data-nour-seo[^>]*>[\s\S]*?<\/script>/gi, '');
+      .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+data-nour-seo[^>]*>[\s\S]*?<\/script>/gi, '')
+      .replace(/href=(["'])index\.html\1/gi, 'href=$1./$1')
+      .replace(/href=(["'])\.\.\/index\.html\1/gi, 'href=$1../$1');
     if (!html.includes('</head>')) throw new Error(`${page.path}: missing </head>`);
     html = html.replace('</head>', `${seoBlock(page)}\n</head>`);
     await writeFile(filePath, html);

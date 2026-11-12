@@ -36,6 +36,15 @@ test('every article declares Quran locations, references, review date, and subst
     if (article.qualityTier === 'pillar') {
       assert.ok(article.sections.length >= 9, `${article.slug}: pillar is not deep enough`);
     }
+    if (article.category === 'prophetic-hadith') {
+      assert.ok(article.hadithRefs?.length >= 1, `${article.slug}: missing hadith reference`);
+      assert.ok(article.hadithRefs.every((reference) =>
+        reference.text.length >= 20 &&
+        reference.narrator.includes('رضي الله عنه') &&
+        /صحيح/.test(reference.grade) &&
+        /^https:\/\/hadeethenc\.com\/ar\/browse\/hadith\/\d+$/.test(reference.url)
+      ), `${article.slug}: hadith text, narrator, grade, or source is not verifiable`);
+    }
   }
 });
 
@@ -97,6 +106,12 @@ test('website build generates discoverable pages, structured data, and a complet
   assert.match(guidePage, /"@type":"Article"/);
   assert.match(guidePage, /"dateModified":"2026-10-14"/);
   assert.match(guidePage, /property="article:published_time"/);
+
+  const hadithArticle = articles.find((article) => article.category === 'prophetic-hadith');
+  const hadithPage = await readFile(join(rootDir, 'dist', 'library', `${hadithArticle.slug}.html`), 'utf8');
+  assert.match(hadithPage, /نص الحديث وتخريجه/);
+  assert.match(hadithPage, /hadeethenc\.com\/ar\/browse\/hadith\/\d+/);
+  assert.match(hadithPage, /الدرجة والمصدر/);
   assert.match(briefPage, /noindex,follow/);
   assert.doesNotMatch(briefPage, /pagead2\.googlesyndication\.com/);
 

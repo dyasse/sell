@@ -1,7 +1,10 @@
-import { sources } from '../content/library-data.mjs';
+import { articles, sources } from '../content/library-data.mjs';
 
 const timeoutMs = 15_000;
-const uniqueUrls = [...new Set(Object.values(sources).map((source) => source.url))];
+const uniqueUrls = [...new Set([
+  ...Object.values(sources).map((source) => source.url),
+  ...articles.flatMap((article) => article.hadithRefs?.map((reference) => reference.url) || [])
+])];
 const results = [];
 
 for (const url of uniqueUrls) {

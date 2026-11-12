@@ -72,6 +72,11 @@ const categoryGuides = {
     scope: 'نربط المعنى الإيماني بالسلوك اليومي مع إبقاء الفرق واضحاً بين التوجيه التربوي العام والحكم الشرعي الخاص.',
     caution: 'لا نستخدم النصوص لإسكات الألم أو لوم المتضرر، ولا نجعل الخطوة الروحية بديلاً عن علاج أو حماية أو استشارة متخصصة عند الحاجة.',
     practice: 'اختر سلوكاً صغيراً قابلاً للملاحظة، وحدد متى ستفعله وما العلامة التي تدل على أنك التزمت به.'
+  },
+  'prophetic-hadith': {
+    scope: 'نبدأ بلفظ الحديث والراوي والمصدر ودرجة الحكم المعلنة، ثم نفصل بين شرح المرجع والتطبيق التربوي الذي يصوغه فريق نور.',
+    caution: 'لا نبني حكماً من حديث بلا تخريج، ولا نجمع ألفاظ روايات مختلفة في نص واحد، ولا نحول الشرح العام إلى فتوى لحالة خاصة.',
+    practice: 'افتح رابط التخريج، وطابق اللفظ والراوي والدرجة، ثم اكتب معنى واحداً وخطوة عملية لا تتجاوز دلالة الحديث.'
   }
 };
 
@@ -127,7 +132,7 @@ function head({ title, description, canonical, relative = '..', type = 'website'
 
 function nav(relative = '..', current = 'library') {
   const links = [
-    ['home', `${relative}/index.html`, 'الرئيسية'],
+    ['home', `${relative}/`, 'الرئيسية'],
     ['quran', `${relative}/quran.html`, 'القرآن الكريم'],
     ['adhkar', `${relative}/adhkar.html`, 'الأذكار'],
     ['duas', `${relative}/duas.html`, 'الأدعية'],
@@ -161,7 +166,7 @@ function articleCard(article, relative = '.') {
     <span class="knowledge-card__category">${escapeHtml(category.name)} · ${isPillar ? 'ملف معمّق' : 'موجز'}</span>
     <h3><a href="${relative}/library/${article.slug}.html">${escapeHtml(article.title)}</a></h3>
     <p>${escapeHtml(article.description)}</p>
-    <div class="knowledge-card__meta"><span>${article.quranRefs.length} مواضع قرآنية</span><span>${article.sections.length} محاور</span><span>${isPillar ? 'مفهرس' : 'قيد التوسعة'}</span></div>
+    <div class="knowledge-card__meta"><span>${article.hadithRefs?.length ? `${article.hadithRefs.length} حديث موثق` : `${article.quranRefs.length} مواضع قرآنية`}</span><span>${article.sections.length} محاور</span><span>${isPillar ? 'مفهرس' : 'قيد التوسعة'}</span></div>
     <a class="knowledge-card__link" href="${relative}/library/${article.slug}.html">اقرأ المقالة <span aria-hidden="true">←</span></a>
   </article>`;
 }
@@ -188,8 +193,10 @@ function renderArticle(article) {
     })
     .map((key, index) => ({ ...sources[key], key, number: index + 1 }));
   const quranReferences = article.quranRefs.map(quranReference);
+  const hadithReferences = article.hadithRefs || [];
   const exactQuranLinks = quranReferences.flatMap((reference) => reference.links.map((link) => link.url));
-  const sourceLinks = [...new Set([...exactQuranLinks, ...usedSources.map((source) => source.url)])];
+  const exactHadithLinks = hadithReferences.map((reference) => reference.url);
+  const sourceLinks = [...new Set([...exactQuranLinks, ...exactHadithLinks, ...usedSources.map((source) => source.url)])];
   const practicalSteps = [
     `اقرأ المواضع القرآنية المذكورة كاملة، ولا تكتف بالآية المنفردة أو المقتطف المتداول.`,
     `لخّص بعبارتك الفرق بين «${article.sections[0][0]}» و«${article.sections[1][0]}».`,
@@ -203,7 +210,7 @@ function renderArticle(article) {
     },
     {
       question: 'ما المصادر التي بُنيت عليها هذه الصفحة؟',
-      answer: `تبدأ الصفحة من المواضع القرآنية: ${article.quranRefs.join('، ')}، ثم تقارن الشرح بمراجع مؤسسية معلنة في أسفل المقالة. الروابط وسيلة للتثبت وليست تزكية للموقع.`
+      answer: `${hadithReferences.length ? `تعتمد الصفحة حديثاً موثقاً برابط التخريج وبيان الراوي والدرجة، وتقرأه مع المواضع القرآنية: ${article.quranRefs.join('، ')}.` : `تبدأ الصفحة من المواضع القرآنية: ${article.quranRefs.join('، ')}.`} ثم تقارن الشرح بمراجع مؤسسية معلنة في أسفل المقالة. الروابط وسيلة للتثبت وليست تزكية للموقع.`
     },
     {
       question: 'هل يمكن اعتماد هذه المقالة فتوى أو حكماً خاصاً؟',
@@ -213,6 +220,7 @@ function renderArticle(article) {
   const renderedWordCount = wordCountOf([
     article.description,
     ...article.sections.flatMap((section) => section),
+    ...hadithReferences.flatMap((reference) => [reference.text, reference.narrator, reference.grade]),
     guide.scope,
     guide.caution,
     ...practicalSteps,
@@ -271,7 +279,7 @@ function renderArticle(article) {
   ${nav('..', 'library')}
   <main class="knowledge-shell">
     <nav class="breadcrumbs" aria-label="مسار الصفحة">
-      <a href="../index.html">الرئيسية</a><span>/</span>
+      <a href="../">الرئيسية</a><span>/</span>
       <a href="../articles.html">المكتبة</a><span>/</span>
       <a href="${category.slug}.html">${escapeHtml(category.name)}</a>
     </nav>
@@ -288,13 +296,14 @@ function renderArticle(article) {
       </header>
       <aside class="source-boundary" aria-label="حدود المقالة">
         <strong>حالة المراجعة بشفافية</strong>
-        <p>${escapeHtml(article.reviewLevel)}. مواضع القرآن هي المصدر الأول، أما الشرح والدروس فصياغة تعليمية أصلية من فريق نور وليست نصاً من القرآن ولا فتوى. ${isPillar ? 'اجتازت هذه الصفحة بوابة النشر المعمّق وتدخل في خريطة Google.' : 'هذه نسخة موجزة غير مفهرسة وغير معروضة للإعلانات حتى تستكمل التوسعة والمراجعة.'}</p>
+        <p>${escapeHtml(article.reviewLevel)}. مواضع القرآن وروابط تخريج الحديث المعلنة هي المصادر الأولى، أما الشرح والدروس فصياغة تعليمية أصلية من فريق نور وليست نصاً من الوحي ولا فتوى. ${isPillar ? 'اجتازت هذه الصفحة بوابة النشر المعمّق وتدخل في خريطة Google.' : 'هذه نسخة موجزة غير مفهرسة وغير معروضة للإعلانات حتى تستكمل التوسعة والمراجعة.'}</p>
       </aside>
       <nav class="article-toc" aria-label="فهرس المقالة">
         <strong>في هذه الصفحة</strong>
         <ol>
           <li><a href="#summary">الخلاصة</a></li>
           <li><a href="#quranRefs">المواضع القرآنية</a></li>
+          ${hadithReferences.length ? '<li><a href="#hadithRefs">نص الحديث وتخريجه</a></li>' : ''}
           ${article.sections.map((section, index) => `<li><a href="#section-${index + 1}">${escapeHtml(section[0])}</a></li>`).join('')}
           <li><a href="#practice">خطة تطبيق</a></li>
           <li><a href="#questions">أسئلة شائعة</a></li>
@@ -311,6 +320,11 @@ function renderArticle(article) {
         <ul>${quranReferences.map((reference) => `<li><strong>${escapeHtml(reference.label)}</strong>${reference.links.length ? `<span class="verse-source-links">${reference.links.map((link) => `<a href="${link.url}" target="_blank" rel="noopener noreferrer external">${link.label}</a>`).join('')}</span>` : ''}</li>`).join('')}</ul>
         <p>يُنصح بقراءة المقطع كاملاً من <a href="../quran.html">مصحف نور</a> أو من مصحف موثوق قبل قراءة الشرح.</p>
       </section>
+      ${hadithReferences.length ? `<section class="quran-reference-box hadith-reference-box" aria-labelledby="hadithRefs">
+        <h2 id="hadithRefs">نص الحديث وتخريجه</h2>
+        ${hadithReferences.map((reference) => `<blockquote><p>«${escapeHtml(reference.text)}»</p></blockquote><dl><dt>الراوي</dt><dd>${escapeHtml(reference.narrator)}</dd><dt>الدرجة والمصدر</dt><dd>${escapeHtml(reference.grade)}</dd></dl><p><a href="${reference.url}" target="_blank" rel="noopener noreferrer external">افتح صفحة التخريج والشرح في موسوعة الأحاديث النبوية</a></p>`).join('')}
+        <p>نقل فريق نور اللفظ المختصر أعلاه من المصدر المرتبط. الشرح التالي صياغة تعليمية أصلية، ولا يستبدل الرجوع إلى كتب الشروح أو سؤال أهل العلم في الأحكام الخاصة.</p>
+      </section>` : ''}
       <div class="knowledge-article__body">
         ${article.sections.map(([heading, paragraph], index) => {
           const cited = usedSources[index % usedSources.length];
@@ -333,9 +347,9 @@ function renderArticle(article) {
       </section>
       <section class="article-sources" aria-labelledby="articleSources">
         <h2 id="articleSources">المراجع المستخدمة</h2>
-        <p>روابط الآيات أعلاه تقود إلى موضع محدد، ورُوجعت الروابط المؤسسية بتاريخ <time datetime="${REVIEW_DATE}">${formatDate(REVIEW_DATE)}</time>. ذكر المرجع لا يعني أن المؤسسة راجعت مقالة نور أو تزكيها.</p>
+        <p>روابط الآيات أعلاه تقود إلى موضع محدد، ورُوجعت روابط هذه المقالة بتاريخ <time datetime="${article.reviewedAt}">${formatDate(article.reviewedAt)}</time>. ذكر المرجع لا يعني أن المؤسسة راجعت مقالة نور أو تزكيها.</p>
         <ol>${usedSources.map((source) =>
-          `<li id="ref-${source.key}"><a href="${source.url}" target="_blank" rel="noopener noreferrer external">${escapeHtml(source.name)}</a><span>${escapeHtml(source.detail)}</span><small>تم الوصول: ${formatDate(REVIEW_DATE)}</small></li>`).join('')}</ol>
+          `<li id="ref-${source.key}"><a href="${source.url}" target="_blank" rel="noopener noreferrer external">${escapeHtml(source.name)}</a><span>${escapeHtml(source.detail)}</span><small>تم الوصول: ${formatDate(article.reviewedAt)}</small></li>`).join('')}</ol>
         <a class="method-link" href="../sources.html">اطلع على منهجية التوثيق كاملة</a>
       </section>
       <aside class="correction-inline">
@@ -384,7 +398,7 @@ function renderCategory(category) {
 <body class="knowledge-page">
   ${nav('..', 'library')}
   <main class="knowledge-shell">
-    <nav class="breadcrumbs" aria-label="مسار الصفحة"><a href="../index.html">الرئيسية</a><span>/</span><a href="../articles.html">المكتبة</a></nav>
+    <nav class="breadcrumbs" aria-label="مسار الصفحة"><a href="../">الرئيسية</a><span>/</span><a href="../articles.html">المكتبة</a></nav>
     <header class="collection-hero">
       <span class="knowledge-eyebrow">${escapeHtml(category.eyebrow)}</span>
       <h1>${escapeHtml(category.name)}</h1>
@@ -572,7 +586,7 @@ function renderEditorialTeam() {
 <body class="knowledge-page">
   ${nav('..', 'library')}
   <main class="knowledge-shell methodology-shell">
-    <nav class="breadcrumbs" aria-label="مسار الصفحة"><a href="../index.html">الرئيسية</a><span>/</span><a href="../articles.html">المكتبة</a><span>/</span><span>فريق التحرير</span></nav>
+    <nav class="breadcrumbs" aria-label="مسار الصفحة"><a href="../">الرئيسية</a><span>/</span><a href="../articles.html">المكتبة</a><span>/</span><span>فريق التحرير</span></nav>
     <header class="collection-hero">
       <span class="knowledge-eyebrow">الاسم لا يكفي؛ المنهج هو الدليل</span>
       <h1>من يكتب موسوعة نور؟</h1>
@@ -629,7 +643,7 @@ function renderCorrections() {
   <main class="knowledge-shell methodology-shell">
     <header class="collection-hero"><span class="knowledge-eyebrow">الثقة تقبل التصحيح</span><h1>سجل التصحيحات والتحديثات</h1><p>نعلن هنا التغييرات التي تمس معنى المادة أو مصدرها أو مستوى مراجعتها. تصحيح الإملاء والتنسيق لا يُسجل كتغيير جوهري.</p><div class="collection-count">آخر تحديث: ${formatDate(REVIEW_DATE)}</div></header>
     <section class="review-pipeline" aria-labelledby="changeLogTitle"><h2 id="changeLogTitle">آخر التغييرات المنهجية</h2><ol>
-      <li><strong>${formatDate(REVIEW_DATE)}</strong><span>اعتماد 16 ملفاً معمقاً فقط للفهرسة، وتحويل الموجزات غير المكتملة إلى صفحات noindex وبلا إعلانات.</span></li>
+      <li><strong>${formatDate(REVIEW_DATE)}</strong><span>توسيع الموسوعة إلى ${indexableArticles.length} ملفاً معمقاً مفهرساً، وإضافة قسم شرح الحديث بألفاظ موثقة وروابط تخريج ظاهرة، مع إبقاء الموجزات غير المكتملة خارج الفهرسة والإعلانات.</span></li>
       <li><strong>${formatDate(REVIEW_DATE)}</strong><span>إضافة روابط مباشرة لكل موضع قرآني إلى التفسير الميسر وتفسير السعدي، وتقسيم خريطة الموقع حسب نوع الصفحة.</span></li>
       <li><strong>27 أغسطس 2026</strong><span>إطلاق سياسة التحرير وصفحة فريق نور ومنهجية التوثيق وقناة الإبلاغ عن الخطأ.</span></li>
     </ol></section>
@@ -650,7 +664,7 @@ function renderHtmlSitemap() {
 <body class="knowledge-page">
   ${nav('.', 'library')}
   <main class="knowledge-shell methodology-shell"><header class="collection-hero"><span class="knowledge-eyebrow">وصول واضح بلا صفحات يتيمة</span><h1>خريطة موقع نور</h1><p>هذه الخريطة تعرض الصفحات المعتمدة للفهرسة. الموجزات قيد التوسعة تبقى متاحة من داخل أبواب المكتبة ولا تدخل خريطة Google.</p></header>
-    <section class="methodology-grid"><article><h2>الأقسام الرئيسية</h2><ul><li><a href="index.html">الرئيسية</a></li><li><a href="quran.html">القرآن الكريم</a></li><li><a href="adhkar.html">الأذكار</a></li><li><a href="duas.html">الأدعية</a></li><li><a href="salat.html">مواقيت الصلاة</a></li><li><a href="articles.html">الموسوعة</a></li><li><a href="app.html">تطبيق Android</a></li></ul></article>
+    <section class="methodology-grid"><article><h2>الأقسام الرئيسية</h2><ul><li><a href="./">الرئيسية</a></li><li><a href="quran.html">القرآن الكريم</a></li><li><a href="adhkar.html">الأذكار</a></li><li><a href="duas.html">الأدعية</a></li><li><a href="salat.html">مواقيت الصلاة</a></li><li><a href="articles.html">الموسوعة</a></li><li><a href="app.html">تطبيق Android</a></li></ul></article>
     <article><h2>الثقة والسياسات</h2><ul><li><a href="about.html">من نحن</a></li><li><a href="authors/editorial-team.html">فريق التحرير</a></li><li><a href="sources.html">المراجع والمنهجية</a></li><li><a href="editorial-policy.html">سياسة التحرير</a></li><li><a href="corrections.html">سجل التصحيحات</a></li><li><a href="privacy-policy.html">الخصوصية</a></li></ul></article></section>
     ${categories.map((category) => `<section class="reference-directory"><h2><a href="library/${category.slug}.html">${escapeHtml(category.name)}</a></h2><div>${indexableArticles.filter((article) => article.category === category.slug).map((article) => `<article><h3><a href="library/${article.slug}.html">${escapeHtml(article.title)}</a></h3><p>${escapeHtml(article.description)}</p></article>`).join('')}</div></section>`).join('')}
   </main>${footer('.')}<script src="app-shell.js"></script>
@@ -659,7 +673,7 @@ function renderHtmlSitemap() {
 
 function render404() {
   return `${head({ title: 'الصفحة غير موجودة | نور', description: 'تعذر العثور على الصفحة المطلوبة.', canonical: `${SITE_URL}/404.html`, relative: '.', indexable: false, ads: false })}
-<body class="knowledge-page"><main class="knowledge-shell methodology-shell"><header class="collection-hero"><span class="knowledge-eyebrow">خطأ 404</span><h1>هذه الصفحة غير موجودة</h1><p>قد يكون الرابط قديماً أو غير مكتمل. ارجع إلى الموسوعة أو استعمل البحث للوصول إلى الموضوع.</p><p><a class="method-link" href="articles.html">افتح موسوعة نور</a> <a class="method-link" href="index.html">العودة للرئيسية</a></p></header></main></body></html>`;
+<body class="knowledge-page"><main class="knowledge-shell methodology-shell"><header class="collection-hero"><span class="knowledge-eyebrow">خطأ 404</span><h1>هذه الصفحة غير موجودة</h1><p>قد يكون الرابط قديماً أو غير مكتمل. ارجع إلى الموسوعة أو استعمل البحث للوصول إلى الموضوع.</p><p><a class="method-link" href="articles.html">افتح موسوعة نور</a> <a class="method-link" href="./">العودة للرئيسية</a></p></header></main></body></html>`;
 }
 
 const xmlEscape = (value = '') => escapeHtml(value).replaceAll('&#039;', '&apos;');
